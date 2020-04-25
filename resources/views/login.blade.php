@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Login Admin KN Ngada</title>
+  <title>Login | SISANTI GEULIS</title>
   <script src="{{asset('file_assets/mylogin/js/jquery.min.js')}}"></script>
   <script src="{{asset('file_assets/adminlte/dist/js/adminlte.min.js')}}"></script>
   <link rel="stylesheet" type="text/css" href="{{asset('file_assets/mylogin/bootstrap/css/bootstrap.min.css')}}">
@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="{{asset('file_assets/adminlte/dist/css/AdminLTE.css')}}">
 
   <link rel="stylesheet" type="text/css" href="{{asset('file_assets/mylogin/css/my-login.css')}}">
-<link rel="shortcut icon" href="{{asset('file_assets/img/logo_pemkab_bogor.png') }}">
+<link rel="shortcut icon" href="{{asset('file_assets/img/logo_sisanti_geulis_notext.png') }}">
   <style type="text/css">
 
   body{

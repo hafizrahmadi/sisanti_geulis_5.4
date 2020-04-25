@@ -28,9 +28,9 @@ Route::get('/home', function () {
 
 
 
-Route::get('/masteruser',function(){
-	return view('home/masteruser');
-});
+Route::get('/masteruser','UserController@masteruser');
+
+Route::get('/catatsuratmasuk','SuratMasukController@catatsuratmasuk');
 
 
 Route::get('getlistuser','UserController@getListUser');

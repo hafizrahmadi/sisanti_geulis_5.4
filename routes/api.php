@@ -21,3 +21,9 @@ use Illuminate\Http\Request;
 Route::post('/signin', 'ApiController@signin');
 Route::get('/profile/{id}', 'ApiController@profile');
 Route::post('/send_notif', 'ApiController@sendNotif');
+
+Route::get('getlistuser','UserController@getListUser');
+Route::get('getlistsuratmasuk','SuratMasukController@getListSuratMasuk');
+Route::post('/addsuratmasuk', 'SuratMasukController@addSuratMasuk');
+Route::post('/deletesuratmasuk', 'SuratMasukController@deleteSuratMasuk');
+Route::get('getlistcamat','SuratMasukController@getListCamat');

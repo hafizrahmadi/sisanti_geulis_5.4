@@ -181,18 +181,6 @@
         $('#modal_title').html(title);
         $('#id_user').val(id);
 
-        // if (index!='') {
-        //
-        //   $('#no_perkara').val($('#no_perkara_'+index).html());
-        //   $('#jenis_sidang').val($('#jenis_sidang_'+index).html());
-        //   $('#agenda_sidang').val($('#agenda_sidang_'+index).html());
-        //   $('#waktu_sidang').val($('#waktu_sidang_'+index).html());
-        //   $('#pasal').val($('#pasal_'+index).html());
-        //   $('#nama_terdakwa').val($('#nama_terdakwa_'+index).html());
-        //   $('#nama_hakim').val($('#nama_hakim_'+index).html());
-        //   $('#nama_jaksa').val($('#nama_jaksa_'+index).html());
-        //   $('#keterangan').val($('#keterangan_'+index).html());
-        // }
         if (id!='') {
             $('#username').val($('#username_'+index).attr('data-val'));
             $('#password').val($("#username_"+index).attr('data-pass'));
@@ -212,7 +200,7 @@
   function getListUser(){
     $('#tbody').html("");
     $.ajax({
-                url: "{{url('/getlistuser')}}",
+                url: "{{url('/api/getlistuser')}}",
                 type: "GET",
                 data: {
                 },
@@ -225,9 +213,8 @@
                   $('#loading').show();
                 },
                 success: function(data) {
-                  dt = JSON.parse(data);
-
-
+                  // dt = JSON.parse(data);
+                  dt = data;
                   console.log(dt);
                   content = '';
                   for (var i = 0; i < dt.length; i++) {

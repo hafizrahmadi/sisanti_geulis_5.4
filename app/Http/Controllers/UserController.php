@@ -34,6 +34,7 @@ class UserController extends Controller
         if($data){ //apakah email tersebut ada atau tidak
             // if(Hash::check($password,$data->password)){
             if ($password==$data->password) {
+                Session::put('id_user',$data->id);
                 Session::put('username',$data->username);
                 Session::put('role',$data->role);
                 Session::put('token',$data->token);
@@ -54,14 +55,16 @@ class UserController extends Controller
         return redirect('/')->with('alert','Anda sudah logout');
     }
 
-    public function masteruser(Request $request){
-        return view('register');
+    public function masteruser(){
+        return view('home/masteruser');
     }
 
     public function getListUser(){
         $sel = DB::connection('mysql')->select("SELECT a.id,a.username,a.password,a.npk,a.nama_lengkap,a.pangkat,a.golongan,a.jabatan,a.role,a.token,a.firebase,b.nama_jabatan from tb_user a left join tb_jabatan b on a.jabatan = b.id order by 1 asc;");
         // $sel = ModelUser::all();
-        return json_encode($sel);
+        // return json_encode($sel);
+        // return $sel;
+        return response()->json($sel);
     }
 
     public function addUserPost(Request $request){

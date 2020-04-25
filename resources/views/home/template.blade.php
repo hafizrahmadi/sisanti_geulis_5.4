@@ -41,19 +41,9 @@
 <!-- AdminLTE App -->
 <script src="{{asset('file_assets/adminlte/dist/js/adminlte.min.js')}}"></script>
 
+<!-- datepicker -->
+<script src="{{asset('file_assets/adminlte/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js')}}"></script>
 
-<!-- dari atas -->
-<!-- <script type="text/javascript" src="js/bootstrap_alerts.js"></script>
-<script type="text/javascript" src="assets/lib/holderjs/holder.js"></script> -->
-
-<!-- <script type="text/javascript" src="js/app.js"></script> -->
-<!-- NOTIFICATION //-->
-<!-- <script type="text/javascript" src="js/notification/jquery.purr.js"></script> -->
-<!-- VALIDASI //-->
-<!-- <script type="text/javascript" src="js/validasi.js"></script> -->
-<!-- TABS -->
-<!-- <script type="text/javascript" src="{{asset('file_assets/adminlte/js/tabs/jquery.scrolltabs.js')}}"></script>
-<script type="text/javascript" src="{{asset('file_assets/adminlte/js/tabs/jquery.mousewheel.js')}}"></script> -->
 
 <script language="javascript" type="text/javascript">
     var prog_percent = 0;
@@ -175,8 +165,9 @@
   <!-- Google Font -->
   <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic"> -->
 
-<link rel="shortcut icon" href="{{asset('file_assets/img/logo_pemkab_bogor.png') }}">
+<link rel="shortcut icon" href="{{asset('file_assets/img/logo_sisanti_geulis_notext.png') }}">
 
+<link rel="stylesheet" href="{{asset('file_assets/adminlte/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css')}}">
 
 
 <style>
@@ -415,11 +406,12 @@
         <li class="header">MAIN NAVIGATION</li>
 
             <!-- <form class="sidebar-menu"> -->
-                  <li><a href="#"><i class="fa fa-inbox"></i> <span>Inbox</span></a></li>
-                  <li><a href="#"><i class="fa fa-send-o"></i> <span>Outbox</span></a></li>
-                  <li><a href="#"><i class="fa fa-bell"></i> <span>Notification</span></a></li>
+                  <!-- <li><a href="#"><i class="fa fa-inbox"></i> <span>Inbox</span></a></li>
+                  <li><a href="#"><i class="fa fa-send-o"></i> <span>Outbox</span></a></li> -->
+                  <!-- <li><a href="#"><i class="fa fa-bell"></i> <span>Notification</span></a></li> -->
                   <li><a href="{{url('/masteruser')}}"><i class="fa fa-user"></i> <span>Master User</span></a></li>
-                  <!-- <li><a href="{{url('/login')}}"><i class="fa fa-lock"></i> <span>Login</span></a></li> -->
+                  <li><a href="{{url('/catatsuratmasuk')}}"><i class="fa fa-pencil-square-o"></i> <span>Catat Surat Masuk</span></a></li>
+                  <li><a href="{{url('/login')}}"><i class="fa fa-lock"></i> <span>Catat Surat Keluar</span></a></li>
               <!-- </form> -->
 
 
