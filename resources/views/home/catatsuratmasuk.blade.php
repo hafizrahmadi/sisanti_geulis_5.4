@@ -210,7 +210,7 @@
                                 '<td id="catatan_'+(i+1)+'" data-val="'+dt[i].catatan+'">'+dt[i].catatan+'</td>'+
                                 '<td class="text-center">'+
                                       '<div class="btn-group" >'+
-                                      '<a href="javascript:alert(\'Kirim notif!\')">'+
+                                      '<a href="javascript:sendNotif(\''+(i+1)+'\')">'+
                                        '<button class="btn btn-xs btn-teal" title="Kirim Notifikasi"><i class="fa fa-bell" style=""></i></button>'+
                                        '</a>&nbsp;'+
                                        '<a href="javascript:modalForm(\'Edit Surat Masuk\',\''+(i+1)+'\',\''+dt[i].id+'\')">'+
@@ -405,6 +405,46 @@
                     alert("Memproses data gagal !");
                 }
             });
+  }
+
+  function sendNotif(index){
+    perihal = $('#perihal_'+index).attr('data-val');
+    $.ajax({
+               url: "{{url('/api/send_notif')}}",
+               type: "POST",
+               data: {
+                  _token: '{{csrf_token()}}',
+                  'firebase': "{{session('token')}}",
+                  'title': "SISANTI GEULIS",
+                  'body': "Pemberitahuan! Surat masuk baru untuk anda. Perihal : "+perihal,
+               },
+               beforeSend: function() {
+                 console.log({
+                   _token: '{{csrf_token()}}',
+                  'firebase': "{{session('token')}}",
+                  'title': "SISANTI GEULIS",
+                  'body': "Pemberitahuan! Surat masuk baru untuk anda. Perihal : "+perihal,
+                 });
+
+               },
+               success: function(data) {
+                    // alert(data);
+                    // console.log(data);
+                    // status = data.status;
+                    // if (status == 'success') {
+                    //   alert(status);
+                    // }else{
+                    //   alert(status+' : '+data.detail);
+                    // }
+                    alert('Notifikasi telah dikirimkan');
+               },
+               complete: function() {
+                 // getListSuratMasuk();
+               },
+               error: function() {
+                   alert("Memproses data gagal !");
+               }
+           });
   }
 
 </script>
