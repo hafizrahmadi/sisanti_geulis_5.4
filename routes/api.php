@@ -22,6 +22,7 @@ Route::post('/signin', 'ApiController@signin');
 Route::get('/profile/{id}', 'ApiController@profile');
 Route::post('/send_notif', 'ApiController@sendNotif');
 Route::get('/notifications/{user_id}', 'ApiController@getMail');
+Route::get('/notifications/unread/{user_id}', 'ApiController@getMailUnread');
 Route::post('/status_read/{id}', 'ApiController@updateStatusRead');
 
 
