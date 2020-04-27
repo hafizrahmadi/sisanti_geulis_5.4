@@ -5,9 +5,10 @@ namespace App\Http\Controllers;
 use DB;
 use Illuminate\Http\Request;
 use App\ModelUser;
+use App\ModelNotifMasuk;
 use Illuminate\Support\Str;
 use Auth;
-
+use Carbon\Carbon;
 /**
  *
  */
@@ -35,7 +36,8 @@ class ApiController extends Controller
           return [
             'status' => 'Success',
             'token' => $token,
-            'firebase' => $firebase
+            'firebase' => $firebase,
+            'user_id' => $data->id
           ];
 
         }
@@ -53,9 +55,11 @@ class ApiController extends Controller
   }
 
   public function sendNotif(Request $request) {
+    $user_id = $request->user_id;
     $firebase = $request->firebase;
     $title = $request->title;
     $body =  $request->body;
+
 
     $fields = array (
             'to' => $firebase,
@@ -64,6 +68,17 @@ class ApiController extends Controller
                 "body"      => $body
             )
         );
+
+    //========
+    $data =  new ModelNotifMasuk();
+    $data->user_id = $request->user_id;
+    $data->title = $request->title;
+    $data->body = $request->body;
+    $data->status_read = 0;
+    $data->created_at = Carbon::now();
+    $data->updated_at = Carbon::now();
+    $data->save();
+    //========
 
     $fields = json_encode ( $fields );
 
@@ -89,5 +104,31 @@ class ApiController extends Controller
 
     curl_close($curl);
   }
+
+
+  public function getMail($user_id) {
+    $data = ModelNotifMasuk::where('user_id',$user_id)->get();
+    return [
+      'data' => $data
+    ];
+  }
+
+  public function updateStatusRead($id) {
+    $data = ModelNotifMasuk::where('id',$id)->update([
+      'status_read' => 1
+    ]);
+    if($data) {
+      return [
+        'status' => 'Success'
+      ];
+    } else {
+      return [
+        'status' => 'Failed'
+      ];
+    }
+  }
+
+
+
 
 }

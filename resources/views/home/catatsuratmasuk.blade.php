@@ -105,7 +105,7 @@
                 <div class="form-group">
                   <label>Disposisi</label>
                   <select class="form-control" name="id_user_camat" id="id_user_camat">
-                    
+
                   </select>
                </div>
 
@@ -143,7 +143,7 @@
             format: 'yyyy-mm-dd',
             // todayHighlight: true,
             autoclose: true,
-            // startDate: '2017-12-18', 
+            // startDate: '2017-12-18',
             endDate:'d',
         });
     });
@@ -282,7 +282,7 @@
                type: "POST",
                processData: false,
               contentType: false,
-               data: 
+               data:
                   form_data
                ,
                beforeSend: function() {
@@ -414,14 +414,14 @@
                type: "POST",
                data: {
                   _token: '{{csrf_token()}}',
-                  'firebase': "{{session('token')}}",
+                  'firebase': "dDaWCLhkAsc:APA91bGhS09beR0fv6LOHJLlnve8qJBtbGKhHldTZjObT07FJLOrlDgRMJmv7oBCiTTak3eNky8C8tkDhZgCDkThSnYrNrlHpQ07PcxFQaPBjfiyu6rYhTcyi1nJ47_G74Ov3EhMDUFR",
                   'title': "SISANTI GEULIS",
                   'body': "Pemberitahuan! Surat masuk baru untuk anda. Perihal : "+perihal,
                },
                beforeSend: function() {
                  console.log({
                    _token: '{{csrf_token()}}',
-                  'firebase': "{{session('token')}}",
+                  'firebase': "dDaWCLhkAsc:APA91bGhS09beR0fv6LOHJLlnve8qJBtbGKhHldTZjObT07FJLOrlDgRMJmv7oBCiTTak3eNky8C8tkDhZgCDkThSnYrNrlHpQ07PcxFQaPBjfiyu6rYhTcyi1nJ47_G74Ov3EhMDUFR",
                   'title': "SISANTI GEULIS",
                   'body': "Pemberitahuan! Surat masuk baru untuk anda. Perihal : "+perihal,
                  });
