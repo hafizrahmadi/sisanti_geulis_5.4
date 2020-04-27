@@ -107,7 +107,7 @@ class ApiController extends Controller
 
 
   public function getMail($user_id) {
-    $data = ModelNotifMasuk::where('user_id',$user_id)->orderBy('created_at', 'desc')->get();
+    $data = ModelNotifMasuk::where('user_id',$user_id)->orderBy('created_at', 'asc')->get();
     return [
       'data' => $data
     ];
