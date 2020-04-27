@@ -59,6 +59,7 @@ class ApiController extends Controller
     $firebase = $request->firebase;
     $title = $request->title;
     $body =  $request->body;
+    $jenis = $request->jenis;
 
 
     $fields = array (
@@ -74,6 +75,7 @@ class ApiController extends Controller
     $data->user_id = $request->user_id;
     $data->title = $request->title;
     $data->body = $request->body;
+    $data->jenis = $request->jenis;
     $data->status_read = 0;
     $data->created_at = Carbon::now();
     $data->updated_at = Carbon::now();
