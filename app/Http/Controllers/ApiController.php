@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\ModelUser;
 use App\ModelNotifMasuk;
 use App\ModelSuratMasuk;
+use App\ModelInstruksiCamat;
 use Illuminate\Support\Str;
 use Auth;
 use Carbon\Carbon;
@@ -142,6 +143,14 @@ class ApiController extends Controller
 
   public function detailSuratMasuk($id) {
     $data = ModelSuratMasuk::where('id',$id)->first();
+    return [
+      'status' => 'Success',
+      'data' => $data
+    ];
+  }
+
+  public function instruksiCamat() {
+    $data = ModelInstruksiCamat::all();
     return [
       'status' => 'Success',
       'data' => $data
