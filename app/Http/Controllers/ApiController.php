@@ -171,6 +171,7 @@ class ApiController extends Controller
     $data->catatan = $request->catatan;
     $data->instruksi = $request->instruksi;
     $data->dari_user_id = $request->dari_user_id;
+    $data->status_read_admin = 0;
     $data->created_at = Carbon::now();
     $response = $data->save();
 
