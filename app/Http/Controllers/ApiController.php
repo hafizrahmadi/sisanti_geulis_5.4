@@ -6,6 +6,7 @@ use DB;
 use Illuminate\Http\Request;
 use App\ModelUser;
 use App\ModelNotifMasuk;
+use App\ModelSuratMasuk;
 use Illuminate\Support\Str;
 use Auth;
 use Carbon\Carbon;
@@ -60,6 +61,7 @@ class ApiController extends Controller
     $title = $request->title;
     $body =  $request->body;
     $jenis = $request->jenis;
+    $id_surat_masuk = $request->id_surat_masuk;
 
 
     $fields = array (
@@ -76,6 +78,7 @@ class ApiController extends Controller
     $data->title = $request->title;
     $data->body = $request->body;
     $data->jenis = $request->jenis;
+    $data->id_surat_masuk = $request->id_surat_masuk;
     $data->status_read = 0;
     $data->created_at = Carbon::now();
     $data->updated_at = Carbon::now();
@@ -137,7 +140,13 @@ class ApiController extends Controller
     }
   }
 
-
+  public function detailSuratMasuk($id) {
+    $data = ModelSuratMasuk::where('id',$id)->first();
+    return [
+      'status' => 'Success',
+      'data' => $data
+    ];
+  }
 
 
 }
