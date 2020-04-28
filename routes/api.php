@@ -26,6 +26,7 @@ Route::get('/notifications/unread/{user_id}', 'ApiController@getMailUnread');
 Route::post('/status_read/{id}', 'ApiController@updateStatusRead');
 Route::get('/detail_surat_masuk/{id}', 'ApiController@detailSuratMasuk');
 Route::get('/list_instruksi_camat', 'ApiController@instruksiCamat');
+Route::post('/post/instruksi', 'ApiController@postInstruksi');
 
 
 Route::get('getlistuser','UserController@getListUser');

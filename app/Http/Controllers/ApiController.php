@@ -8,6 +8,7 @@ use App\ModelUser;
 use App\ModelNotifMasuk;
 use App\ModelSuratMasuk;
 use App\ModelInstruksiCamat;
+use App\ModelFeedbackSuratMasuk;
 use Illuminate\Support\Str;
 use Auth;
 use Carbon\Carbon;
@@ -155,6 +156,36 @@ class ApiController extends Controller
       'status' => 'Success',
       'data' => $data
     ];
+  }
+
+
+  public function postInstruksi(Request $request) {
+    $id_surat_masuk = $request->id_surat_masuk;
+    $catatan = $request->catatan;
+    $instruksi	 = $request->instruksi	;
+    $dari_user_id =  $request->dari_user_id;
+
+
+    $data = new ModelFeedbackSuratMasuk();
+    $data->id_surat_masuk = $request->id_surat_masuk;
+    $data->catatan = $request->catatan;
+    $data->instruksi = $request->instruksi;
+    $data->dari_user_id = $request->dari_user_id;
+    $data->created_at = Carbon::now();
+    $response = $data->save();
+
+    if($response) {
+      return [
+        'status' => 'Success'
+      ];
+    } else {
+      return [
+        'status' => 'Failed'
+      ];
+    }
+
+
+
   }
 
 
