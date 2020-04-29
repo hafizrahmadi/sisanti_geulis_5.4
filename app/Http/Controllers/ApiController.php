@@ -47,6 +47,8 @@ class ApiController extends Controller
         else {
             return ['status' => 'Failed'];
         }
+    } else {
+      return ['status' => 'Failed'];
     }
   }
 
