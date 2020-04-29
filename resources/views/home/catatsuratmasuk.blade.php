@@ -105,7 +105,7 @@
                 <div class="form-group">
                   <label>Disposisi</label>
                   <select class="form-control" name="id_user_camat" id="id_user_camat">
-                    
+
                   </select>
                </div>
 
@@ -143,7 +143,7 @@
             format: 'yyyy-mm-dd',
             // todayHighlight: true,
             autoclose: true,
-            // startDate: '2017-12-18', 
+            // startDate: '2017-12-18',
             endDate:'d',
         });
     });
@@ -210,7 +210,7 @@
                                 '<td id="catatan_'+(i+1)+'" data-val="'+dt[i].catatan+'">'+dt[i].catatan+'</td>'+
                                 '<td class="text-center">'+
                                       '<div class="btn-group" >'+
-                                      '<a href="javascript:sendNotif(\''+(i+1)+'\',\''+dt[i].id_user_camat+'\',\''+dt[i].firebase+'\')">'+
+                                      '<a href="javascript:sendNotif(\''+(i+1)+'\',\''+dt[i].id+'\',\''+dt[i].id_user_camat+'\',\''+dt[i].firebase+'\')">'+
                                        '<button class="btn btn-xs btn-teal" title="Kirim Notifikasi"><i class="fa fa-bell" style=""></i></button>'+
                                        '</a>&nbsp;'+
                                        '<a href="javascript:modalForm(\'Edit Surat Masuk\',\''+(i+1)+'\',\''+dt[i].id+'\')">'+
@@ -282,7 +282,7 @@
                type: "POST",
                processData: false,
               contentType: false,
-               data: 
+               data:
                   form_data
                ,
                beforeSend: function() {
@@ -407,7 +407,7 @@
             });
   }
 
-  function sendNotif(index,id_user_camat,firebase){
+  function sendNotif(index,id_surat_masuk,id_user_camat,firebase){
     perihal = $('#perihal_'+index).attr('data-val');
     $.ajax({
                url: "{{url('/api/send_notif')}}",
@@ -418,7 +418,8 @@
                   'firebase':firebase,
                   'title': "SISANTI GEULIS",
                   'body': "Pemberitahuan! Surat masuk baru untuk anda. Perihal : "+perihal,
-                  'jenis':1
+                  'jenis':1,
+                  'id_surat_masuk':id_surat_masuk,
                },
                beforeSend: function() {
                  console.log({
@@ -427,7 +428,8 @@
                   'firebase':firebase,
                   'title': "SISANTI GEULIS",
                   'body': "Pemberitahuan! Surat masuk baru untuk anda. Perihal : "+perihal,
-                  'jenis':1
+                  'jenis':1,
+                  'id_surat_masuk':id_surat_masuk,
                  });
 
                },
