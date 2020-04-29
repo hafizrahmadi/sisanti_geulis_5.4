@@ -51,7 +51,12 @@ class ApiController extends Controller
   }
 
   public function profile($id) {
-    $data = ModelUser::where('id',$id)->first();
+
+    $data = DB::table('tb_user')
+    ->select('tb_user.id','tb_user.username','tb_user.npk','tb_user.nama_lengkap', 'tb_user.jabatan', 'tb_jabatan.nama_jabatan', 'tb_user.token','tb_user.firebase')
+    ->join('tb_jabatan','tb_user.jabatan','=','tb_jabatan.id')
+    ->where('tb_user.id', $id)
+    ->get();
     return [
       'data' => $data
     ];
@@ -184,9 +189,19 @@ class ApiController extends Controller
         'status' => 'Failed'
       ];
     }
+  }
 
+  public function organisasi($leader_id) {
+    $data = DB::table('tb_user')
+    ->select('tb_user.id','tb_user.username','tb_user.npk','tb_user.nama_lengkap', 'tb_user.token','tb_user.firebase')
+    ->join('tb_organisasi','tb_user.id','=','tb_organisasi.under_id')
+    ->where('tb_organisasi.leader_id', $leader_id)
+    ->get();
 
-
+    return [
+      'status' => 'Success',
+      'data' => $data
+    ];
   }
 
 
