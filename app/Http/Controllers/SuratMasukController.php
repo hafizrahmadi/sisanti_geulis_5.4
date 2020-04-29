@@ -23,7 +23,7 @@ class SuratMasukController extends Controller
         // $sel = DB::connection('mysql')->select("SELECT a.id, a.nomor_surat, a.tanggal_surat, a.perihal, a.asal_surat, a.lampiran, a.id_user, b.username, b.nama_lengkap, a.file_dokumen, a.catatan, a.created_at, a.updated_at
         //     from tb_surat_masuk a left join tb_user b on a.id_user = b.id order by 1 asc;");
         $sel = DB::connection('mysql')->select("SELECT a.id, a.nomor_surat, a.tanggal_surat, a.perihal, a.asal_surat, a.lampiran, a.id_user, b.username, b.nama_lengkap, a.id_user_camat, 
-            c.username as username_camat, c.nama_lengkap as nama_lengkap_camat, c.firebase
+            c.username as username_camat, c.nama_lengkap as nama_lengkap_camat, c.firebase,
             a.file_dokumen, a.catatan, a.created_at, a.updated_at
             from tb_surat_masuk a left join tb_user b on a.id_user = b.id left join tb_user c on a.id_user_camat = c.id order by 1 asc;");
 
