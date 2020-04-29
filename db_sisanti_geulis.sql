@@ -11,7 +11,7 @@
  Target Server Version : 100411
  File Encoding         : 65001
 
- Date: 25/04/2020 16:51:23
+ Date: 26/04/2020 13:56:11
 */
 
 SET NAMES utf8mb4;
@@ -121,7 +121,7 @@ CREATE TABLE `tb_user` (
 -- Records of tb_user
 -- ----------------------------
 BEGIN;
-INSERT INTO `tb_user` VALUES (1, 'admin', 'admin', '1234', 'mimin tampan', 'tralal', '1', 10, 'admin', '-', '', '2020-04-18 13:28:07', '2020-04-22 16:23:04');
+INSERT INTO `tb_user` VALUES (1, 'admin', 'admin', '1234', 'mimin tampan', 'tralal', '1', 10, 'admin', 'QHP2ShynvXsgHGH81e65xjwWq8qoqjRwttlDahUYsar9D4RuRyN5vJAns1hb3OJw8NaCZzshuUc59dnyjIupEQ5FCcXeThnbcaN2sGjV7Ez2O3xkcrEZmUYPrzYYxFPHIduBeHiySipgGUupcHw1wd6TqFfK2HGh', '', '2020-04-18 13:28:07', '2020-04-22 16:23:04');
 INSERT INTO `tb_user` VALUES (3, 'camat', 'camat', '123123', 'hafiz rahmadi', 'eqweqwe', '1', 1, 'camat', 'QHP2ShynvXsgHGH81e65xjwWq8qoqjRwttlDahUYsar9D4RuRyN5vJAns1hb3OJw8NaCZzshuUc59dnyjIupEQ5FCcXeThnbcaN2sGjV7Ez2O3xkcrEZmUYPrzYYxFPHIduBeHiySipgGUupcHw1wd6TqFfK2HGh', '123', '2020-04-18 13:31:49', '2020-04-25 09:44:31');
 COMMIT;
 

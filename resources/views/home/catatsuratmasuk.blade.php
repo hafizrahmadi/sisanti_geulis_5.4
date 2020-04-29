@@ -210,7 +210,7 @@
                                 '<td id="catatan_'+(i+1)+'" data-val="'+dt[i].catatan+'">'+dt[i].catatan+'</td>'+
                                 '<td class="text-center">'+
                                       '<div class="btn-group" >'+
-                                      '<a href="javascript:sendNotif(\''+(i+1)+'\')">'+
+                                      '<a href="javascript:sendNotif(\''+(i+1)+'\',\''+dt[i].id_user_camat+'\',\''+dt[i].firebase+'\')">'+
                                        '<button class="btn btn-xs btn-teal" title="Kirim Notifikasi"><i class="fa fa-bell" style=""></i></button>'+
                                        '</a>&nbsp;'+
                                        '<a href="javascript:modalForm(\'Edit Surat Masuk\',\''+(i+1)+'\',\''+dt[i].id+'\')">'+
@@ -407,23 +407,27 @@
             });
   }
 
-  function sendNotif(index){
+  function sendNotif(index,id_user_camat,firebase){
     perihal = $('#perihal_'+index).attr('data-val');
     $.ajax({
                url: "{{url('/api/send_notif')}}",
                type: "POST",
                data: {
                   _token: '{{csrf_token()}}',
-                  'firebase': "{{session('token')}}",
+                  'user_id':id_user_camat,
+                  'firebase':firebase,
                   'title': "SISANTI GEULIS",
                   'body': "Pemberitahuan! Surat masuk baru untuk anda. Perihal : "+perihal,
+                  'jenis':1
                },
                beforeSend: function() {
                  console.log({
                    _token: '{{csrf_token()}}',
-                  'firebase': "{{session('token')}}",
+                  'user_id':id_user_camat,
+                  'firebase':firebase,
                   'title': "SISANTI GEULIS",
                   'body': "Pemberitahuan! Surat masuk baru untuk anda. Perihal : "+perihal,
+                  'jenis':1
                  });
 
                },
