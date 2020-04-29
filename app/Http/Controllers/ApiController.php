@@ -121,7 +121,7 @@ class ApiController extends Controller
 
 
   public function getMail($user_id) {
-    $data = ModelNotifMasuk::where('user_id',$user_id)->orderBy('created_at', 'asc')->get();
+    $data = ModelNotifMasuk::where('user_id',$user_id)->orderBy('id', 'desc')->get();
     return [
       'data' => $data
     ];
@@ -171,13 +171,14 @@ class ApiController extends Controller
     $catatan = $request->catatan;
     $instruksi	 = $request->instruksi	;
     $dari_user_id =  $request->dari_user_id;
-
+    $untuk_user_id = $request->untuk_user_id;
 
     $data = new ModelFeedbackSuratMasuk();
     $data->id_surat_masuk = $request->id_surat_masuk;
     $data->catatan = $request->catatan;
     $data->instruksi = $request->instruksi;
     $data->dari_user_id = $request->dari_user_id;
+    $data->untuk_user_id = $request->untuk_user_id;
     $data->status_read_admin = 0;
     $data->created_at = Carbon::now();
     $response = $data->save();
