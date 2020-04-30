@@ -22,9 +22,10 @@ class SuratMasukController extends Controller
     public function getListSuratMasuk(){
         // $sel = DB::connection('mysql')->select("SELECT a.id, a.nomor_surat, a.tanggal_surat, a.perihal, a.asal_surat, a.lampiran, a.id_user, b.username, b.nama_lengkap, a.file_dokumen, a.catatan, a.created_at, a.updated_at
         //     from tb_surat_masuk a left join tb_user b on a.id_user = b.id order by 1 asc;");
-        $sel = DB::connection('mysql')->select("SELECT a.id, a.nomor_surat, a.tanggal_surat, a.perihal, a.asal_surat, a.lampiran, a.id_user, b.username, b.nama_lengkap, a.id_user_camat, 
-            c.username as username_camat, c.nama_lengkap as nama_lengkap_camat, c.firebase,
-            a.file_dokumen, a.catatan, a.created_at, a.updated_at
+        $sel = DB::connection('mysql')->select("SELECT a.id, a.nomor_surat, a.tanggal_surat, a.perihal, a.asal_surat, a.lampiran, a.file_dokumen, a.catatan, a.ringkasan_surat, 
+             a.id_user, b.username, b.nama_lengkap, 
+             a.id_user_camat, c.username as username_camat, c.nama_lengkap as nama_lengkap_camat, c.firebase, a.status_read_camat,
+             a.created_at, a.updated_at
             from tb_surat_masuk a left join tb_user b on a.id_user = b.id left join tb_user c on a.id_user_camat = c.id order by 1 asc;");
 
 
@@ -94,6 +95,7 @@ class SuratMasukController extends Controller
             }
 
             $data->file_dokumen = $fullpath;
+            $data->ringkasan_surat = $request->ringkasan_surat;
             $data->catatan = $request->catatan;
 
             if ($status_upload) {    
@@ -128,9 +130,9 @@ class SuratMasukController extends Controller
 
             if ($fullpath!='') {
                File::delete($file_dokumen_lama);
-                $xx = ModelSuratMasuk::where('id',$request->id)->update(['nomor_surat'=>$request->nomor_surat,'tanggal_surat'=>$request->tanggal_surat,'perihal'=>$request->perihal,'asal_surat'=>$request->asal_surat,'lampiran'=>$request->lampiran,'id_user'=>$request->id_user,'file_dokumen'=>$fullpath,'catatan'=>$request->catatan,'id_user_camat'=>$request->id_user_camat]);
+                $xx = ModelSuratMasuk::where('id',$request->id)->update(['nomor_surat'=>$request->nomor_surat,'tanggal_surat'=>$request->tanggal_surat,'perihal'=>$request->perihal,'asal_surat'=>$request->asal_surat,'lampiran'=>$request->lampiran,'id_user'=>$request->id_user,'file_dokumen'=>$fullpath,'catatan'=>$request->catatan,'ringkasan_surat'=>$request->ringkasan_surat,'id_user_camat'=>$request->id_user_camat]);
             }else{
-                $xx = ModelSuratMasuk::where('id',$request->id)->update(['nomor_surat'=>$request->nomor_surat,'tanggal_surat'=>$request->tanggal_surat,'perihal'=>$request->perihal,'asal_surat'=>$request->asal_surat,'lampiran'=>$request->lampiran,'id_user'=>$request->id_user,'catatan'=>$request->catatan,'id_user_camat'=>$request->id_user_camat]);
+                $xx = ModelSuratMasuk::where('id',$request->id)->update(['nomor_surat'=>$request->nomor_surat,'tanggal_surat'=>$request->tanggal_surat,'perihal'=>$request->perihal,'asal_surat'=>$request->asal_surat,'lampiran'=>$request->lampiran,'id_user'=>$request->id_user,'catatan'=>$request->catatan,'ringkasan_surat'=>$request->ringkasan_surat,'id_user_camat'=>$request->id_user_camat]);
             }
             
             if ($status_upload) {   

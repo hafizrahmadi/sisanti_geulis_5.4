@@ -279,6 +279,8 @@
 <link rel="stylesheet" href="{{asset('file_assets/adminlte/bower_components/datatables.net-bs/css/dataTables.bootstrap.css') }}">
 <!-- DataTables -->
 <script src="{{asset('file_assets/adminlte/bower_components/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+<script src="{{asset('file_assets/adminlte/bower_components/datatables.net/js/dataTables.fixedColumns.min.js') }}"></script>
+
 <script src="{{asset('file_assets/adminlte/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
 <!-- <script src="//cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script> -->
 
@@ -411,6 +413,7 @@
                   <!-- <li><a href="#"><i class="fa fa-bell"></i> <span>Notification</span></a></li> -->
                   <li><a href="{{url('/masteruser')}}"><i class="fa fa-user"></i> <span>Master User</span></a></li>
                   <li><a href="{{url('/catatsuratmasuk')}}"><i class="fa fa-pencil-square-o"></i> <span>Catat Surat Masuk</span></a></li>
+                  <li><a href="javascript:alert('coming soon!');"><i class="fa fa-archive" style=""></i> Arsip Surat Masuk</a></li>
                   <li><a href="{{url('/login')}}"><i class="fa fa-lock"></i> <span>Catat Surat Keluar</span></a></li>
               <!-- </form> -->
 

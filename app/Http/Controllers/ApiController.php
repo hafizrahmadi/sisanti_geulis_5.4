@@ -94,6 +94,10 @@ class ApiController extends Controller
     $data->save();
     //========
 
+    // ===== update status read camat =====
+    $xx = ModelSuratMasuk::where('id',$request->id_surat_masuk)->update(['status_read_camat'=>1]);
+    // ===== end update status read camat =====
+
     $fields = json_encode ( $fields );
 
     $curl = curl_init();
