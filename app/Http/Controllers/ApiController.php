@@ -98,6 +98,19 @@ class ApiController extends Controller
     $xx = ModelSuratMasuk::where('id',$request->id_surat_masuk)->update(['status_read_camat'=>1]);
     // ===== end update status read camat =====
 
+    // ===== nyimpen ke tb feeback (disposisi)
+    $data = new ModelFeedbackSuratMasuk();
+    $data->id_surat_masuk = $request->id_surat_masuk;
+    $data->catatan = "Surat masuk baru";
+    $data->instruksi = "Untuk diketahui";
+    $data->dari_user_id = $request->id_admin;
+    $data->untuk_user_id = $request->user_id;
+    $data->status_read_admin = 1;
+    $data->created_at = Carbon::now();
+    $response = $data->save();
+
+    // ==== end nyimpen ke tb feedback (disposisi)
+
     $fields = json_encode ( $fields );
 
     $curl = curl_init();

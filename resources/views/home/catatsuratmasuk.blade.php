@@ -288,7 +288,7 @@
                     }
 
                     if (dt[i].status_read_camat==0) {
-                      ctn_notif = '<a href="javascript:sendNotif(\''+(i+1)+'\',\''+dt[i].id+'\',\''+dt[i].id_user_camat+'\',\''+dt[i].firebase+'\')">'+
+                      ctn_notif = '<a href="javascript:sendNotif(\''+(i+1)+'\',\''+dt[i].id+'\',\''+dt[i].id_user+'\',\''+dt[i].id_user_camat+'\',\''+dt[i].firebase+'\')">'+
                                        '<button class="btn btn-xs btn-teal" title="Kirim Notifikasi"><i class="fa fa-bell" style=""></i></button>'+
                                        '</a>';
                     }else if (dt[i].status_read_camat==1) {
@@ -365,6 +365,7 @@
     var lampiran = $('#lampiran').val();
     var file_dokumen = $('#file_dokumen').prop('files')[0];
     var catatan = $('#catatan').val();
+    var ringkasan_surat = $('#ringkasan_surat').val();
     var id_surat_masuk = $('#id_surat_masuk').val();
     var id_user_camat = $('#id_user_camat').val();
     var id_user = $('#id_user').val();
@@ -380,6 +381,7 @@
        form_data.append('lampiran', lampiran);
        form_data.append('file_dokumen', file_dokumen);
        form_data.append('catatan', catatan);
+       form_data.append('ringkasan_surat', ringkasan_surat);
        form_data.append('id_user', id_user);
        form_data.append('id_user_camat', id_user_camat);
        console.log(
@@ -517,7 +519,7 @@
             });
   }
 
-  function sendNotif(index,id_surat_masuk,id_user_camat,firebase){
+  function sendNotif(index,id_surat_masuk,id_admin,id_user_camat,firebase){
     perihal = $('#perihal_'+index).attr('data-val');
     $.ajax({
                url: "{{url('/api/send_notif')}}",
@@ -525,6 +527,7 @@
                data: {
                   _token: '{{csrf_token()}}',
                   'user_id':id_user_camat,
+                  'id_admin':id_admin,
                   'firebase':firebase,
                   'title': "SISANTI GEULIS",
                   'body': "Pemberitahuan! Surat masuk baru untuk anda. Perihal : "+perihal,
@@ -535,6 +538,7 @@
                  console.log({
                    _token: '{{csrf_token()}}',
                   'user_id':id_user_camat,
+                  'id_admin':id_admin,
                   'firebase':firebase,
                   'title': "SISANTI GEULIS",
                   'body': "Pemberitahuan! Surat masuk baru untuk anda. Perihal : "+perihal,

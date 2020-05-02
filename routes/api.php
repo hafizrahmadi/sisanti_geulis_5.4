@@ -31,6 +31,10 @@ Route::get('/list_under/{leader_id}', 'ApiController@organisasi');
 
 Route::get('getlistuser','UserController@getListUser');
 Route::get('getlistsuratmasuk','SuratMasukController@getListSuratMasuk');
+Route::get('getsuratmasuk/{id}','SuratMasukController@getSuratMasuk');
 Route::post('/addsuratmasuk', 'SuratMasukController@addSuratMasuk');
 Route::post('/deletesuratmasuk', 'SuratMasukController@deleteSuratMasuk');
 Route::get('getlistcamat','SuratMasukController@getListCamat');
+Route::get('getlistnotifdisposisi','SuratMasukController@getListNotifDisposisi');
+Route::get('getlistdisposisi','SuratMasukController@getListDisposisi');
+Route::post('/readdisposisi', 'SuratMasukController@readDisposisi');

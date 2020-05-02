@@ -31,7 +31,9 @@ Route::get('/home', function () {
 Route::get('/masteruser','UserController@masteruser');
 
 Route::get('/catatsuratmasuk','SuratMasukController@catatsuratmasuk');
-
+Route::get('/list_disposisi',function(){
+	return view('home/list_disposisi');
+});
 
 Route::get('getlistuser','UserController@getListUser');
 Route::post('/adduserpost', 'UserController@addUserPost');

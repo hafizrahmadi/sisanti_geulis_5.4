@@ -274,6 +274,29 @@
         background-color: #ffffff;
     }
 
+    /*kebutuhan dropdown notif*/
+    .navbar-nav > .messages-menu > .dropdown-menu > li .menu > li > a > h4 {
+        padding: 0;
+        margin: 0 0 0 0px;
+        color: #444444;
+        font-size: 15px;
+        position: relative;
+        white-space: pre-wrap;
+    }
+
+    .navbar-nav > .messages-menu > .dropdown-menu > li .menu > li > a > p {
+      margin: 0 0 0 0px;
+      font-size: 13px;
+      color: #444444;
+      white-space: pre-wrap;
+    }
+
+    .navbar-nav > .messages-menu > .dropdown-menu > li .menu > li > a > p.det {
+      margin: 0 0 0 0px;
+      font-size: 11px;
+      color: #888888;
+      white-space: pre-wrap;
+    }
 </style>
 @yield('css')
 <link rel="stylesheet" href="{{asset('file_assets/adminlte/bower_components/datatables.net-bs/css/dataTables.bootstrap.css') }}">
@@ -317,16 +340,15 @@
          <div class="navbar-custom-menu">
             <ul class="nav navbar-nav">
             <li class="dropdown messages-menu">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                  <i class="fa fa-envelope-o"></i>
-                  <span class="label label-success">4</span>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" onclick="">
+                  <i class="fa fa-bell-o"></i>
+                  <span class="label label-warning" id="label-notif"></span>
                 </a>
-                <ul class="dropdown-menu">
+                <ul class="dropdown-menu" id="dropdown-notif">
                   <li class="header">You have 4 messages</li>
                   <li>
-                    <!-- inner menu: contains the actual data -->
                     <ul class="menu">
-                      <li><!-- start message -->
+                      <li>
                         <a href="#">
                           <div class="pull-left">
                             <img src="{{asset('file_assets/img/user.png')}}" class="img-circle" alt="User Image">
@@ -338,30 +360,9 @@
                           <p>Why not buy a new awesome theme?</p>
                         </a>
                       </li>
-                      <!-- end message -->
                     </ul>
                   </li>
                   <li class="footer"><a href="#">See All Messages</a></li>
-                </ul>
-              </li>
-              <li class="dropdown notifications-menu">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                  <i class="fa fa-bell-o"></i>
-                  <span class="label label-warning">10</span>
-                </a>
-                <ul class="dropdown-menu">
-                  <li class="header">You have 10 notifications</li>
-                  <li>
-                    <!-- inner menu: contains the actual data -->
-                    <ul class="menu">
-                      <li>
-                        <a href="#">
-                          <i class="fa fa-users text-aqua"></i> 5 new members joined today
-                        </a>
-                      </li>
-                    </ul>
-                  </li>
-                  <li class="footer"><a href="#">View all</a></li>
                 </ul>
               </li>
               <li class="dropdown user user-menu ">
@@ -414,6 +415,8 @@
                   <li><a href="{{url('/masteruser')}}"><i class="fa fa-user"></i> <span>Master User</span></a></li>
                   <li><a href="{{url('/catatsuratmasuk')}}"><i class="fa fa-pencil-square-o"></i> <span>Catat Surat Masuk</span></a></li>
                   <li><a href="javascript:alert('coming soon!');"><i class="fa fa-archive" style=""></i> Arsip Surat Masuk</a></li>
+                  <li><a href="javascript:alert('coming soon!');"><i class="fa fa-sticky-note-o" style=""></i> Nota Dinas</a></li>
+                  <li><a href="{{url('/list_disposisi')}}"><i class="fa fa-mail-forward" style=""></i> List Disposisi</a></li>
                   <li><a href="{{url('/login')}}"><i class="fa fa-lock"></i> <span>Catat Surat Keluar</span></a></li>
               <!-- </form> -->
 
@@ -450,6 +453,66 @@
 
 
 </div>
+<script type="text/javascript">
+  $(document).ready(function() {
+    getListNotifDisposisi();
+     // setInterval(getListNotifDisposisi,5000);
+    });
+  function getListNotifDisposisi(){
+    $('#tbody').html("");
+    $.ajax({
+                url: "{{url('/api/getlistnotifdisposisi')}}",
+                type: "GET",
+                data: {
+                },
+                beforeSend: function() {
+                  // console.log(tablex);
+
+                },
+                success: function(dt) {
+                  // dt = JSON.parse(data);
+
+                  console.log(dt);
+                  // content = '';
+                  //  content+='<option value="">Pilih Camat</option>';
+                  // for (var i = 0; i < dt.length; i++) {
+                  //   content+='<option value="'+dt[i].id+'">'+dt[i].username +' ('+dt[i].nama_lengkap+' : '+dt[i].nama_jabatan+')</option>';
+                  // }
+                  content = '';
+
+                  content+='<li class="header">Ada '+dt.length+' Notifikasi Disposisi</li>';
+                  for (var i = 0; i < dt.length; i++) {
+                    link = "{{url('/list_disposisi')}}";
+                  content+=
+                  '<li>'+
+                    '<ul class="menu">'+
+                      '<li>'+
+                        '<a href="'+link+'">'+
+                          '<h4>'+
+                            '<i class="fa fa-mail-forward"></i> '+'Surat Masuk : '+dt[i].perihal+' ('+')'+
+                            // '<small><i class="fa fa-clock-o"></i> 5 mins</small>'+
+                          '</h4>'+
+                          '<p>Telah didisposisikan dari '+dt[i].dari_username+', untuk '+dt[i].untuk_username+'.</p>'+
+                          '<p class="det">Catatan : '+dt[i].catatan_disposisi+'</p>'+
+                          '<p class="det">Instruksi : '+dt[i].instruksi+'</p>'+
+                        '</a>'+
+                      '</li>'+
+                    '</ul>'+
+                  '</li>';
+                }
+                content+='<li class="footer"><a href="#">Lihat Semua Disposisi</a></li>';
+                  $('#label-notif').html(dt.length);
+                  $('#dropdown-notif').html(content);
+              },
+              complete: function() {
+              },
+              error: function() {
+                  alert("Load data notif disposisi gagal !");
+              }
+          });
+  }
+
+</script>
 @yield('script')
 </body>
 </html>
