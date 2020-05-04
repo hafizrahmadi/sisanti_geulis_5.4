@@ -38,3 +38,9 @@ Route::get('getlistcamat','SuratMasukController@getListCamat');
 Route::get('getlistnotifdisposisi','SuratMasukController@getListNotifDisposisi');
 Route::get('getlistdisposisi','SuratMasukController@getListDisposisi');
 Route::post('/readdisposisi', 'SuratMasukController@readDisposisi');
+
+// surat keluar
+Route::get('getlistsuratkeluar','SuratKeluarController@getListSuratKeluar');
+Route::get('getsuratkeluar/{id}','SuratKeluarController@getSuratKeluar');
+Route::post('/addsuratkeluar', 'SuratKeluarController@addSuratKeluar');
+Route::post('/deletesuratkeluar', 'SuratKeluarController@deleteSuratKeluar');

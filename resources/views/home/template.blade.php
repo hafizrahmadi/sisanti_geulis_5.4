@@ -417,7 +417,7 @@
                   <li><a href="javascript:alert('coming soon!');"><i class="fa fa-archive" style=""></i> Arsip Surat Masuk</a></li>
                   <li><a href="javascript:alert('coming soon!');"><i class="fa fa-sticky-note-o" style=""></i> Nota Dinas</a></li>
                   <li><a href="{{url('/list_disposisi')}}"><i class="fa fa-mail-forward" style=""></i> List Disposisi</a></li>
-                  <li><a href="{{url('/login')}}"><i class="fa fa-lock"></i> <span>Catat Surat Keluar</span></a></li>
+                  <li><a href="{{url('/catatsuratkeluar')}}"><i class="fa fa-send"></i> <span>Catat Surat Keluar</span></a></li>
               <!-- </form> -->
 
 

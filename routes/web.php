@@ -20,22 +20,26 @@ Route::get('/login',function(){
 });
 Route::post('/loginpost','UserController@loginPost');
 
-Route::get('/home', function () {
-    // return view('welcome');
-	return view('home/home');
+
+Route::group(['middleware' => ['forLogin']], function () {  
+	Route::get('/home', function () {
+	    // return view('welcome');
+		return view('home/home');
+	});
+
+
+
+
+	Route::get('/masteruser','UserController@masteruser');
+	Route::get('/catatsuratmasuk','SuratMasukController@catatsuratmasuk');
+	Route::get('/list_disposisi',function(){
+		return view('home/list_disposisi');
+	});
+
+	Route::get('getlistuser','UserController@getListUser');
+	Route::post('/adduserpost', 'UserController@addUserPost');
+	Route::post('/deleteuser', 'UserController@deleteUser');
+	Route::get('getlistjabatan','UserController@getListJabatan');
+
+	Route::get('/catatsuratkeluar','SuratKeluarController@catatsuratkeluar');
 });
-
-
-
-
-Route::get('/masteruser','UserController@masteruser');
-
-Route::get('/catatsuratmasuk','SuratMasukController@catatsuratmasuk');
-Route::get('/list_disposisi',function(){
-	return view('home/list_disposisi');
-});
-
-Route::get('getlistuser','UserController@getListUser');
-Route::post('/adduserpost', 'UserController@addUserPost');
-Route::post('/deleteuser', 'UserController@deleteUser');
-Route::get('getlistjabatan','UserController@getListJabatan');
