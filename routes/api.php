@@ -28,6 +28,8 @@ Route::get('/detail_surat_masuk/{id}', 'ApiController@detailSuratMasuk');
 Route::get('/list_instruksi_camat', 'ApiController@instruksiCamat');
 Route::post('/post/instruksi', 'ApiController@postInstruksi');
 Route::get('/list_under/{leader_id}', 'ApiController@organisasi');
+Route::get('/list_disposisi', 'ApiController@listdisposisi');
+
 
 Route::get('getlistuser','UserController@getListUser');
 Route::get('getlistsuratmasuk','SuratMasukController@getListSuratMasuk');

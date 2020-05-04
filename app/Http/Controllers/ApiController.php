@@ -225,4 +225,23 @@ class ApiController extends Controller
   }
 
 
+  public function listdisposisi() {
+    $sel = DB::connection('mysql')->select("SELECT a.id, a.nomor_surat, a.tanggal_surat, a.perihal, a.asal_surat, a.lampiran, a.file_dokumen, a.catatan, a.ringkasan_surat,
+        a.id_user, b.username, b.nama_lengkap,
+        a.id_user_camat, c.username as username_camat, c.nama_lengkap as nama_lengkap_camat, c.firebase, a.status_read_camat,
+        a.created_at, a.updated_at, d.id as id_disposisi, d.catatan as catatan_disposisi,d.instruksi,d.status_read_admin,
+        d.dari_user_id,e.username as dari_username,e.pangkat as dari_pangkat, d.untuk_user_id, f.username as untuk_username, f.pangkat as untuk_pangkat,d.created_at as waktu_disposisi
+        from tb_surat_masuk a left join tb_user b on a.id_user = b.id
+        left join tb_user c on a.id_user_camat = c.id
+        left join tb_feeback_surat_masuk d on d.id_surat_masuk = a.id
+        left join tb_user e on d.dari_user_id = e.id
+        left join tb_user f on d.untuk_user_id = f.id
+        where d.id is not null
+        GROUP BY d.id order by d.id desc;");
+
+     // $sel = DB::connection('mysql')->select("SELECT * from tb_feeback_surat_masuk d  where d.id is not null and d.status_read_admin = 0 order by 1 asc;");
+    return response()->json($sel);
+  }
+
+
 }
