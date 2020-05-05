@@ -68,7 +68,6 @@ class SuratKeluarController extends Controller
                 'perihal' => 'required',
                 'asal_surat'=>'required',
                 'lampiran'=>'required',
-                'id_user_camat'=>'required',
                 'file_dokumen'=>'file|mimes:pdf',
             ]);
         }else{
@@ -80,26 +79,24 @@ class SuratKeluarController extends Controller
             'perihal' => 'required',
             'asal_surat'=>'required',
             'lampiran'=>'required',
-            'id_user_camat'=>'required',
         ]);
         }
         
         if ($request->id == '') {
-            $data =  new ModelSuratMasuk();
+            $data =  new ModelSuratKeluar();
             $data->nomor_surat = $request->nomor_surat;
             $data->tanggal_surat = $request->tanggal_surat;
             $data->perihal = $request->perihal;
             $data->asal_surat = $request->asal_surat;
             $data->lampiran = $request->lampiran;
             $data->id_user = $request->id_user;
-            $data->id_user_camat = $request->id_user_camat;
             
             $status_upload = true;
             $fullpath = '';
             if ($request->hasFile('file_dokumen')) {
                 $file = $request->file('file_dokumen');
                 $nama_file = $file->getClientOriginalName();
-                $tujuan = 'file_suratmasuk';
+                $tujuan = 'file_suratkeluar';
                 $aa = $file->move($tujuan,$nama_file);
                 $fullpath = $tujuan.'/'.$nama_file;
                 if (!$aa) {
@@ -125,10 +122,10 @@ class SuratKeluarController extends Controller
         }else{
             $fullpath = '';
             $status_upload = true;
-            $tujuan = 'file_suratmasuk';
+            $tujuan = 'file_suratkeluar';
             $file_dokumen_lama = '';
             if ($request->hasFile('file_dokumen')) {
-                $az = ModelSuratMasuk::where('id',$request->id)->first();
+                $az = ModelSuratKeluar::where('id',$request->id)->first();
                 $file_dokumen_lama = $az->file_dokumen;
 
                 $file = $request->file('file_dokumen');
@@ -144,9 +141,9 @@ class SuratKeluarController extends Controller
 
             if ($fullpath!='') {
                File::delete($file_dokumen_lama);
-                $xx = ModelSuratMasuk::where('id',$request->id)->update(['nomor_surat'=>$request->nomor_surat,'tanggal_surat'=>$request->tanggal_surat,'perihal'=>$request->perihal,'asal_surat'=>$request->asal_surat,'lampiran'=>$request->lampiran,'id_user'=>$request->id_user,'file_dokumen'=>$fullpath,'catatan'=>$request->catatan,'ringkasan_surat'=>$request->ringkasan_surat,'id_user_camat'=>$request->id_user_camat]);
+                $xx = ModelSuratKeluar::where('id',$request->id)->update(['nomor_surat'=>$request->nomor_surat,'tanggal_surat'=>$request->tanggal_surat,'perihal'=>$request->perihal,'asal_surat'=>$request->asal_surat,'lampiran'=>$request->lampiran,'id_user'=>$request->id_user,'file_dokumen'=>$fullpath,'catatan'=>$request->catatan,'ringkasan_surat'=>$request->ringkasan_surat]);
             }else{
-                $xx = ModelSuratMasuk::where('id',$request->id)->update(['nomor_surat'=>$request->nomor_surat,'tanggal_surat'=>$request->tanggal_surat,'perihal'=>$request->perihal,'asal_surat'=>$request->asal_surat,'lampiran'=>$request->lampiran,'id_user'=>$request->id_user,'catatan'=>$request->catatan,'ringkasan_surat'=>$request->ringkasan_surat,'id_user_camat'=>$request->id_user_camat]);
+                $xx = ModelSuratKeluar::where('id',$request->id)->update(['nomor_surat'=>$request->nomor_surat,'tanggal_surat'=>$request->tanggal_surat,'perihal'=>$request->perihal,'asal_surat'=>$request->asal_surat,'lampiran'=>$request->lampiran,'id_user'=>$request->id_user,'catatan'=>$request->catatan,'ringkasan_surat'=>$request->ringkasan_surat]);
             }
             
             if ($status_upload) {   
@@ -166,8 +163,8 @@ class SuratKeluarController extends Controller
     }
 
     public function deleteSuratKeluar(Request $request){
-        $data = ModelSuratMasuk::find($request->id)->first();
-        // $tujuan = 'file_suratmasuk';
+        $data = ModelSuratKeluar::find($request->id)->first();
+        // $tujuan = 'file_suratkeluar';
         File::delete($data->file_dokumen);
         $xx = $data->delete();
         if ($xx) {

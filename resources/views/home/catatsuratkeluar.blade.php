@@ -44,7 +44,6 @@
                         <th>Perihal</th>
                         <th>Asal Surat</th>
                         <th>Lampiran</th>
-                        <th>Disposisi</th>
                         <th>Catatan</th>
                         <th class="text-center">File</th>
                         <th class="text-center">Status Surat</th>
@@ -109,12 +108,6 @@
                   <p class="help-block text-sm" style="color:#ff0000" id="p_file_dokumen">Format file .pdf</p>
                 </div>
 
-                <div class="form-group">
-                  <label>Disposisi</label>
-                  <select class="form-control" name="id_user_camat" id="id_user_camat">
-
-                  </select>
-               </div>
                <div class="form-group">
                   <label>Ringkasan Surat</label>
                   <textarea class="form-control" rows="2" placeholder="Ringkasan surat ..." id="ringkasan_surat"></textarea>
@@ -124,7 +117,7 @@
                   <textarea class="form-control" rows="2" placeholder="Catatan ..." id="catatan"></textarea>
                </div>
                <!-- <input type="hidden" id="note_breach_date" name="note_breach_date" /> -->
-               <input type="hidden" id="id_surat_masuk" name="id_surat_masuk" />
+               <input type="hidden" id="id_surat_keluar" name="id_surat_keluar" />
                <input type="hidden" id="id_user" name="id_user" value="{{session('id_user')}}" />
             </div>
             <div class="modal-footer">
@@ -181,12 +174,6 @@
                   <div id="det_file"></div>
                 </div>
 
-                <div class="form-group">
-                  <label>Disposisi</label>
-                  <select class="form-control" name="id_user_camat" id="det_id_user_camat" disabled="disabled">
-
-                  </select>
-               </div>
                <div class="form-group">
                   <label>Ringkasan Surat</label>
                   <textarea class="form-control" rows="2" placeholder="Ringkasan surat ..." id="det_ringkasan_surat" disabled="disabled"></textarea>
@@ -196,8 +183,8 @@
                   <textarea class="form-control" rows="2" placeholder="Catatan ..." id="det_catatan" disabled="disabled"></textarea>
                </div>
                <!-- <input type="hidden" id="note_breach_date" name="note_breach_date" /> -->
-               <input type="hidden" id="id_surat_masuk" name="det_id_surat_masuk" />
-               <input type="hidden" id="id_user" name="det_id_user" value="{{session('id_user')}}" />
+               <input type="hidden" id="det_id_surat_keluar" name="id_surat_keluar" />
+               <input type="hidden" id="det_id_user" name="id_user" value="{{session('id_user')}}" />
             </div>
             <div class="modal-footer">
                <!-- <button type="button" class="btn btn-sm btn-default" title="Reset" id="appendix1_reset"><i class="fa fa-undo"></i></button> -->
@@ -219,7 +206,7 @@
 <script type="text/javascript">
     var tablex = null;
     $(document).ready(function() {
-      getListSuratMasuk();
+      getListSuratKeluar();
       getListCamat();
       $('#tanggal_surat').datepicker({
             format: 'yyyy-mm-dd',
@@ -239,8 +226,7 @@
         $('#file_dokumen').val("");
         $('#catatan').val("");
         $('#ringkasan_surat').val("");
-        $('#id_surat_masuk').val("");
-        $('#id_user_camat').val("");
+        $('#id_surat_keluar').val("");
         $('#modal_title').html(title);
 
         if (id!='') {
@@ -253,17 +239,16 @@
             $('#catatan').val($('#catatan_'+index).attr('data-val'));
             $('#ringkasan_surat').val($('#catatan_'+index).attr('data-ringkasan_surat'));
 
-            $('#id_surat_masuk').val(id);
-            $('#id_user_camat').val($('#id_user_camat_'+index).attr('data-val'));
+            $('#id_surat_keluar').val(id);
         }
         $('#btn_save').attr('onclick', 'modalSave()');
         $('#modal').modal('show');
   }
 
-  function getListSuratMasuk(){
+  function getListSuratKeluar(){
     $('#tbody').html("");
     $.ajax({
-                url: "{{url('/api/getlistsuratmasuk')}}",
+                url: "{{url('/api/getlistsuratkeluar')}}",
                 type: "GET",
                 data: {
                 },
@@ -284,18 +269,19 @@
                     link_file = "{{url('/')}}"+"/";
                     ctn_file = '-';
                     if (dt[i].file_dokumen!=""&&dt[i].file_dokumen!=null) {
-                      ctn_file = '<a class="btn btn-xs btn-teal" title="Lihat file dokumen surat masuk" href="'+link_file+dt[i].file_dokumen+'" target="_blank"><i class="fa fa-file-pdf-o"></i></a>';
+                      ctn_file = '<a class="btn btn-xs btn-teal" title="Lihat file dokumen surat keluar" href="'+link_file+dt[i].file_dokumen+'" target="_blank"><i class="fa fa-file-pdf-o"></i></a>';
                     }
 
-                    if (dt[i].status_read_camat==0) {
-                      ctn_notif = '<a href="javascript:sendNotif(\''+(i+1)+'\',\''+dt[i].id+'\',\''+dt[i].id_user+'\',\''+dt[i].id_user_camat+'\',\''+dt[i].firebase+'\')">'+
-                                       '<button class="btn btn-xs btn-teal" title="Kirim Notifikasi"><i class="fa fa-bell" style=""></i></button>'+
-                                       '</a>';
-                    }else if (dt[i].status_read_camat==1) {
-                      ctn_notif = '<span class="text-success"><i class="fa fa-check-square"></i> Notif Terkirim</span>';
-                    }else if (dt[i].status_read_camat==2) {
-                      ctn_notif = '<span class="text-success"><i class="fa fa-eye"></i> Notif Terbaca</span>';
-                    }
+                    ctn_notif = '';
+                    // if (dt[i].status_read_camat==0) {
+                    //   ctn_notif = '<a href="javascript:sendNotif(\''+(i+1)+'\',\''+dt[i].id+'\',\''+dt[i].id_user+'\',\''+dt[i].id_user_camat+'\',\''+dt[i].firebase+'\')">'+
+                    //                    '<button class="btn btn-xs btn-teal" title="Kirim Notifikasi"><i class="fa fa-bell" style=""></i></button>'+
+                    //                    '</a>';
+                    // }else if (dt[i].status_read_camat==1) {
+                    //   ctn_notif = '<span class="text-success"><i class="fa fa-check-square"></i> Notif Terkirim</span>';
+                    // }else if (dt[i].status_read_camat==2) {
+                    //   ctn_notif = '<span class="text-success"><i class="fa fa-eye"></i> Notif Terbaca</span>';
+                    // }
                     
                     content+='<tr>'+
                                 '<td>'+(i+1)+'</td>'+
@@ -305,19 +291,18 @@
                                 '<td id="perihal_'+(i+1)+'" data-val="'+dt[i].perihal+'">'+dt[i].perihal+'</td>'+
                                 '<td id="asal_surat_'+(i+1)+'" data-val="'+dt[i].asal_surat+'">'+dt[i].asal_surat+'</td>'+
                                 '<td id="lampiran_'+(i+1)+'" data-val="'+dt[i].lampiran+'">'+dt[i].lampiran+'</td>'+
-                                '<td id="id_user_camat_'+(i+1)+'" data-val="'+dt[i].id_user_camat+'">'+dt[i].username_camat +' ('+dt[i].nama_lengkap_camat+')</td>'+
                                 '<td id="catatan_'+(i+1)+'" data-val="'+dt[i].catatan+'" data-ringkasan_surat="'+dt[i].ringkasan_surat+'">'+dt[i].catatan+'</td>'+
                                 '<td class="text-center" id="file_dokumen_'+(i+1)+'" data-val="'+dt[i].file_dokumen+'">'+ctn_file+'</td>'+
                                 '<td class="text-center">'+ctn_notif+'</td>'+
                                 '<td class="text-center">'+
                                       '<div class="btn-group" >'+
-                                      '<a href="javascript:modalForm(\'Edit Surat Masuk\',\''+(i+1)+'\',\''+dt[i].id+'\')">'+
+                                      '<a href="javascript:modalForm(\'Edit Surat Keluar\',\''+(i+1)+'\',\''+dt[i].id+'\')">'+
                                        '<button class="btn btn-xs btn-teal" title="Edit"><i class="fa fa-pencil" style=""></i></button>'+
                                        '</a>&nbsp;'+
-                                       '<a href="javascript:modalDetail(\'Detail Surat Masuk\',\''+(i+1)+'\',\''+dt[i].id+'\')">'+
+                                       '<a href="javascript:modalDetail(\'Detail Surat Keluar\',\''+(i+1)+'\',\''+dt[i].id+'\')">'+
                                        '<button class="btn btn-xs btn-teal" title="Lihat detail surat"><i class="fa fa-search" style=""></i></button>'+
                                        '</a>&nbsp;'+
-                                       '<a href="javascript:deleteSuratMasuk('+dt[i].id+')"  onclick="return conf();">'+
+                                       '<a href="javascript:deleteSuratKeluar('+dt[i].id+')"  onclick="return conf();">'+
                                        '<button class="btn btn-xs btn-teal" title="Delete"><i class="fa fa-trash-o" style=""></i></button>'+
                                        '</a>'+
                                       '</div>'+
@@ -337,7 +322,7 @@
                       // },
                       // paging:         false,
                       "columnDefs": [
-                      { "targets": 8, "orderable": false},{ "targets": 9, "orderable": false},{ "targets": 10, "orderable": false},
+                      { "targets": 7, "orderable": false},{ "targets": 8, "orderable": false},{ "targets": 9, "orderable": false},
 
                     ]
                     // "paging": true,
@@ -366,14 +351,13 @@
     var file_dokumen = $('#file_dokumen').prop('files')[0];
     var catatan = $('#catatan').val();
     var ringkasan_surat = $('#ringkasan_surat').val();
-    var id_surat_masuk = $('#id_surat_masuk').val();
-    var id_user_camat = $('#id_user_camat').val();
+    var id_surat_keluar = $('#id_surat_keluar').val();
     var id_user = $('#id_user').val();
 
-    if (nomor_surat!=''&&tanggal_surat!=''&&perihal!=''&&asal_surat!=''&&id_user_camat!='') {
+    if (nomor_surat!=''&&tanggal_surat!=''&&perihal!=''&&asal_surat!='') {
       var form_data = new FormData();
       form_data.append('_token', '{{csrf_token()}}');
-       form_data.append('id', id_surat_masuk);
+       form_data.append('id', id_surat_keluar);
        form_data.append('nomor_surat', nomor_surat);
        form_data.append('tanggal_surat', tanggal_surat);
        form_data.append('perihal', perihal);
@@ -383,13 +367,12 @@
        form_data.append('catatan', catatan);
        form_data.append('ringkasan_surat', ringkasan_surat);
        form_data.append('id_user', id_user);
-       form_data.append('id_user_camat', id_user_camat);
        console.log(
                   ...form_data
                  );
 
         $.ajax({
-               url: "{{url('/api/addsuratmasuk')}}",
+               url: "{{url('/api/addsuratkeluar')}}",
                type: "POST",
                processData: false,
               contentType: false,
@@ -400,10 +383,10 @@
                  console.log(
                   form_data
                  );
-                 if (id_surat_masuk=='') {
-                   console.log('Tambah data suratmasuk : '+perihal + ' | no surat : '+nomor_surat);
+                 if (id_surat_keluar=='') {
+                   console.log('Tambah data suratkeluar : '+perihal + ' | no surat : '+nomor_surat);
                  }else{
-                   console.log('Update data user ID : '+id_surat_masuk+' | perihal : '+perihal+ ' | no surat : '+nomor_surat);
+                   console.log('Update data user ID : '+id_surat_keluar+' | perihal : '+perihal+ ' | no surat : '+nomor_surat);
                  }
 
                },
@@ -417,10 +400,10 @@
                       alert(status+' : '+data.detail);
                     }
                     // if (data) {
-                    //     if (id_surat_masuk!='') {
-                    //         alert('Surat Masuk berhasil diperbarui!');
+                    //     if (id_surat_keluar!='') {
+                    //         alert('Surat Keluar berhasil diperbarui!');
                     //     }else{
-                    //         alert('Surat Masuk berhasil ditambahkan!');
+                    //         alert('Surat Keluar berhasil ditambahkan!');
                     //     }
 
                     //     $('#nomor_surat').val("");
@@ -430,14 +413,14 @@
                     //     $('#lampiran').val("");
                     //     $('#file_dokumen').val("");
                     //     $('#catatan').val("");
-                    //     $('#id_surat_masuk').val("");
+                    //     $('#id_surat_keluar').val("");
                         $('#modal').modal('hide');
                     // }else{
-                    //     alert('Surat Masuk gagal ditambahkan!');
+                    //     alert('Surat Keluar gagal ditambahkan!');
                     // }
                },
                complete: function() {
-                 getListSuratMasuk();
+                 getListSuratKeluar();
                },
                error: function() {
                    alert("Memproses data gagal !");
@@ -449,9 +432,9 @@
 
   }
 
-  function deleteSuratMasuk(id){
+  function deleteSuratKeluar(id){
     $.ajax({
-               url: "{{url('/api/deletesuratmasuk')}}",
+               url: "{{url('/api/deletesuratkeluar')}}",
                type: "POST",
                data: {
                     _token: '{{csrf_token()}}',
@@ -463,7 +446,7 @@
                   'id': id,
                  });
 
-                console.log('Delete surat masuk : '+id);
+                console.log('Delete surat keluar : '+id);
 
 
                },
@@ -478,7 +461,7 @@
                     }
                },
                complete: function() {
-                 getListSuratMasuk();
+                 getListSuratKeluar();
                },
                error: function() {
                    alert("Memproses data gagal !");
@@ -519,7 +502,7 @@
             });
   }
 
-  function sendNotif(index,id_surat_masuk,id_admin,id_user_camat,firebase){
+  function sendNotif(index,id_surat_keluar,id_admin,id_user_camat,firebase){
     perihal = $('#perihal_'+index).attr('data-val');
     $.ajax({
                url: "{{url('/api/send_notif')}}",
@@ -530,9 +513,9 @@
                   'id_admin':id_admin,
                   'firebase':firebase,
                   'title': "SISANTI GEULIS",
-                  'body': "Pemberitahuan! Surat masuk baru untuk anda. Perihal : "+perihal,
+                  'body': "Pemberitahuan! Surat keluar baru untuk anda. Perihal : "+perihal,
                   'jenis':1,
-                  'id_surat_masuk':id_surat_masuk,
+                  'id_surat_keluar':id_surat_keluar,
                },
                beforeSend: function() {
                  console.log({
@@ -541,9 +524,9 @@
                   'id_admin':id_admin,
                   'firebase':firebase,
                   'title': "SISANTI GEULIS",
-                  'body': "Pemberitahuan! Surat masuk baru untuk anda. Perihal : "+perihal,
+                  'body': "Pemberitahuan! Surat keluar baru untuk anda. Perihal : "+perihal,
                   'jenis':1,
-                  'id_surat_masuk':id_surat_masuk,
+                  'id_surat_keluar':id_surat_keluar,
                  });
 
                },
@@ -559,7 +542,7 @@
                     alert('Notifikasi telah dikirimkan');
                },
                complete: function() {
-                getListSuratMasuk();
+                getListSuratKeluar();
                },
                error: function() {
                    alert("Memproses data gagal !");
@@ -576,8 +559,7 @@
         $('#det_file_dokumen').val("");
         $('#det_catatan').val("");
         $('#det_ringkasan_surat').val("");
-        $('#det_id_surat_masuk').val("");
-        $('#det_id_user_camat').val("");
+        $('#det_id_surat_keluar').val("");
         $('#modal_detail_title').html(title);
          $('#det_file').html('<i style="color:#ff0000;">Belum ada file</i>');
 
@@ -595,8 +577,7 @@
             $('#det_catatan').val($('#catatan_'+index).attr('data-val'));
             $('#det_ringkasan_surat').val($('#catatan_'+index).attr('data-ringkasan_surat'));
 
-            $('#det_id_surat_masuk').val(id);
-            $('#det_id_user_camat').val($('#id_user_camat_'+index).attr('data-val'));
+            $('#det_id_surat_keluar').val(id);
         }
         $('#modal-detail').modal('show');
   }

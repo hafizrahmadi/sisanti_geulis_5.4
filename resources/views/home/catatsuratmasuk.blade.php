@@ -196,8 +196,8 @@
                   <textarea class="form-control" rows="2" placeholder="Catatan ..." id="det_catatan" disabled="disabled"></textarea>
                </div>
                <!-- <input type="hidden" id="note_breach_date" name="note_breach_date" /> -->
-               <input type="hidden" id="id_surat_masuk" name="det_id_surat_masuk" />
-               <input type="hidden" id="id_user" name="det_id_user" value="{{session('id_user')}}" />
+               <input type="hidden" id="det_id_surat_masuk" name="id_surat_masuk" />
+               <input type="hidden" id="det_id_user" name="id_user" value="{{session('id_user')}}" />
             </div>
             <div class="modal-footer">
                <!-- <button type="button" class="btn btn-sm btn-default" title="Reset" id="appendix1_reset"><i class="fa fa-undo"></i></button> -->
