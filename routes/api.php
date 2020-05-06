@@ -47,3 +47,4 @@ Route::get('getlistsuratkeluar','SuratKeluarController@getListSuratKeluar');
 Route::get('getsuratkeluar/{id}','SuratKeluarController@getSuratKeluar');
 Route::post('/addsuratkeluar', 'SuratKeluarController@addSuratKeluar');
 Route::post('/deletesuratkeluar', 'SuratKeluarController@deleteSuratKeluar');
+Route::get('getlistkasikasubag','SuratKeluarController@getListKasiKasubag');

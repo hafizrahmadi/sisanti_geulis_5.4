@@ -174,8 +174,8 @@ class SuratKeluarController extends Controller
         }
     }
 
-    public function getListCamat(){
-        $sel = DB::connection('mysql')->select("SELECT a.id,a.username,a.password,a.npk,a.nama_lengkap,a.pangkat,a.golongan,a.jabatan,a.role,a.token,a.firebase,b.nama_jabatan from tb_user a left join tb_jabatan b on a.jabatan = b.id  where a.role = 'camat' order by 1 asc;");
+    public function getListKasiKasubag(){
+        $sel = DB::connection('mysql')->select("SELECT a.id,a.username,a.password,a.npk,a.nama_lengkap,a.pangkat,a.golongan,a.jabatan,a.role,a.token,a.firebase,b.nama_jabatan from tb_user a left join tb_jabatan b on a.jabatan = b.id  where a.role = 'kasi' or a.role='kasubag' order by 1 asc;");
         // return json_encode($sel);
         return response()->json($sel);
     }

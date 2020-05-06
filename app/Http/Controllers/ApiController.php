@@ -9,6 +9,7 @@ use App\ModelNotifMasuk;
 use App\ModelSuratMasuk;
 use App\ModelInstruksiCamat;
 use App\ModelFeedbackSuratMasuk;
+use App\ModelDisposisiSurat;
 use Illuminate\Support\Str;
 use Auth;
 use Carbon\Carbon;

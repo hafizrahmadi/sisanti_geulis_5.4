@@ -195,6 +195,34 @@
       <!-- /.box -->
    </div>
 </div>
+
+<div class="modal fade" id="modal-disposisi" role="dialog" style="z-index: 1050;">
+   <div class="modal-dialog">
+      <div class="box box-success">
+         <div class="modal-content">
+            <div class="modal-header">
+               <button type="button" class="close" data-dismiss="modal">&times;</button>
+               <h4 class="modal-title" id="modal_disposisi_title" style="font-weight:bold;"></h4>
+            </div>
+            <div class="modal-body">
+              <div class="form-group">
+                  <label>Disposisi</label>
+                  <select class="form-control" name="id_user_kk" id="dis_id_user_kk" >
+                  </select>
+
+                  <input type="hidden" id="dis_id_surat_keluar" name="id_surat_keluar" />
+                <input type="hidden" id="dis_id_user" name="id_user" value="{{session('id_user')}}" />
+               </div>
+            </div>
+            <div class="modal-footer">
+               <!-- <button type="button" class="btn btn-sm btn-default" title="Reset" id="appendix1_reset"><i class="fa fa-undo"></i></button> -->
+               <button type="button" class="btn btn-sm btn-teal" title="Submit" id="btn_save_disposisi"><i class="fa fa-save"></i></button>
+            </div>
+         </div>
+      </div>
+      <!-- /.box -->
+   </div>
+</div>
 @endsection
 
 @section('script')
@@ -207,7 +235,7 @@
     var tablex = null;
     $(document).ready(function() {
       getListSuratKeluar();
-      getListCamat();
+      getListKasiKasubag();
       $('#tanggal_surat').datepicker({
             format: 'yyyy-mm-dd',
             // todayHighlight: true,
@@ -274,9 +302,12 @@
 
                     ctn_notif = '';
                     // if (dt[i].status_read_camat==0) {
-                    //   ctn_notif = '<a href="javascript:sendNotif(\''+(i+1)+'\',\''+dt[i].id+'\',\''+dt[i].id_user+'\',\''+dt[i].id_user_camat+'\',\''+dt[i].firebase+'\')">'+
-                    //                    '<button class="btn btn-xs btn-teal" title="Kirim Notifikasi"><i class="fa fa-bell" style=""></i></button>'+
-                    //                    '</a>';
+                      // ctn_notif = '<a href="javascript:sendNotif(\''+(i+1)+'\',\''+dt[i].id+'\',\''+dt[i].id_user+'\',\''+dt[i].id_user_camat+'\',\''+dt[i].firebase+'\')">'+
+                      //                  '<button class="btn btn-xs btn-teal" title="Kirim Notifikasi"><i class="fa fa-bell" style=""></i></button>'+
+                      //                  '</a>';
+                      ctn_notif = '<a href="javascript:modalDisposisi(\'Disposisi Surat Keluar\',\''+(i+1)+'\',\''+dt[i].id+'\')">'+
+                                       '<button class="btn btn-xs btn-teal" title="Kirim Notifikasi"><i class="fa fa-bell" style=""></i></button>'+
+                                       '</a>';
                     // }else if (dt[i].status_read_camat==1) {
                     //   ctn_notif = '<span class="text-success"><i class="fa fa-check-square"></i> Notif Terkirim</span>';
                     // }else if (dt[i].status_read_camat==2) {
@@ -470,10 +501,10 @@
   }
 
 
-  function getListCamat(){
+  function getListKasiKasubag(){
     $('#tbody').html("");
     $.ajax({
-                url: "{{url('/api/getlistcamat')}}",
+                url: "{{url('/api/getlistkasikasubag')}}",
                 type: "GET",
                 data: {
                 },
@@ -486,12 +517,12 @@
 
                   console.log(dt);
                   content = '';
-                   content+='<option value="">Pilih Camat</option>';
+                   content+='<option value="">Pilih Kasi/Kasubag</option>';
                   for (var i = 0; i < dt.length; i++) {
                     content+='<option value="'+dt[i].id+'">'+dt[i].username +' ('+dt[i].nama_lengkap+' : '+dt[i].nama_jabatan+')</option>';
                   }
-                  $('#id_user_camat').html(content);
-                  $('#det_id_user_camat').html(content);
+                  $('#dis_id_user_kk').html(content);
+
                 },
                 complete: function() {
 
@@ -580,6 +611,33 @@
             $('#det_id_surat_keluar').val(id);
         }
         $('#modal-detail').modal('show');
+  }
+
+    function modalDisposisi(title,index,id){
+        // $('#dis_id_user_kk').val();
+        
+        $('#modal_disposisi_title').html(title);
+        $('#dis_id_surat_keluar').val(id);
+        // if (id!='') {
+        //     $('#nomor_surat').val($('#nomor_surat_'+index).attr('data-val'));
+        //     $('#tanggal_surat').val($('#tanggal_surat_'+index).attr('data-val'));
+        //     $('#perihal').val($('#perihal_'+index).attr('data-val'));
+        //     $('#asal_surat').val($('#asal_surat_'+index).attr('data-val'));
+        //     $('#lampiran').val($('#lampiran_'+index).attr('data-val'));
+        //     $('#p_file_dokumen').html("Format file .pdf | Current File : "+$('#file_dokumen_'+index).attr('data-val'));
+        //     $('#catatan').val($('#catatan_'+index).attr('data-val'));
+        //     $('#ringkasan_surat').val($('#catatan_'+index).attr('data-ringkasan_surat'));
+
+        //     $('#id_surat_keluar').val(id);
+        // }
+        $('#btn_save_disposisi').attr('onclick', 'modalSaveDisposisi()');
+        $('#modal-disposisi').modal('show');
+  }
+
+  function modalSaveDisposisi(){
+    aaa = $('#dis_id_surat_keluar').val();
+    bbb = $('#dis_id_user_kk').val();
+    alert(aaa+" "+bbb);
   }
 
 </script>
