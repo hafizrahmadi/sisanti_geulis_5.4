@@ -22,10 +22,12 @@ class SuratKeluarController extends Controller
     public function getListSuratKeluar(){
         // $sel = DB::connection('mysql')->select("SELECT a.id, a.nomor_surat, a.tanggal_surat, a.perihal, a.asal_surat, a.lampiran, a.id_user, b.username, b.nama_lengkap, a.file_dokumen, a.catatan, a.created_at, a.updated_at
         //     from tb_surat_masuk a left join tb_user b on a.id_user = b.id order by 1 asc;");
-        $sel = DB::connection('mysql')->select("SELECT a.id, a.nomor_surat, a.tanggal_surat, a.perihal, a.asal_surat, a.lampiran, a.file_dokumen, a.catatan, a.ringkasan_surat, 
+        $sel = DB::connection('mysql')->select("SELECT a.id, a.nomor_surat, a.tanggal_surat, a.perihal, a.asal_surat, a.lampiran, a.file_dokumen, a.catatan, a.ringkasan_surat, a.status, a.created_at,
              a.id_user, b.username, b.nama_lengkap, 
              a.created_at, a.updated_at
-            from tb_surat_keluar a left join tb_user b on a.id_user = b.id order by 1 desc;");
+            from tb_surat_keluar a left join tb_user b on a.id_user = b.id 
+            where a.deleted_at is null
+            order by 1 desc;");
 
 
         // $sel = ModelUser::all();
@@ -35,12 +37,11 @@ class SuratKeluarController extends Controller
 
     public function getSuratKeluar(Request $request){
         $id = $request->id;
-         $sel = DB::connection('mysql')->select("SELECT a.id, a.nomor_surat, a.tanggal_surat, a.perihal, a.asal_surat, a.lampiran, a.file_dokumen, a.catatan, a.ringkasan_surat, 
+         $sel = DB::connection('mysql')->select("SELECT a.id, a.nomor_surat, a.tanggal_surat, a.perihal, a.asal_surat, a.lampiran, a.file_dokumen, a.catatan, a.ringkasan_surat, a.status, a.created_at,
              a.id_user, b.username, b.nama_lengkap, 
              a.created_at, a.updated_at
             from tb_surat_keluar a left join tb_user b on a.id_user = b.id 
-            where a.id = $id
-            ;");
+            where a.id = $id ;");
 
 
         // $sel = ModelUser::all();
@@ -90,6 +91,7 @@ class SuratKeluarController extends Controller
             $data->asal_surat = $request->asal_surat;
             $data->lampiran = $request->lampiran;
             $data->id_user = $request->id_user;
+            $data->status = 0;
             
             $status_upload = true;
             $fullpath = '';
@@ -165,13 +167,18 @@ class SuratKeluarController extends Controller
     public function deleteSuratKeluar(Request $request){
         $data = ModelSuratKeluar::find($request->id)->first();
         // $tujuan = 'file_suratkeluar';
-        File::delete($data->file_dokumen);
+        // File::delete($data->file_dokumen);
         $xx = $data->delete();
         if ($xx) {
             return response()->json(['status'=>'success']);
         }else{
             return response()->json(['status'=>'failed','detail'=>'delete data failed']);
         }
+    }
+
+    public function forceDeleteSuratKeluar(Request $request){ 
+        // coming soon
+        // File::delete($data->file_dokumen);
     }
 
     public function getListKasiKasubag(){

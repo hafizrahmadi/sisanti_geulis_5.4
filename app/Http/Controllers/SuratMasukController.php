@@ -24,8 +24,8 @@ class SuratMasukController extends Controller
         //     from tb_surat_masuk a left join tb_user b on a.id_user = b.id order by 1 asc;");
         $sel = DB::connection('mysql')->select("SELECT a.id, a.nomor_surat, a.tanggal_surat, a.perihal, a.asal_surat, a.lampiran, a.file_dokumen, a.catatan, a.ringkasan_surat, 
              a.id_user, b.username, b.nama_lengkap, 
-             a.id_user_camat, c.username as username_camat, c.nama_lengkap as nama_lengkap_camat, c.firebase, a.status_read_camat,
-             a.created_at, a.updated_at
+             a.id_user_camat, c.username as username_camat, c.nama_lengkap as nama_lengkap_camat, c.firebase, a.status,
+             a.created_at, a.updated_at, a.deleted_at
             from tb_surat_masuk a left join tb_user b on a.id_user = b.id left join tb_user c on a.id_user_camat = c.id order by 1 desc;");
 
 
@@ -38,8 +38,8 @@ class SuratMasukController extends Controller
         $id = $request->id;
          $sel = DB::connection('mysql')->select("SELECT a.id, a.nomor_surat, a.tanggal_surat, a.perihal, a.asal_surat, a.lampiran, a.file_dokumen, a.catatan, a.ringkasan_surat, 
              a.id_user, b.username, b.nama_lengkap, 
-             a.id_user_camat, c.username as username_camat, c.nama_lengkap as nama_lengkap_camat, c.firebase, a.status_read_camat,
-             a.created_at, a.updated_at
+             a.id_user_camat, c.username as username_camat, c.nama_lengkap as nama_lengkap_camat, c.firebase, a.status,
+             a.created_at, a.updated_at, a.deleted_at
             from tb_surat_masuk a left join tb_user b on a.id_user = b.id left join tb_user c on a.id_user_camat = c.id 
             where a.id = $id
             ;");
@@ -170,13 +170,18 @@ class SuratMasukController extends Controller
     public function deleteSuratMasuk(Request $request){
         $data = ModelSuratMasuk::find($request->id)->first();
         // $tujuan = 'file_suratmasuk';
-        File::delete($data->file_dokumen);
+        // File::delete($data->file_dokumen);
         $xx = $data->delete();
         if ($xx) {
             return response()->json(['status'=>'success']);
         }else{
             return response()->json(['status'=>'failed','detail'=>'delete data failed']);
         }
+    }
+
+    public function forceDeleteSuratMasuk(Request $request){ 
+        // coming soon
+        // File::delete($data->file_dokumen);
     }
 
     public function getListCamat(){
@@ -188,7 +193,7 @@ class SuratMasukController extends Controller
     public function getListNotifDisposisi(){
         $sel = DB::connection('mysql')->select("SELECT a.id, a.nomor_surat, a.tanggal_surat, a.perihal, a.asal_surat, a.lampiran, a.file_dokumen, a.catatan, a.ringkasan_surat,
             a.id_user, b.username, b.nama_lengkap,
-            a.id_user_camat, c.username as username_camat, c.nama_lengkap as nama_lengkap_camat, c.firebase, a.status_read_camat,
+            a.id_user_camat, c.username as username_camat, c.nama_lengkap as nama_lengkap_camat, c.firebase, a.status,
             a.created_at, a.updated_at, d.id as id_disposisi, d.catatan as catatan_disposisi,d.instruksi,d.status_read_admin,
             d.dari_user_id,e.username as dari_username,e.pangkat as dari_pangkat, d.untuk_user_id, f.username as untuk_username, f.pangkat as untuk_pangkat,d.created_at as waktu_disposisi
             from tb_surat_masuk a left join tb_user b on a.id_user = b.id
@@ -207,7 +212,7 @@ class SuratMasukController extends Controller
     public function getListDisposisi(){
         $sel = DB::connection('mysql')->select("SELECT a.id, a.nomor_surat, a.tanggal_surat, a.perihal, a.asal_surat, a.lampiran, a.file_dokumen, a.catatan, a.ringkasan_surat,
             a.id_user, b.username, b.nama_lengkap,
-            a.id_user_camat, c.username as username_camat, c.nama_lengkap as nama_lengkap_camat, c.firebase, a.status_read_camat,
+            a.id_user_camat, c.username as username_camat, c.nama_lengkap as nama_lengkap_camat, c.firebase, a.status,
             a.created_at, a.updated_at, d.id as id_disposisi, d.catatan as catatan_disposisi,d.instruksi,d.status_read_admin,
             d.dari_user_id,e.username as dari_username,e.pangkat as dari_pangkat, d.untuk_user_id, f.username as untuk_username, f.pangkat as untuk_pangkat,d.created_at as waktu_disposisi
             from tb_surat_masuk a left join tb_user b on a.id_user = b.id

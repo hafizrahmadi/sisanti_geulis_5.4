@@ -235,7 +235,6 @@
     var tablex = null;
     $(document).ready(function() {
       getListSuratKeluar();
-      getListKasiKasubag();
       $('#tanggal_surat').datepicker({
             format: 'yyyy-mm-dd',
             // todayHighlight: true,
@@ -244,6 +243,11 @@
             endDate:'d',
         });
     });
+
+    // $('#dis_id_user_kk').change(function(){
+      // alert($('#dis_id_user_kk').find(':selected').data('firebase'));
+    // });
+    
 
     function modalForm(title,index,id){
         $('#nomor_surat').val("");
@@ -301,18 +305,34 @@
                     }
 
                     ctn_notif = '';
-                    // if (dt[i].status_read_camat==0) {
-                      // ctn_notif = '<a href="javascript:sendNotif(\''+(i+1)+'\',\''+dt[i].id+'\',\''+dt[i].id_user+'\',\''+dt[i].id_user_camat+'\',\''+dt[i].firebase+'\')">'+
-                      //                  '<button class="btn btn-xs btn-teal" title="Kirim Notifikasi"><i class="fa fa-bell" style=""></i></button>'+
-                      //                  '</a>';
-                      ctn_notif = '<a href="javascript:modalDisposisi(\'Disposisi Surat Keluar\',\''+(i+1)+'\',\''+dt[i].id+'\')">'+
-                                       '<button class="btn btn-xs btn-teal" title="Kirim Notifikasi"><i class="fa fa-bell" style=""></i></button>'+
+                    if (dt[i].status==0) {
+                      ctn_notif = '<span class=""><i class="fa fa-times-circle-o"></i> Notif belum dikirim</span>';
+                      ctn_notif += '<br><a href="javascript:modalDisposisi(\'Disposisi Surat Keluar ke Kasi/Kasubag\',\''+(i+1)+'\',\''+dt[i].id+'\',\''+dt[i].status+'\')">'+
+                                       '<button class="btn btn-xs btn-teal" title="Kirim Notifikasi"><i class="fa fa-bell" style=""></i> Kirim Notif</button>'+
                                        '</a>';
-                    // }else if (dt[i].status_read_camat==1) {
-                    //   ctn_notif = '<span class="text-success"><i class="fa fa-check-square"></i> Notif Terkirim</span>';
-                    // }else if (dt[i].status_read_camat==2) {
-                    //   ctn_notif = '<span class="text-success"><i class="fa fa-eye"></i> Notif Terbaca</span>';
-                    // }
+                    }else if (dt[i].status==0.5) {
+                      ctn_notif = '<span class="text-success"><i class="fa fa-check-square"></i> Notif Terkirim ke Kasi/Kasubag</span>';
+                    }else if (dt[i].status==1) {
+                      ctn_notif = '<span class="text-warnning"><i class="fa fa-times-circle-o"></i> Revisi dari Kasi/Kasubag</span>';
+                    }else if (dt[i].status==2) {
+                      ctn_notif = '<span class="text-success"><i class="fa fa-eye"></i> Disetujui Kasi/Kasubag</span>';
+                      ctn_notif += '<br><a href="javascript:modalDisposisi(\'Disposisi Surat Keluar ke Sekcam \',\''+(i+1)+'\',\''+dt[i].id+'\',\''+dt[i].status+'\')">'+
+                                       '<button class="btn btn-xs btn-teal" title="Kirim Notifikasi"><i class="fa fa-bell" style=""></i> Kirim Notif</button>'+
+                                       '</a>';
+                    }else if (dt[i].status==2.5) {
+                      ctn_notif = '<span class="text-success"><i class="fa fa-check-square"></i> Notif Terkirim ke Sekcam</span>';
+                    }else if (dt[i].status==3) {
+                      ctn_notif = '<span class="text-warnning"><i class="fa fa-times-circle-o"></i> Revisi dari Sekcam</span>';
+                    }else if (dt[i].status==4) {
+                      ctn_notif = '<span class="text-success"><i class="fa fa-eye"></i> Disetujui Sekcam</span>';
+                      ctn_notif += '<br><a href="javascript:modalDisposisi(\'Disposisi Surat Keluar ke Camat \',\''+(i+1)+'\',\''+dt[i].id+'\',\''+dt[i].status+'\')">'+
+                                       '<button class="btn btn-xs btn-teal" title="Kirim Notifikasi"><i class="fa fa-bell" style=""></i> Kirim Notif</button>'+
+                                       '</a>';
+                    }else if (dt[i].status==5) {
+                      ctn_notif = '<span class="text-warnning"><i class="fa fa-times-circle-o"></i> Revisi dari Camat</span>';
+                    }else if (dt[i].status==6) {
+                      ctn_notif = '<span class="text-success"><i class="fa fa-eye"></i> Disetujui Camat</span>';
+                    }
                     
                     content+='<tr>'+
                                 '<td>'+(i+1)+'</td>'+
@@ -502,7 +522,7 @@
 
 
   function getListKasiKasubag(){
-    $('#tbody').html("");
+    // $('#tbody').html("");
     $.ajax({
                 url: "{{url('/api/getlistkasikasubag')}}",
                 type: "GET",
@@ -519,7 +539,7 @@
                   content = '';
                    content+='<option value="">Pilih Kasi/Kasubag</option>';
                   for (var i = 0; i < dt.length; i++) {
-                    content+='<option value="'+dt[i].id+'">'+dt[i].username +' ('+dt[i].nama_lengkap+' : '+dt[i].nama_jabatan+')</option>';
+                    content+='<option value="'+dt[i].id+'" data-firebase="'+dt[i].firebase+'">'+dt[i].username +' ('+dt[i].nama_lengkap+' : '+dt[i].nama_jabatan+')</option>';
                   }
                   $('#dis_id_user_kk').html(content);
 
@@ -533,30 +553,38 @@
             });
   }
 
-  function sendNotif(index,id_surat_keluar,id_admin,id_user_camat,firebase){
+  function getListSekcam(){
+
+  }
+
+  function getListCamat(){
+
+  }
+
+  function sendNotif(index,id_surat_keluar,dari_id_user,untuk_id_user,firebase){
     perihal = $('#perihal_'+index).attr('data-val');
     $.ajax({
                url: "{{url('/api/send_notif')}}",
                type: "POST",
                data: {
                   _token: '{{csrf_token()}}',
-                  'user_id':id_user_camat,
-                  'id_admin':id_admin,
+                  'user_id':untuk_id_user,
+                  'dari_id_user':dari_id_user,
                   'firebase':firebase,
                   'title': "SISANTI GEULIS",
                   'body': "Pemberitahuan! Surat keluar baru untuk anda. Perihal : "+perihal,
-                  'jenis':1,
+                  'jenis':2,
                   'id_surat_keluar':id_surat_keluar,
                },
                beforeSend: function() {
                  console.log({
                    _token: '{{csrf_token()}}',
-                  'user_id':id_user_camat,
-                  'id_admin':id_admin,
+                  'user_id':untuk_id_user,
+                  'dari_id_user':dari_id_user,
                   'firebase':firebase,
                   'title': "SISANTI GEULIS",
                   'body': "Pemberitahuan! Surat keluar baru untuk anda. Perihal : "+perihal,
-                  'jenis':1,
+                  'jenis':2,
                   'id_surat_keluar':id_surat_keluar,
                  });
 
@@ -613,31 +641,75 @@
         $('#modal-detail').modal('show');
   }
 
-    function modalDisposisi(title,index,id){
+    function modalDisposisi(title,index,id,status){
         // $('#dis_id_user_kk').val();
         
         $('#modal_disposisi_title').html(title);
         $('#dis_id_surat_keluar').val(id);
-        // if (id!='') {
-        //     $('#nomor_surat').val($('#nomor_surat_'+index).attr('data-val'));
-        //     $('#tanggal_surat').val($('#tanggal_surat_'+index).attr('data-val'));
-        //     $('#perihal').val($('#perihal_'+index).attr('data-val'));
-        //     $('#asal_surat').val($('#asal_surat_'+index).attr('data-val'));
-        //     $('#lampiran').val($('#lampiran_'+index).attr('data-val'));
-        //     $('#p_file_dokumen').html("Format file .pdf | Current File : "+$('#file_dokumen_'+index).attr('data-val'));
-        //     $('#catatan').val($('#catatan_'+index).attr('data-val'));
-        //     $('#ringkasan_surat').val($('#catatan_'+index).attr('data-ringkasan_surat'));
+        if (status==0) {
+          getListKasiKasubag();
+        }else if (status==2) {
 
-        //     $('#id_surat_keluar').val(id);
-        // }
-        $('#btn_save_disposisi').attr('onclick', 'modalSaveDisposisi()');
+        }else if (status==4) {
+
+        }
+        
+        $('#btn_save_disposisi').attr('onclick', 'modalSaveDisposisi(\''+index+'\')');
         $('#modal-disposisi').modal('show');
   }
 
-  function modalSaveDisposisi(){
-    aaa = $('#dis_id_surat_keluar').val();
-    bbb = $('#dis_id_user_kk').val();
-    alert(aaa+" "+bbb);
+  function modalSaveDisposisi(index){
+    id_surat_keluar = $('#dis_id_surat_keluar').val();
+    id_user_kk = $('#dis_id_user_kk').val();
+    id_user = $('#dis_id_user').val();
+    firebase = $('#dis_id_user_kk').find(':selected').data("firebase");
+    // alert();
+
+    perihal = $('#perihal_'+index).attr('data-val');
+    $.ajax({
+               url: "{{url('/api/send_notif')}}",
+               type: "POST",
+               data: {
+                  _token: '{{csrf_token()}}',
+                  'untuk_user_id':id_user_kk,
+                  'dari_user_id':id_user,
+                  'firebase':firebase,
+                  'title': "SISANTI GEULIS",
+                  'body': "Pemberitahuan! Surat keluar baru untuk anda. Mohon untuk melakukan pemeriksaan. Perihal : "+perihal,
+                  'jenis':2,
+                  'id_surat':id_surat_keluar,
+               },
+               beforeSend: function() {
+                 console.log({
+                   _token: '{{csrf_token()}}',
+                  'untuk_user_id':id_user_kk,
+                  'dari_user_id':id_user,
+                  'firebase':firebase,
+                  'title': "SISANTI GEULIS",
+                  'body': "Pemberitahuan! Surat keluar baru untuk anda. Mohon untuk melakukan pemeriksaan. Perihal : "+perihal,
+                  'jenis':2,
+                  'id_surat':id_surat_keluar,
+                 });
+
+               },
+               success: function(data) {
+                    // alert(data);
+                    // console.log(data);
+                    // status = data.status;
+                    // if (status == 'success') {
+                    //   alert(status);
+                    // }else{
+                    //   alert(status+' : '+data.detail);
+                    // }
+                    alert('Notifikasi telah dikirimkan');
+               },
+               complete: function() {
+                getListSuratKeluar();
+               },
+               error: function() {
+                   alert("Memproses data gagal !");
+               }
+           });
   }
 
 </script>

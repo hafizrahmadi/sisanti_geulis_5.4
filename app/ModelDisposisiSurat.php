@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ModelFeedbackSuratMasuk extends Model
+class ModelDisposisiSurat extends Model
 {
     //
     protected $table = 'tb_disposisi_surat';

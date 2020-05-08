@@ -287,13 +287,13 @@
                       ctn_file = '<a class="btn btn-xs btn-teal" title="Lihat file dokumen surat masuk" href="'+link_file+dt[i].file_dokumen+'" target="_blank"><i class="fa fa-file-pdf-o"></i></a>';
                     }
 
-                    if (dt[i].status_read_camat==0) {
+                    if (dt[i].status==0) {
                       ctn_notif = '<a href="javascript:sendNotif(\''+(i+1)+'\',\''+dt[i].id+'\',\''+dt[i].id_user+'\',\''+dt[i].id_user_camat+'\',\''+dt[i].firebase+'\')">'+
                                        '<button class="btn btn-xs btn-teal" title="Kirim Notifikasi"><i class="fa fa-bell" style=""></i></button>'+
                                        '</a>';
-                    }else if (dt[i].status_read_camat==1) {
+                    }else if (dt[i].status==1) {
                       ctn_notif = '<span class="text-success"><i class="fa fa-check-square"></i> Notif Terkirim</span>';
-                    }else if (dt[i].status_read_camat==2) {
+                    }else if (dt[i].status==2) {
                       ctn_notif = '<span class="text-success"><i class="fa fa-eye"></i> Notif Terbaca</span>';
                     }
                     

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\ModelUser;
 use App\ModelNotifMasuk;
 use App\ModelSuratMasuk;
+use App\ModelSuratKeluar;
 use App\ModelInstruksiCamat;
 use App\ModelFeedbackSuratMasuk;
 use App\ModelDisposisiSurat;
@@ -82,35 +83,86 @@ class ApiController extends Controller
             )
         );
 
-    //========
-    $data =  new ModelNotifMasuk();
-    $data->user_id = $request->user_id;
-    $data->title = $request->title;
-    $data->body = $request->body;
-    $data->jenis = $request->jenis;
-    $data->id_surat_masuk = $request->id_surat_masuk;
-    $data->status_read = 0;
-    $data->created_at = Carbon::now();
-    $data->updated_at = Carbon::now();
-    $data->save();
-    //========
+    
+    if ($jenis==1) { // surat masuk
 
-    // ===== update status read camat =====
-    $xx = ModelSuratMasuk::where('id',$request->id_surat_masuk)->update(['status_read_camat'=>1]);
-    // ===== end update status read camat =====
+      //========
+      $data =  new ModelNotifMasuk();
+      $data->user_id = $request->user_id;
+      $data->title = $request->title;
+      $data->body = $request->body;
+      $data->jenis = $request->jenis;
+      $data->id_surat_masuk = $request->id_surat_masuk;
+      $data->status_read = 0;
+      $data->created_at = Carbon::now();
+      $data->updated_at = Carbon::now();
+      $data->save();
+      //========
 
-    // ===== nyimpen ke tb feeback (disposisi)
-    $data = new ModelFeedbackSuratMasuk();
-    $data->id_surat_masuk = $request->id_surat_masuk;
-    $data->catatan = "Surat masuk baru";
-    $data->instruksi = "Untuk diketahui";
-    $data->dari_user_id = $request->id_admin;
-    $data->untuk_user_id = $request->user_id;
-    $data->status_read_admin = 1;
-    $data->created_at = Carbon::now();
-    $response = $data->save();
+      // ===== update status surat masuk =====
+      $xx = ModelSuratMasuk::where('id',$request->id_surat_masuk)->update(['status'=>1]);
+      // ===== end update status surat masuk =====
 
-    // ==== end nyimpen ke tb feedback (disposisi)
+      // ===== nyimpen ke tb feeback (disposisi)
+      $data = new ModelFeedbackSuratMasuk();
+      $data->id_surat_masuk = $request->id_surat_masuk;
+      $data->catatan = "Surat masuk baru";
+      $data->instruksi = "Untuk diketahui";
+      $data->dari_user_id = $request->id_admin;
+      $data->untuk_user_id = $request->user_id;
+      $data->status_read_admin = 1;
+      $data->created_at = Carbon::now();
+      $response = $data->save();
+      // ==== end nyimpen ke tb feedback (disposisi)
+
+      // ===== nyimpen ke tb disposisi surat (disposisi baru)
+      $data = new ModelDisposisiSurat();
+      $data->id_surat = $request->id_surat_masuk;
+      $data->jenis_surat = $jenis;
+      $data->catatan = "Surat masuk baru";
+      $data->instruksi = "Untuk diketahui";
+      $data->dari_user_id = $request->id_admin;
+      $data->untuk_user_id = $request->user_id;
+      $data->status_read_admin = 1;
+      $data->created_at = Carbon::now();
+      $response = $data->save();
+      // ==== end nyimpen ke tb disposisi surat (disposisi baru)
+    }
+
+    if ($jenis==2) { // surat keluar
+      $dari_user_id = $request->dari_user_id;
+      $untuk_user_id = $request->untuk_user_id;
+      $id_surat = $request->id_surat;
+
+
+       //======== notif masuk
+      $data =  new ModelNotifMasuk();
+      $data->user_id = $request->untuk_user_id;
+      $data->title = $request->title;
+      $data->body = $request->body;
+      $data->jenis = $request->jenis;
+      $data->id_surat_masuk = $request->id_surat;
+      $data->status_read = 0;
+      $data->created_at = Carbon::now();
+      $data->updated_at = Carbon::now();
+      $data->save();
+      //========
+
+      $data = new ModelDisposisiSurat();
+      $data->id_surat = $id_surat;
+      $data->jenis_surat = $jenis;
+      $data->catatan = "Surat keluar baru";
+      $data->instruksi = "Untuk diperiksa";
+      $data->dari_user_id = $dari_user_id;
+      $data->untuk_user_id = $untuk_user_id;
+      $data->status_read_admin = 1;
+      $data->created_at = Carbon::now();
+      $response = $data->save();
+
+      // ===== update status surat keluar =====
+      $xx = ModelSuratKeluar::where('id',$request->id_surat)->update(['status'=>0.5]);
+      // ===== end update status surat keluar =====
+    }
 
     $fields = json_encode ( $fields );
 
@@ -229,7 +281,7 @@ class ApiController extends Controller
   public function listdisposisi() {
     $sel = DB::connection('mysql')->select("SELECT a.id, a.nomor_surat, a.tanggal_surat, a.perihal, a.asal_surat, a.lampiran, a.file_dokumen, a.catatan, a.ringkasan_surat,
         a.id_user, b.username, b.nama_lengkap,
-        a.id_user_camat, c.username as username_camat, c.nama_lengkap as nama_lengkap_camat, c.firebase, a.status_read_camat,
+        a.id_user_camat, c.username as username_camat, c.nama_lengkap as nama_lengkap_camat, c.firebase, a.status,
         a.created_at, a.updated_at, d.id as id_disposisi, d.catatan as catatan_disposisi,d.instruksi,d.status_read_admin,
         d.dari_user_id,e.username as dari_username,e.pangkat as dari_pangkat, d.untuk_user_id, f.username as untuk_username, f.pangkat as untuk_pangkat,d.created_at as waktu_disposisi
         from tb_surat_masuk a left join tb_user b on a.id_user = b.id

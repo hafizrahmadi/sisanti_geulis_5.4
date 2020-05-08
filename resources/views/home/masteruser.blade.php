@@ -116,7 +116,7 @@
                   <select class="form-control" name="role" id="role">
                     <option value="">Pilih Role</option>
                     <option value="camat">Camat</option>
-                    <option value="sekretaris_camat">Sekretaris Camat</option>
+                    <option value="sekcam">Sekretaris Camat</option>
                     <option value="kasi">Kasi</option>
                     <option value="kasubag">Kasubag</option>
                     <option value="admin">Admin</option>
