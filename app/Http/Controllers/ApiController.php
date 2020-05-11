@@ -276,7 +276,7 @@ class ApiController extends Controller
         d.dari_user_id,e.username as dari_username,e.pangkat as dari_pangkat, d.untuk_user_id, f.username as untuk_username, f.pangkat as untuk_pangkat,d.created_at as waktu_disposisi
         from tb_surat_masuk a left join tb_user b on a.id_user = b.id
         left join tb_user c on a.id_user_camat = c.id
-        left join tb_feeback_surat_masuk d on d.id_surat_masuk = a.id
+        left join tb_disposisi_surat d on d.id_surat = a.id
         left join tb_user e on d.dari_user_id = e.id
         left join tb_user f on d.untuk_user_id = f.id
         where d.id is not null
