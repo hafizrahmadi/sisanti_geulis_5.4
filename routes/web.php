@@ -42,4 +42,5 @@ Route::group(['middleware' => ['forLogin']], function () {
 	Route::get('getlistjabatan','UserController@getListJabatan');
 
 	Route::get('/catatsuratkeluar','SuratKeluarController@catatsuratkeluar');
+	Route::get('/catatnotadinas','NotaDinasController@catatnotadinas');
 });

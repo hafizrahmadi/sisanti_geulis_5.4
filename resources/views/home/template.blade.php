@@ -63,6 +63,11 @@
         return document.all(x);
     }
 
+    const capitalize = (s) => {
+      if (typeof s !== 'string') return ''
+      return s.charAt(0).toUpperCase() + s.slice(1)
+    }
+
 
     $(document).ready(function () {
         // cekSession();
@@ -415,9 +420,10 @@
                   <li><a href="{{url('/masteruser')}}"><i class="fa fa-user"></i> <span>Master User</span></a></li>
                   <li><a href="{{url('/catatsuratmasuk')}}"><i class="fa fa-pencil-square-o"></i> <span>Catat Surat Masuk</span></a></li>
                   <li><a href="{{url('/catatsuratkeluar')}}"><i class="fa fa-send"></i> <span>Catat Surat Keluar</span></a></li>
+                  <li><a href="{{url('/catatnotadinas')}}"><i class="fa fa-sticky-note-o" style=""></i> Catat Nota Dinas</a></li>
                   <li><a href="{{url('/list_disposisi')}}"><i class="fa fa-mail-forward" style=""></i> List Disposisi</a></li>
                   <li><a href="javascript:alert('coming soon!');"><i class="fa fa-archive" style=""></i> Arsip Surat Masuk</a></li>
-                  <li><a href="javascript:alert('coming soon!');"><i class="fa fa-sticky-note-o" style=""></i> Nota Dinas</a></li>
+                  
                   
                   
               <!-- </form> -->

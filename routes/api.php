@@ -48,3 +48,9 @@ Route::get('getsuratkeluar/{id}','SuratKeluarController@getSuratKeluar');
 Route::post('/addsuratkeluar', 'SuratKeluarController@addSuratKeluar');
 Route::post('/deletesuratkeluar', 'SuratKeluarController@deleteSuratKeluar');
 Route::get('getlistkasikasubag','SuratKeluarController@getListKasiKasubag');
+
+// nota dinas
+Route::get('getlistnotadinas','NotaDinasController@getListNotaDinas');
+Route::get('getnotadinas/{id}','NotaDinasController@getNotaDinas');
+Route::post('/addnotadinas', 'NotaDinasController@addNotaDinas');
+Route::post('/deletenotadinas', 'NotaDinasController@deleteNotaDinas');
