@@ -83,9 +83,12 @@ class ApiController extends Controller
             )
         );
 
+    // cek role user id untuk kebutuhan status surat masuk/keluar
+    $dt = ModelUser::where('id',$request->user_id)->first();
+    $role = $dt['role'];
+    $status_code = null;
 
     if ($jenis==1) { // surat masuk
-
       //========
       $data =  new ModelNotifMasuk();
       $data->user_id = $request->user_id;
@@ -100,7 +103,27 @@ class ApiController extends Controller
       //========
 
       // ===== update status surat masuk =====
-      $xx = ModelSuratMasuk::where('id',$request->id_surat_masuk)->update(['status'=>1]);
+      // kalo pake dari_user_id
+      // if ($role=='admin') {
+      //   $status_code =
+      // }else if ($role=='camat') {
+        
+      // }else if ($role=='sekcam') {
+        
+      // }else if ($role=='kasi'||$role=='kasubag') {
+        
+      // }
+
+      // kalo pake untuk_user_id
+      if ($role=='camat') {
+        $status_code = 0;
+      }else if ($role=='sekcam') {
+        $status_code = 2;
+      }else if ($role=='kasi'||$role=='kasubag') {
+        $status_code = 4;
+      }
+
+      $xx = ModelSuratMasuk::where('id',$request->id_surat_masuk)->update(['status'=>$status_code]);
       // ===== end update status surat masuk =====
 
       // ===== nyimpen ke tb disposisi surat (disposisi baru)
@@ -148,7 +171,15 @@ class ApiController extends Controller
       $response = $data->save();
 
       // ===== update status surat keluar =====
-      $xx = ModelSuratKeluar::where('id',$request->id_surat)->update(['status'=>0.5]);
+      // kalo pake untuk_user_id
+      if ($role=='kasi'||$role=='kasubag') {
+        $status_code = 0;
+      }else if ($role=='sekcam') {
+        $status_code = 2;
+      }else if ($role=='camat') {
+        $status_code = 4;
+      }
+      $xx = ModelSuratKeluar::where('id',$request->id_surat)->update(['status'=>$status_code]);
       // ===== end update status surat keluar =====
     }
 
@@ -284,6 +315,13 @@ class ApiController extends Controller
 
      // $sel = DB::connection('mysql')->select("SELECT * from tb_feeback_surat_masuk d  where d.id is not null and d.status_read_admin = 0 order by 1 asc;");
     return response()->json($sel);
+  }
+
+  public function checkRole(Request $request){
+    $id = $request->id;
+    $dt = ModelUser::where('id',$id)->first();
+    $role = $dt['role'];
+    return response($role);
   }
 
 

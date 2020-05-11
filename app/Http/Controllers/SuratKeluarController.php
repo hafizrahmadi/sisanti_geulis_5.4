@@ -50,16 +50,7 @@ class SuratKeluarController extends Controller
     }
 
     public function addSuratKeluar(Request $request){
-        // $id_user = session('id_user');
-        
-        // if ($id_user!==null) {
-        //     return response()->json($id_user);
-        // }else{
-        //     return response()->json(['status'=>'failed','detail'=>'no session']);
-        // }
 
-        
-        // return response()->json($request);
         if ($request->hasFile('file_dokumen')) {
             $this->validate($request, [
                 // 'name' => 'required|min:4',
@@ -141,9 +132,20 @@ class SuratKeluarController extends Controller
                 }
             }
 
+            //==== cek status surat keluar
+            $dt = ModelSuratKeluar::where('id',$request->id)->first();
+            $status_code = $dt['status'];
+            //=====
+
             if ($fullpath!='') {
                File::delete($file_dokumen_lama);
-                $xx = ModelSuratKeluar::where('id',$request->id)->update(['nomor_surat'=>$request->nomor_surat,'tanggal_surat'=>$request->tanggal_surat,'perihal'=>$request->perihal,'asal_surat'=>$request->asal_surat,'lampiran'=>$request->lampiran,'id_user'=>$request->id_user,'file_dokumen'=>$fullpath,'catatan'=>$request->catatan,'ringkasan_surat'=>$request->ringkasan_surat]);
+               // ===== ketika surat keluar revisi
+               $status_code_new = $status_code;
+               if ($status_code==1||$status_code==3||$status_code==5) {
+                   $status_code_new = 0;
+               }
+               // =====
+                $xx = ModelSuratKeluar::where('id',$request->id)->update(['nomor_surat'=>$request->nomor_surat,'tanggal_surat'=>$request->tanggal_surat,'perihal'=>$request->perihal,'asal_surat'=>$request->asal_surat,'lampiran'=>$request->lampiran,'id_user'=>$request->id_user,'file_dokumen'=>$fullpath,'catatan'=>$request->catatan,'ringkasan_surat'=>$request->ringkasan_surat,'status'=>$status_code_new]);
             }else{
                 $xx = ModelSuratKeluar::where('id',$request->id)->update(['nomor_surat'=>$request->nomor_surat,'tanggal_surat'=>$request->tanggal_surat,'perihal'=>$request->perihal,'asal_surat'=>$request->asal_surat,'lampiran'=>$request->lampiran,'id_user'=>$request->id_user,'catatan'=>$request->catatan,'ringkasan_surat'=>$request->ringkasan_surat]);
             }
@@ -183,6 +185,18 @@ class SuratKeluarController extends Controller
 
     public function getListKasiKasubag(){
         $sel = DB::connection('mysql')->select("SELECT a.id,a.username,a.password,a.npk,a.nama_lengkap,a.pangkat,a.golongan,a.jabatan,a.role,a.token,a.firebase,b.nama_jabatan from tb_user a left join tb_jabatan b on a.jabatan = b.id  where a.role = 'kasi' or a.role='kasubag' order by 1 asc;");
+        // return json_encode($sel);
+        return response()->json($sel);
+    }
+
+    public function getListSekcam(){
+        $sel = DB::connection('mysql')->select("SELECT a.id,a.username,a.password,a.npk,a.nama_lengkap,a.pangkat,a.golongan,a.jabatan,a.role,a.token,a.firebase,b.nama_jabatan from tb_user a left join tb_jabatan b on a.jabatan = b.id  where a.role = 'sekcam' order by 1 asc;");
+        // return json_encode($sel);
+        return response()->json($sel);
+    }
+
+    public function getListCamat(){
+        $sel = DB::connection('mysql')->select("SELECT a.id,a.username,a.password,a.npk,a.nama_lengkap,a.pangkat,a.golongan,a.jabatan,a.role,a.token,a.firebase,b.nama_jabatan from tb_user a left join tb_jabatan b on a.jabatan = b.id  where a.role = 'camat' order by 1 asc;");
         // return json_encode($sel);
         return response()->json($sel);
     }

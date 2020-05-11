@@ -328,6 +328,8 @@
                       ctn_notif += '<br><a href="javascript:modalDisposisi(\'Disposisi Surat Keluar ke Camat \',\''+(i+1)+'\',\''+dt[i].id+'\',\''+dt[i].status+'\')">'+
                                        '<button class="btn btn-xs btn-teal" title="Kirim Notifikasi"><i class="fa fa-bell" style=""></i> Kirim Notif</button>'+
                                        '</a>';
+                    }else if (dt[i].status==4.5) {
+                      ctn_notif = '<span class="text-success"><i class="fa fa-check-square"></i> Notif Terkirim ke Sekcam</span>';
                     }else if (dt[i].status==5) {
                       ctn_notif = '<span class="text-warnning"><i class="fa fa-times-circle-o"></i> Revisi dari Camat</span>';
                     }else if (dt[i].status==6) {
@@ -522,7 +524,6 @@
 
 
   function getListKasiKasubag(){
-    // $('#tbody').html("");
     $.ajax({
                 url: "{{url('/api/getlistkasikasubag')}}",
                 type: "GET",
@@ -530,7 +531,7 @@
                 },
                 beforeSend: function() {
                   // console.log(tablex);
-
+                  $('#dis_id_user_kk').html("");
                 },
                 success: function(dt) {
                   // dt = JSON.parse(data);
@@ -554,11 +555,65 @@
   }
 
   function getListSekcam(){
+        $.ajax({
+                url: "{{url('/api/getlistsekcam')}}",
+                type: "GET",
+                data: {
+                },
+                beforeSend: function() {
+                  // console.log(tablex);
+                  $('#dis_id_user_kk').html("");
+                },
+                success: function(dt) {
+                  // dt = JSON.parse(data);
 
+                  console.log(dt);
+                  content = '';
+                   content+='<option value="">Pilih Kasi/Kasubag</option>';
+                  for (var i = 0; i < dt.length; i++) {
+                    content+='<option value="'+dt[i].id+'" data-firebase="'+dt[i].firebase+'">'+dt[i].username +' ('+dt[i].nama_lengkap+' : '+dt[i].nama_jabatan+')</option>';
+                  }
+                  $('#dis_id_user_kk').html(content);
+
+                },
+                complete: function() {
+
+                },
+                error: function() {
+                    alert("Memproses data gagal !");
+                }
+            });
   }
 
   function getListCamat(){
+        $.ajax({
+                url: "{{url('/api/getlistcamat')}}",
+                type: "GET",
+                data: {
+                },
+                beforeSend: function() {
+                  // console.log(tablex);
+                  $('#dis_id_user_kk').html("");
+                },
+                success: function(dt) {
+                  // dt = JSON.parse(data);
 
+                  console.log(dt);
+                  content = '';
+                   content+='<option value="">Pilih Kasi/Kasubag</option>';
+                  for (var i = 0; i < dt.length; i++) {
+                    content+='<option value="'+dt[i].id+'" data-firebase="'+dt[i].firebase+'">'+dt[i].username +' ('+dt[i].nama_lengkap+' : '+dt[i].nama_jabatan+')</option>';
+                  }
+                  $('#dis_id_user_kk').html(content);
+
+                },
+                complete: function() {
+
+                },
+                error: function() {
+                    alert("Memproses data gagal !");
+                }
+            });
   }
 
   function sendNotif(index,id_surat_keluar,dari_id_user,untuk_id_user,firebase){
@@ -649,9 +704,9 @@
         if (status==0) {
           getListKasiKasubag();
         }else if (status==2) {
-
+          getListSekcam();
         }else if (status==4) {
-
+          getListCamat();
         }
         
         $('#btn_save_disposisi').attr('onclick', 'modalSaveDisposisi(\''+index+'\')');

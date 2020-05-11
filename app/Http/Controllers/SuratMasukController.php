@@ -95,6 +95,7 @@ class SuratMasukController extends Controller
             $data->lampiran = $request->lampiran;
             $data->id_user = $request->id_user;
             $data->id_user_camat = $request->id_user_camat;
+            $data->status = null;
             
             $status_upload = true;
             $fullpath = '';

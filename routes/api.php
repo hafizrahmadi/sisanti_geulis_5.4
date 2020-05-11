@@ -29,6 +29,7 @@ Route::get('/list_instruksi_camat', 'ApiController@instruksiCamat');
 Route::post('/post/instruksi', 'ApiController@postInstruksi');
 Route::get('/list_under/{leader_id}', 'ApiController@organisasi');
 Route::get('/list_disposisi', 'ApiController@listdisposisi');
+Route::get('/checkrole/{id}', 'ApiController@checkRole');
 
 
 Route::get('getlistuser','UserController@getListUser');
@@ -48,6 +49,8 @@ Route::get('getsuratkeluar/{id}','SuratKeluarController@getSuratKeluar');
 Route::post('/addsuratkeluar', 'SuratKeluarController@addSuratKeluar');
 Route::post('/deletesuratkeluar', 'SuratKeluarController@deleteSuratKeluar');
 Route::get('getlistkasikasubag','SuratKeluarController@getListKasiKasubag');
+Route::get('getlistsekcam','SuratKeluarController@getListSekcam');
+Route::get('getlistcamat','SuratKeluarController@getListCamat');
 
 // nota dinas
 Route::get('getlistnotadinas','NotaDinasController@getListNotaDinas');
