@@ -83,7 +83,7 @@ class ApiController extends Controller
             )
         );
 
-    
+
     if ($jenis==1) { // surat masuk
 
       //========
@@ -102,18 +102,6 @@ class ApiController extends Controller
       // ===== update status surat masuk =====
       $xx = ModelSuratMasuk::where('id',$request->id_surat_masuk)->update(['status'=>1]);
       // ===== end update status surat masuk =====
-
-      // ===== nyimpen ke tb feeback (disposisi)
-      $data = new ModelFeedbackSuratMasuk();
-      $data->id_surat_masuk = $request->id_surat_masuk;
-      $data->catatan = "Surat masuk baru";
-      $data->instruksi = "Untuk diketahui";
-      $data->dari_user_id = $request->id_admin;
-      $data->untuk_user_id = $request->user_id;
-      $data->status_read_admin = 1;
-      $data->created_at = Carbon::now();
-      $response = $data->save();
-      // ==== end nyimpen ke tb feedback (disposisi)
 
       // ===== nyimpen ke tb disposisi surat (disposisi baru)
       $data = new ModelDisposisiSurat();
@@ -237,14 +225,16 @@ class ApiController extends Controller
 
 
   public function postInstruksi(Request $request) {
-    $id_surat_masuk = $request->id_surat_masuk;
+    $jenis_surat = $request->jenis_surat;
+    $id_surat = $request->id_surat;
     $catatan = $request->catatan;
     $instruksi	 = $request->instruksi	;
     $dari_user_id =  $request->dari_user_id;
     $untuk_user_id = $request->untuk_user_id;
 
-    $data = new ModelFeedbackSuratMasuk();
-    $data->id_surat_masuk = $request->id_surat_masuk;
+    $data = new ModelDisposisiSurat();
+    $data->jenis_surat = $request->jenis_surat;
+    $data->id_surat = $request->id_surat;
     $data->catatan = $request->catatan;
     $data->instruksi = $request->instruksi;
     $data->dari_user_id = $request->dari_user_id;
@@ -286,7 +276,7 @@ class ApiController extends Controller
         d.dari_user_id,e.username as dari_username,e.pangkat as dari_pangkat, d.untuk_user_id, f.username as untuk_username, f.pangkat as untuk_pangkat,d.created_at as waktu_disposisi
         from tb_surat_masuk a left join tb_user b on a.id_user = b.id
         left join tb_user c on a.id_user_camat = c.id
-        left join tb_feeback_surat_masuk d on d.id_surat_masuk = a.id
+        left join tb_disposisi_surat d on d.id_surat = a.id
         left join tb_user e on d.dari_user_id = e.id
         left join tb_user f on d.untuk_user_id = f.id
         where d.id is not null
