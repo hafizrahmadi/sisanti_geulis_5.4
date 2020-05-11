@@ -41,7 +41,8 @@ Route::get('getlistcamat','SuratMasukController@getListCamat');
 Route::get('getlistnotifdisposisi','SuratMasukController@getListNotifDisposisi');
 Route::get('getlistdisposisi','SuratMasukController@getListDisposisi');
 Route::post('/readdisposisi', 'SuratMasukController@readDisposisi');
-
+Route::get('/getdistinctdatesuratmasuk','SuratMasukController@getDistinctDateSuratMasuk');
+Route::get('/getlistsuratmasukbydate/{date}','SuratMasukController@getListSuratMasukByDate');
 
 // surat keluar
 Route::get('getlistsuratkeluar','SuratKeluarController@getListSuratKeluar');

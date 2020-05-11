@@ -579,7 +579,7 @@
         $('#det_id_surat_masuk').val("");
         $('#det_id_user_camat').val("");
         $('#modal_detail_title').html(title);
-         $('#det_file').html('<i style="color:#ff0000;">Belum ada file</i>');
+        $('#det_file').html('<i style="color:#ff0000;">Belum ada file</i>');
 
         if (id!='') {
             $('#det_nomor_surat').val($('#nomor_surat_'+index).attr('data-val'));

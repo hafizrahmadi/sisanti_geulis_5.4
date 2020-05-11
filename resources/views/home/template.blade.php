@@ -320,7 +320,7 @@
 
      <header class="main-header">
         <!-- Logo         -->
-        <a href="#" class="logo" style="">
+        <a href="{{url('home')}}" class="logo" style="">
           <!-- mini logo for sidebar mini 50x50 pixels -->
           <span class="logo-mini"><b>SG</b></span>
           <!-- logo for regular state and mobile devices -->
@@ -417,6 +417,7 @@
                   <!-- <li><a href="#"><i class="fa fa-inbox"></i> <span>Inbox</span></a></li>
                   <li><a href="#"><i class="fa fa-send-o"></i> <span>Outbox</span></a></li> -->
                   <!-- <li><a href="#"><i class="fa fa-bell"></i> <span>Notification</span></a></li> -->
+                  <li><a href="{{url('/home')}}"><i class="fa fa-home"></i> <span>Home</span></a></li>
                   <li><a href="{{url('/masteruser')}}"><i class="fa fa-user"></i> <span>Master User</span></a></li>
                   <li><a href="{{url('/catatsuratmasuk')}}"><i class="fa fa-pencil-square-o"></i> <span>Catat Surat Masuk</span></a></li>
                   <li><a href="{{url('/catatsuratkeluar')}}"><i class="fa fa-send"></i> <span>Catat Surat Keluar</span></a></li>
