@@ -41,8 +41,8 @@ Route::get('getlistcamat','SuratMasukController@getListCamat');
 Route::get('getlistnotifdisposisi','SuratMasukController@getListNotifDisposisi');
 Route::get('getlistdisposisi','SuratMasukController@getListDisposisi');
 Route::post('/readdisposisi', 'SuratMasukController@readDisposisi');
-Route::get('/getdistinctdatesuratmasuk','SuratMasukController@getDistinctDateSuratMasuk');
-Route::get('/getlistsuratmasukbydate/{date}','SuratMasukController@getListSuratMasukByDate');
+Route::get('/getdistinctdatesuratmasuk','SuratMasukController@getDistinctDateSuratMasuk'); //arsip
+Route::get('/getlistsuratmasukbydate/{date}','SuratMasukController@getListSuratMasukByDate'); //arsip
 
 // surat keluar
 Route::get('getlistsuratkeluar','SuratKeluarController@getListSuratKeluar');
@@ -52,9 +52,13 @@ Route::post('/deletesuratkeluar', 'SuratKeluarController@deleteSuratKeluar');
 Route::get('getlistkasikasubag','SuratKeluarController@getListKasiKasubag');
 Route::get('getlistsekcam','SuratKeluarController@getListSekcam');
 Route::get('getlistcamat','SuratKeluarController@getListCamat');
+Route::get('/getdistinctdatesuratkeluar','SuratKeluarController@getDistinctDateSuratKeluar'); //arsip
+Route::get('/getlistsuratkeluarbydate/{date}','SuratKeluarController@getListSuratKeluarByDate'); //arsip
 
 // nota dinas
 Route::get('getlistnotadinas','NotaDinasController@getListNotaDinas');
 Route::get('getnotadinas/{id}','NotaDinasController@getNotaDinas');
 Route::post('/addnotadinas', 'NotaDinasController@addNotaDinas');
 Route::post('/deletenotadinas', 'NotaDinasController@deleteNotaDinas');
+Route::get('/getdistinctdatenotadinas','NotaDinasController@getDistinctDateNotaDinas'); //arsip
+Route::get('/getlistnotadinasbydate/{date}','NotaDinasController@getListNotaDinasByDate'); //arsip

@@ -249,4 +249,19 @@ class SuratKeluarController extends Controller
             return response()->json(['status'=>'failed','detail'=>'update data failed']);
         }
     }
+
+    function getDistinctDateSuratKeluar(){
+        $sel = DB::connection('mysql')->select("SELECT distinct date(created_at) tanggal from tb_surat_keluar where  deleted_at is null order by 1 desc;");
+        return response()->json($sel);
+    }
+
+    function getListSuratKeluarByDate(Request $request){
+        $date = $request->date;
+        $sel = DB::connection('mysql')->select("SELECT a.id, a.nomor_surat, a.tanggal_surat, a.perihal, a.asal_surat, a.lampiran, a.file_dokumen, a.catatan, a.ringkasan_surat, a.status, a.created_at,
+             a.id_user, b.username, b.nama_lengkap, 
+             a.created_at, a.updated_at
+            from tb_surat_keluar a left join tb_user b on a.id_user = b.id 
+            where date(a.created_at) = '$date'");
+        return response()->json($sel);   
+    }
 }

@@ -241,7 +241,7 @@ class SuratMasukController extends Controller
     }
 
     function getDistinctDateSuratMasuk(){
-        $sel = DB::connection('mysql')->select("SELECT distinct date(created_at) tanggal from tb_surat_masuk order by 1 desc;");
+        $sel = DB::connection('mysql')->select("SELECT distinct date(created_at) tanggal from tb_surat_masuk where deleted_at is null order by 1 desc;");
         return response()->json($sel);
     }
 

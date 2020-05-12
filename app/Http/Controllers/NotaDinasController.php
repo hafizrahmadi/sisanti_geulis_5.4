@@ -203,5 +203,18 @@ class NotaDinasController extends Controller
         // File::delete($data->file_dokumen);
     }
 
-   
+   function getDistinctDateNotaDinas(){
+        $sel = DB::connection('mysql')->select("SELECT distinct date(created_at) tanggal from tb_nota_dinas where deleted_at is null order by 1 desc;");
+        return response()->json($sel);
+    }
+
+    function getListNotaDinasByDate(Request $request){
+        $date = $request->date;
+        $sel = DB::connection('mysql')->select("SELECT id, tanggal, nomor, asal, sifat, lampiran, perihal, isi_ringkas,
+            tujuan, tembusan, file_dokumen, jenis, id_surat_masuk,
+             created_at, updated_at,deleted_at
+            from tb_nota_dinas
+            where deleted_at is null and date(created_at) = '$date'");
+        return response()->json($sel);   
+    }
 }
