@@ -30,7 +30,8 @@ Route::post('/post/instruksi', 'ApiController@postInstruksi');
 Route::get('/list_under/{leader_id}', 'ApiController@organisasi');
 Route::get('/list_disposisi', 'ApiController@listdisposisi');
 Route::get('/checkrole/{id}', 'ApiController@checkRole');
-
+Route::post('/post_absen', 'ApiController@postAbsen');
+Route::get('/status_absen/{user_id}', 'ApiController@statusabsen');
 
 Route::get('getlistuser','UserController@getListUser');
 Route::get('getlistsuratmasuk','SuratMasukController@getListSuratMasuk');

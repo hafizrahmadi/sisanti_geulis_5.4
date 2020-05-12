@@ -11,6 +11,7 @@ use App\ModelSuratKeluar;
 use App\ModelInstruksiCamat;
 use App\ModelFeedbackSuratMasuk;
 use App\ModelDisposisiSurat;
+use App\ModelAbsen;
 use Illuminate\Support\Str;
 use Auth;
 use Carbon\Carbon;
@@ -107,11 +108,11 @@ class ApiController extends Controller
       // if ($role=='admin') {
       //   $status_code =
       // }else if ($role=='camat') {
-        
+
       // }else if ($role=='sekcam') {
-        
+
       // }else if ($role=='kasi'||$role=='kasubag') {
-        
+
       // }
 
       // kalo pake untuk_user_id
@@ -322,6 +323,41 @@ class ApiController extends Controller
     $dt = ModelUser::where('id',$id)->first();
     $role = $dt['role'];
     return response($role);
+  }
+
+
+  public function postAbsen(Request $request) {
+    $current_timestamp = Carbon::now();
+    $data = new ModelAbsen();
+    $data->user_id = $request->user_id;
+    $data->tanggal_absen = $current_timestamp;
+    $data->jam_absen = $current_timestamp;
+    $data->status_absen = $request->status_absen;
+    $data->save();
+    return [
+      'status' => 'Success'
+    ];
+  }
+
+  public function statusabsen($user_id) {
+    $data = DB::table('tb_user')
+            ->select('tb_user.username','tb_absen.status_absen')
+            ->join('tb_absen', 'tb_absen.user_id', '=', 'tb_user.id')
+            ->where('tb_user.id', $user_id)
+            ->latest('tb_absen.created_at')
+            ->first();
+
+    if($data) {
+      return [
+        'status' => 'Success',
+        'data' => $data
+      ];
+    } else {
+      return [
+        'status' => 'Failed',
+        'data' => $data
+      ];
+    }
   }
 
 
