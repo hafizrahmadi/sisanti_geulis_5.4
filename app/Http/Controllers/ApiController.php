@@ -341,7 +341,7 @@ class ApiController extends Controller
 
   public function statusabsen($user_id) {
     $data = DB::table('tb_user')
-            ->select('tb_user.username','tb_absen.status_absen')
+            ->select('tb_user.username','tb_absen.status_absen', 'tb_absen.tanggal_absen', 'tb_absen.jam_absen')
             ->join('tb_absen', 'tb_absen.user_id', '=', 'tb_user.id')
             ->where('tb_user.id', $user_id)
             ->latest('tb_absen.created_at')
