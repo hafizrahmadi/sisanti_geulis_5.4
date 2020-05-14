@@ -199,7 +199,7 @@ class SuratMasukController extends Controller
             d.dari_user_id,e.username as dari_username,e.pangkat as dari_pangkat, d.untuk_user_id, f.username as untuk_username, f.pangkat as untuk_pangkat,d.created_at as waktu_disposisi
             from tb_surat_masuk a left join tb_user b on a.id_user = b.id
             left join tb_user c on a.id_user_camat = c.id
-            left join tb_disposisi_surat d on d.id_surat_masuk = a.id
+            left join tb_disposisi_surat d on d.id_surat = a.id
             left join tb_user e on d.dari_user_id = e.id
             left join tb_user f on d.untuk_user_id = f.id
             where d.id is not null
@@ -218,11 +218,16 @@ class SuratMasukController extends Controller
             d.dari_user_id,e.username as dari_username,e.pangkat as dari_pangkat, d.untuk_user_id, f.username as untuk_username, f.pangkat as untuk_pangkat,d.created_at as waktu_disposisi
             from tb_surat_masuk a left join tb_user b on a.id_user = b.id
             left join tb_user c on a.id_user_camat = c.id
-            left join tb_disposisi_surat d on d.id_surat_masuk = a.id
+            left join tb_disposisi_surat d on d.id_surat = a.id
             left join tb_user e on d.dari_user_id = e.id
             left join tb_user f on d.untuk_user_id = f.id
             where d.id is not null
             GROUP BY d.id order by d.id desc;");
+//         $qqq = "SELECT a.id, a.jenis_surat,a.id_surat,a.catatan,a.instruksi,
+            //         a.dari_user_id, b.username as dari_username, b.nama_lengkap as dari_nama_lengkap, 
+            //         a.untuk_user_id,c.username as untuk_username, c.nama_lengkap as untuk_nama_lengkap
+            // from tb_disposisi_surat a left join tb_user b on b.id = a.dari_user_id 
+            // left join tb_user c on c.id = a.untuk_user_id;";
 
          // $sel = DB::connection('mysql')->select("SELECT * from tb_disposisi_surat d  where d.id is not null and d.status_read_admin = 0 order by 1 asc;");
         return response()->json($sel);
