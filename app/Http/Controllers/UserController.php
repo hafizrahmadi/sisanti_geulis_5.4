@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use DB;
 use Illuminate\Http\Request;
 use App\ModelUser;
+use App\ModelJabatan;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 
@@ -36,9 +37,20 @@ class UserController extends Controller
             if ($password==$data->password) {
                 Session::put('id_user',$data->id);
                 Session::put('username',$data->username);
+                Session::put('nama_lengkap',$data->nama_lengkap);
+                Session::put('pangkat',$data->pangkat);
+                Session::put('jabatan',$data->jabatan);
+                Session::put('npk',$data->npk);
                 Session::put('role',$data->role);
                 Session::put('token',$data->token);
                 Session::put('login',TRUE);
+
+                $nama_jabatan = '';
+                if ($data->jabatan!=null||$data->jabatan!='') {
+                    $jbt = ModelJabatan::where('id',$data->jabatan)->first();
+                    $nama_jabatan = $jbt->nama_jabatan;
+                }
+                Session::put('nama_jabatan',$nama_jabatan);
                 return redirect('home')->with('alert','Halo '.session('username').' ! Selamat bekerja sama dengan SISANTI GEULIS :)');
             }
             else{

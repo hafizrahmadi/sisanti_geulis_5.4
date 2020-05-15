@@ -27,6 +27,10 @@ Route::group(['middleware' => ['forLogin']], function () {
 		return view('home/home');
 	});
 
+	Route::get('/absen', function () {
+	    // return view('welcome');
+		return view('home/absen');
+	});
 
 
 
@@ -43,4 +47,5 @@ Route::group(['middleware' => ['forLogin']], function () {
 
 	Route::get('/catatsuratkeluar','SuratKeluarController@catatsuratkeluar');
 	Route::get('/catatnotadinas','NotaDinasController@catatnotadinas');
+
 });
