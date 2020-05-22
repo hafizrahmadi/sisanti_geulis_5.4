@@ -79,6 +79,37 @@ class UserController extends Controller
         return response()->json($sel);
     }
 
+    public function getListAbsen(){
+        $arr_absen = array();
+        $sel = DB::connection('mysql')->select("SELECT a.id,a.username,a.password,a.npk,a.nama_lengkap,a.pangkat,a.golongan,a.jabatan,a.role,a.token,a.firebase,b.nama_jabatan from tb_user a left join tb_jabatan b on a.jabatan = b.id order by 1 asc;");
+
+        for ($i=0; $i < count($sel); $i++) { 
+            $id = $sel[$i]->id;
+            $sss = DB::connection('mysql')->select("SELECT * from tb_absen where user_id='$id' order by created_at desc limit 1;");
+            $status_absen = '';
+            if (count($sss)>0) {
+                $status_absen = $sss[0]->status_absen." : ".$sss[0]->tanggal_absen." (".$sss[0]->jam_absen.")";
+            }
+            
+            // dd($status_absen);
+            $arr_absen[] = array(
+                                'id'=>$sel[$i]->id,
+                                'username'=>$sel[$i]->username,
+                                'npk'=>$sel[$i]->npk,
+                                'nama_lengkap'=>$sel[$i]->nama_lengkap,
+                                'pangkat'=>$sel[$i]->pangkat,
+                                'golongan'=>$sel[$i]->golongan,
+                                'jabatan'=>$sel[$i]->jabatan,
+                                'nama_jabatan'=>$sel[$i]->nama_jabatan,
+                                'status_absen'=>$status_absen
+                                );
+        }
+        // $sel = ModelUser::all();
+        // return json_encode($sel);
+        // return $sel;
+        return response()->json($arr_absen);
+    }
+
     public function addUserPost(Request $request){
         $this->validate($request, [
             // 'name' => 'required|min:4',

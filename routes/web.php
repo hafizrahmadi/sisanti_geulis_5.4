@@ -32,6 +32,11 @@ Route::group(['middleware' => ['forLogin']], function () {
 		return view('home/absen');
 	});
 
+	Route::get('/laporan_absen', function () {
+	    // return view('welcome');
+		return view('home/laporan_absen');
+	});
+
 
 
 	Route::get('/masteruser','UserController@masteruser');

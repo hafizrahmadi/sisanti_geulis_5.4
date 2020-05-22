@@ -83,11 +83,27 @@
   <section class="h-100">
     <div class="container h-100">
       <div class="row justify-content-md-center h-100">
-        <div class="card-wrapper">
-          <div class="brand">
-            <img src="{{asset('file_assets/img/logo_sisanti_geulis_landscape.png')}}" style="height: 100px; width: auto; display: block; margin: auto">
+        
+        <!-- <div class="card-wrapper"> -->
+          <div class="col-sm-12">
+            <div class="brand">
+              <img src="{{asset('file_assets/img/logo_sisanti_geulis_landscape.png')}}" style="height: 100px; width: auto; display: block; margin: auto">
+            </div>
           </div>
-          <div class="card fat">
+          <div class="col-sm-6">
+            <div class="card fat" style="height:340px;">
+            <div class="card-body">
+              <h4 class="card-title text-center">Aplikasi Mobile SISANTI GEULIS</h4>
+              <div class="text-center">
+                <a href="{{asset('sisanti_geulis.apk')}}" style=""><img style="width: 30%;margin-top: 20px;margin-bottom: 20px;" src="{{asset('file_assets/img/android-logo.png')}}"></a>
+                <p>Klik logo android untuk mengunduh aplikasi</p>
+              </div>
+            </div>
+
+          </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="card fat" style="height:340px;">
             <div class="card-body">
               <h4 style="" class="card-title text-center">Login SISANTI GEULIS</h4>
               <form method="POST" id="form-login" action="{{url('/loginpost')}}">
@@ -116,10 +132,12 @@
             </div>
 
           </div>
+          </div>
+          
           <div class="footer">
             SISANTI GEULIS | Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved
           </div>
-        </div>
+        <!-- </div> -->
       </div>
     </div>
   </section>

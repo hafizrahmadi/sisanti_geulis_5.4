@@ -128,7 +128,7 @@
                   }else{
                     if (dt.data.status_absen=='Masuk') {
                       status_absen= 'Keluar';
-                      ctn+='<button type="submit" onclick="submitAbsen()" class="btn btn-teal"><i class="fa fa-sign-in"></i> Absen Keluar</button>';
+                      ctn+='<button type="submit" onclick="submitAbsen()" class="btn btn-teal"><i class="fa fa-sign-out"></i> Absen Keluar</button>';
                     }else{
                       status_absen= 'Masuk';
                       ctn+='<button type="submit" onclick="submitAbsen()" class="btn btn-teal"><i class="fa fa-sign-in"></i> Absen Masuk</button>';

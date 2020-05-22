@@ -63,3 +63,5 @@ Route::post('/addnotadinas', 'NotaDinasController@addNotaDinas');
 Route::post('/deletenotadinas', 'NotaDinasController@deleteNotaDinas');
 Route::get('/getdistinctdatenotadinas','NotaDinasController@getDistinctDateNotaDinas'); //arsip
 Route::get('/getlistnotadinasbydate/{date}','NotaDinasController@getListNotaDinasByDate'); //arsip
+
+Route::get('getlistabsen','UserController@getListAbsen');
