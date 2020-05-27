@@ -91,11 +91,11 @@
             </div>
           </div>
           <div class="col-sm-6">
-            <div class="card fat" style="height:340px;">
+            <div class="card fat" style="min-height:340px;">
             <div class="card-body">
               <h4 class="card-title text-center">Aplikasi Mobile SISANTI GEULIS</h4>
               <div class="text-center">
-                <a href="{{asset('sisanti_geulis.apk')}}" style=""><img style="width: 30%;margin-top: 20px;margin-bottom: 20px;" src="{{asset('file_assets/img/android-logo.png')}}"></a>
+                <a href="{{asset('sisanti_geulis.apk')}}" style="" onclick="alert('Terima kasih telah mengunduh! :)')"><img style="width: 30%;margin-top: 20px;margin-bottom: 20px;" src="{{asset('file_assets/img/android-logo.png')}}"></a>
                 <p>Klik logo android untuk mengunduh aplikasi</p>
               </div>
             </div>
@@ -103,7 +103,7 @@
           </div>
           </div>
           <div class="col-sm-6">
-            <div class="card fat" style="height:340px;">
+            <div class="card fat" style="min-height:340px;">
             <div class="card-body">
               <h4 style="" class="card-title text-center">Login SISANTI GEULIS</h4>
               <form method="POST" id="form-login" action="{{url('/loginpost')}}">

@@ -287,14 +287,24 @@
                       ctn_file = '<a class="btn btn-xs btn-teal" title="Lihat file dokumen surat masuk" href="'+link_file+dt[i].file_dokumen+'" target="_blank"><i class="fa fa-file-pdf-o"></i></a>';
                     }
 
-                    if (dt[i].status==0) {
+                    if (dt[i].status==null) {
                       ctn_notif = '<a href="javascript:sendNotif(\''+(i+1)+'\',\''+dt[i].id+'\',\''+dt[i].id_user+'\',\''+dt[i].id_user_camat+'\',\''+dt[i].firebase+'\')">'+
                                        '<button class="btn btn-xs btn-teal" title="Kirim Notifikasi"><i class="fa fa-bell" style=""></i></button>'+
                                        '</a>';
-                    }else if (dt[i].status==1) {
+                    }else if (dt[i].status==0) {
                       ctn_notif = '<span class="text-success"><i class="fa fa-check-square"></i> Notif Terkirim</span>';
+                    }else if (dt[i].status==1) {
+                      ctn_notif = '<span class="text-success"><i class="fa fa-eye"></i> Surat pada Camat</span>';
                     }else if (dt[i].status==2) {
-                      ctn_notif = '<span class="text-success"><i class="fa fa-eye"></i> Notif Terbaca</span>';
+                      ctn_notif = '<span class="text-success"><i class="fa fa-eye"></i> Camat meneruskan ke Sekcam</span>';
+                    }else if (dt[i].status==3) {
+                      ctn_notif = '<span class="text-success"><i class="fa fa-eye"></i> Surat pada Sekcam</span>';
+                    }else if (dt[i].status==4) {
+                      ctn_notif = '<span class="text-success"><i class="fa fa-eye"></i> Sekcam meneruskan ke Kasi/Kasubag</span>';
+                    }else if (dt[i].status==5) {
+                      ctn_notif = '<span class="text-success"><i class="fa fa-eye"></i> Surat pada Kasi/Kasubag</span>';
+                    }else if (dt[i].status==6) {
+                      ctn_notif = '<span class="text-success"><i class="fa fa-eye"></i> Kasi/Kasubag Meneruskan ke Pelaksana</span>';
                     }
                     
                     content+='<tr>'+

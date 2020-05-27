@@ -349,7 +349,7 @@
                   <i class="fa fa-bell-o"></i>
                   <span class="label label-warning" id="label-notif"></span>
                 </a>
-                <ul class="dropdown-menu" id="dropdown-notif">
+                <ul class="dropdown-menu" id="dropdown-notif" style="    overflow-y: scroll; max-height: 500px;">
                   <li class="header">You have 4 messages</li>
                   <li>
                     <ul class="menu">
@@ -417,12 +417,12 @@
                   <!-- <li><a href="#"><i class="fa fa-inbox"></i> <span>Inbox</span></a></li>
                   <li><a href="#"><i class="fa fa-send-o"></i> <span>Outbox</span></a></li> -->
                   <!-- <li><a href="#"><i class="fa fa-bell"></i> <span>Notification</span></a></li> -->
-                  <li><a href="{{url('/home')}}"><i class="fa fa-home"></i> <span>Home</span></a></li>
-                  <li><a href="{{url('/masteruser')}}"><i class="fa fa-user"></i> <span>Master User</span></a></li>
+                  <li><a href="{{url('/home')}}"><i class="fa fa-home"></i> <span>Beranda</span></a></li>
+                  <li><a href="{{url('/masteruser')}}"><i class="fa fa-user"></i> <span>Pengelolaan User</span></a></li>
                   <li><a href="{{url('/catatsuratmasuk')}}"><i class="fa fa-pencil-square-o"></i> <span>Catat Surat Masuk</span></a></li>
                   <li><a href="{{url('/catatsuratkeluar')}}"><i class="fa fa-send"></i> <span>Catat Surat Keluar</span></a></li>
                   <li><a href="{{url('/catatnotadinas')}}"><i class="fa fa-sticky-note-o" style=""></i> Catat Nota Dinas</a></li>
-                  <li><a href="{{url('/list_disposisi')}}"><i class="fa fa-mail-forward" style=""></i> List Disposisi</a></li>
+                  <li><a href="{{url('/list_disposisi')}}"><i class="fa fa-mail-forward" style=""></i> Daftar Disposisi</a></li>
                   <li><a href="{{url('/absen')}}"><i class="fa fa-sign-in" style=""></i> Absen Pegawai</a></li>
                   <li><a href="{{url('/laporan_absen')}}"><i class="fa fa-book" style=""></i> Laporan Absen Pegawai</a></li>
                   <!-- <li><a href="javascript:alert('coming soon!');"><i class="fa fa-archive" style=""></i> Arsip Surat Masuk</a></li> -->

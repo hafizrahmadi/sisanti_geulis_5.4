@@ -26,7 +26,9 @@ class SuratMasukController extends Controller
              a.id_user, b.username, b.nama_lengkap, 
              a.id_user_camat, c.username as username_camat, c.nama_lengkap as nama_lengkap_camat, c.firebase, a.status,
              a.created_at, a.updated_at, a.deleted_at
-            from tb_surat_masuk a left join tb_user b on a.id_user = b.id left join tb_user c on a.id_user_camat = c.id order by 1 desc;");
+            from tb_surat_masuk a left join tb_user b on a.id_user = b.id left join tb_user c on a.id_user_camat = c.id 
+            where a.deleted_at is null
+            order by 1 desc;");
 
 
         // $sel = ModelUser::all();
@@ -42,6 +44,7 @@ class SuratMasukController extends Controller
              a.created_at, a.updated_at, a.deleted_at
             from tb_surat_masuk a left join tb_user b on a.id_user = b.id left join tb_user c on a.id_user_camat = c.id 
             where a.id = $id
+            and a.deleted_at is null
             ;");
 
 
@@ -69,7 +72,7 @@ class SuratMasukController extends Controller
                 'tanggal_surat' => 'required',
                 'perihal' => 'required',
                 'asal_surat'=>'required',
-                'lampiran'=>'required',
+                // 'lampiran'=>'required',
                 'id_user_camat'=>'required',
                 'file_dokumen'=>'file|mimes:pdf',
             ]);
@@ -81,7 +84,7 @@ class SuratMasukController extends Controller
             'tanggal_surat' => 'required',
             'perihal' => 'required',
             'asal_surat'=>'required',
-            'lampiran'=>'required',
+            // 'lampiran'=>'required',
             'id_user_camat'=>'required',
         ]);
         }
@@ -169,7 +172,7 @@ class SuratMasukController extends Controller
     }
 
     public function deleteSuratMasuk(Request $request){
-        $data = ModelSuratMasuk::find($request->id)->first();
+        $data = ModelSuratMasuk::where('id',$request->id)->first();
         // $tujuan = 'file_suratmasuk';
         // File::delete($data->file_dokumen);
         $xx = $data->delete();
