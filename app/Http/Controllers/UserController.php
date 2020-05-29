@@ -6,6 +6,7 @@ use DB;
 use Illuminate\Http\Request;
 use App\ModelUser;
 use App\ModelJabatan;
+use App\ModelOrganisasi;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 
@@ -72,7 +73,10 @@ class UserController extends Controller
     }
 
     public function getListUser(){
-        $sel = DB::connection('mysql')->select("SELECT a.id,a.username,a.password,a.npk,a.nama_lengkap,a.pangkat,a.golongan,a.jabatan,a.role,a.token,a.firebase,b.nama_jabatan from tb_user a left join tb_jabatan b on a.jabatan = b.id order by 1 asc;");
+        $sel = DB::connection('mysql')->select("SELECT a.id,a.username,a.password,a.npk,a.nama_lengkap,a.pangkat,a.golongan,a.jabatan,a.role,a.token,a.firebase,b.nama_jabatan, c.leader_id as atasan, c.under_id as bawahan
+            from tb_user a left join tb_jabatan b on a.jabatan = b.id 
+            left join tb_organisasi c on c.id = a.id
+            order by 1 asc");
         // $sel = ModelUser::all();
         // return json_encode($sel);
         // return $sel;
@@ -134,6 +138,19 @@ class UserController extends Controller
             // $data->password = $request->password;
             return json_encode($data->save());
         }else{
+            $yy = ModelOrganisasi::where('id',$request->id_user)->get();
+            // $ak = true;
+            if (count($yy)>0) {
+              
+              ModelOrganisasi::where('id',$request->id_user)->update(['leader_id'=>$request->atasan,'under_id'=>$request->bawahan]);
+            }else{
+                $oo = new ModelOrganisasi();
+                $oo->id = $request->id_user;
+                $oo->leader_id = $request->atasan;
+                $oo->under_id = $request->bawahan;
+                $oo->save();
+            }
+
             $xx = ModelUser::where('id',$request->id_user)->update(['username'=>$request->username,'password'=>$request->password,'npk'=>$request->npk,'nama_lengkap'=>$request->nama_lengkap,'pangkat'=>$request->pangkat,'golongan'=>$request->golongan,'jabatan'=>$request->jabatan,'role'=>$request->role]);
             return json_encode($xx);
         }
@@ -142,8 +159,9 @@ class UserController extends Controller
         // return redirect('login')->with('alert-success','Kamu berhasil Register');
     }
 
+
     public function deleteUser(Request $request){
-    $data = ModelUser::find($request->id);
+    $data = ModelUser::where('id',$request->id);
 
     return json_encode($data->delete());
     }

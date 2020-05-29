@@ -10,17 +10,17 @@
 </style>
 @endsection
 @section('content-header')
-    <h1>Master User</h1>
+    <h1>Pengelolaan User</h1>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Master User</li>
+        <li class="active">Pengelolaan User</li>
       </ol>
 @endsection
 @section('content')
     <!-- Default box -->
     <div class="box" >
         <div class="box-header with-border">
-            <h3 class="box-title">Master User</h3>
+            <h3 class="box-title">Pengelolaan User</h3>
             <div class="box-tools pull-right">
                 <!-- <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button> -->
                 <a href="javascript:modalForm('Tambah User','','');"><button class="btn btn-sm btn-teal"><i class="fa fa-pencil-square-o" style=""></i> Tambah User</button></a>
@@ -122,6 +122,20 @@
                     <option value="admin">Admin</option>
                   </select>
                </div>
+
+               <div class="form-group div_organisasi">
+                  <label>Atasan</label>
+                  <select class="form-control" name="atasan" id="atasan">
+                    
+                  </select>
+               </div>
+
+               <div class="form-group div_organisasi">
+                  <label>Bawahan</label>
+                  <select class="form-control" name="bawahan" id="bawahan">
+                    
+                  </select>
+               </div>
                <!-- <input type="hidden" id="note_breach_date" name="note_breach_date" /> -->
                <input type="hidden" id="id_user" name="id_user" />
             </div>
@@ -178,8 +192,11 @@
         $('#jabatan').val("");
         $('#role').val("");
         $('#id_user').val("");
+        $('#atasan').val("0");
+        $('#bawahan').val("0");
         $('#modal_title').html(title);
         $('#id_user').val(id);
+        $('.div_organisasi').hide();
 
         if (id!='') {
             $('#username').val($('#username_'+index).attr('data-val'));
@@ -192,6 +209,19 @@
             $('#jabatan').val($('#jabatan_'+index).attr('data-val'));
             $('#role').val($('#role_'+index).attr('data-val'));
             $('#id_user').val(id);
+            $('.div_organisasi').show();
+
+            if ($('#username_'+index).attr('data-atasan')!=null) {
+              $('#atasan').val($('#username_'+index).attr('data-atasan'));  
+            }else{
+              $('#atasan').val("0");
+            }
+
+            if ($('#username_'+index).attr('data-atasan')!=null) {
+              $('#bawahan').val($('#username_'+index).attr('data-bawahan'));  
+            }else{
+              $('#bawahan').val("0");
+            }
         }
         $('#btn_save').attr('onclick', 'modalSave()');
         $('#modal').modal('show');
@@ -217,11 +247,13 @@
                   dt = data;
                   console.log(dt);
                   content = '';
+                  content_atasan = '<option value="0">Tanpa Atasan</option>';
+                  content_bawahan = '<option value="0">Tanpa Bawahan</option>';
                   for (var i = 0; i < dt.length; i++) {
                     content+='<tr>'+
                                 '<td>'+(i+1)+'</td>'+
                                 // '<td id="id_user_'+(i+1)+'" data-val="'+dt[i].id+'">'+dt[i].id+'</td>'+
-                                '<td id="username_'+(i+1)+'" data-val="'+dt[i].username+'" data-pass="'+dt[i].password+'">'+dt[i].username+'</td>'+
+                                '<td id="username_'+(i+1)+'" data-val="'+dt[i].username+'" data-pass="'+dt[i].password+'" data-atasan="'+dt[i].atasan+'" data-bawahan="'+dt[i].bawahan+'">'+dt[i].username+'</td>'+
                                 '<td id="npk_'+(i+1)+'" data-val="'+dt[i].npk+'">'+dt[i].npk+'</td>'+
                                 '<td id="nama_lengkap_'+(i+1)+'" data-val="'+dt[i].nama_lengkap+'">'+dt[i].nama_lengkap+'</td>'+
                                 '<td id="pangkat_'+(i+1)+'" data-val="'+dt[i].pangkat+'">'+dt[i].pangkat+'</td>'+
@@ -240,8 +272,13 @@
                                       '</div>'+
                                   '</td>'+
                               '</tr>';
+                    content_atasan += '<option value="'+dt[i].id+'">'+dt[i].nama_lengkap+' ('+dt[i].nama_jabatan+')</option>';
+                    content_bawahan += '<option value="'+dt[i].id+'">'+dt[i].nama_lengkap+' ('+dt[i].nama_jabatan+')</option>';
                   }
                   $('#tbody').html(content);
+
+                  $('#atasan').html(content_atasan);
+                  $('#bawahan').html(content_bawahan);
                 },
                 complete: function() {
 
@@ -275,6 +312,8 @@
     var pangkat = $('#pangkat').val();
     var golongan = $('#golongan').val();
     var jabatan = $('#jabatan').val();
+    var atasan = $('#atasan').val();
+    var bawahan = $('#bawahan').val();
     var role = $('#role').val();
     if (username!=''&&password!=''&&conf_password!=''&&role!=''&&npk!=''&&nama_lengkap!=''&&pangkat!=''&&golongan!=''&&jabatan!='') {
         $.ajax({
@@ -291,6 +330,8 @@
                   'pangkat': pangkat,
                   'golongan': golongan,
                   'jabatan': jabatan,
+                  'atasan': atasan,
+                  'bawahan': bawahan,
                   'role': role,
                },
                beforeSend: function() {
@@ -305,6 +346,8 @@
                   'pangkat': pangkat,
                   'golongan': golongan,
                   'jabatan': jabatan,
+                  'atasan': atasan,
+                  'bawahan': bawahan,
                   'role': role,
                  });
                  if (id_user=='') {
@@ -332,6 +375,8 @@
                         $('#pangkat').val("");
                         $('#golongan').val("");
                         $('#jabatan').val("");
+                        $('#atasan').val("");
+                        $('#bawahan').val("");
                         $('#role').val("");
                         $('#modal').modal('hide');
                     }else{

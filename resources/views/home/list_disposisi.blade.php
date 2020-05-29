@@ -39,6 +39,7 @@
                     <tr>
                         <th>No.</th>
                         <th>Waktu Disposisi</th>
+                        <th>Jenis Surat</th>
                         <th>Dari</th>
                         <th>Untuk</th>
                         <th>Catatan</th>
@@ -156,8 +157,9 @@
 
   function getListDisposisi(){
     $('#tbody').html("");
+    iddis = "{{isset($_GET['id'])?$_GET['id']:0}}";
     $.ajax({
-                url: "{{url('/api/getlistdisposisi')}}",
+                url: "{{url('/api/getlistdisposisi')}}"+'/'+0,
                 type: "GET",
                 data: {
                 },
@@ -181,11 +183,19 @@
                                        '<button class="btn btn-xs btn-teal" title="Baca Disposisi"><i class="fa fa-eye" style=""></i></button>'+
                                        '</a>';
                     }
+
+                    if (dt[i].jenis_surat==1) {
+                      jsu = 'Surat Masuk';
+                    }else if (dt[i].jenis_surat==2) {
+                      jsu = 'Surat Keluar';
+                    }
+                    
                     
                     content+='<tr>'+
-                                '<td>'+(i+1)+'</td>'+
+                                '<td id="dsp_'+dt[i].id_disposisi+'" data-idsurat="'+dt[i].id_surat+'" data-jenissurat="'+dt[i].jenis_surat+'">'+(i+1)+'</td>'+
                                 // '<td id="id_user_'+(i+1)+'" data-val="'+dt[i].id+'">'+dt[i].id+'</td>'+
                                 '<td>'+dt[i].waktu_disposisi+'</td>'+
+                                '<td>'+jsu+'</td>'+
                                 '<td>'+dt[i].dari_username+' ('+dt[i].dari_pangkat+')</td>'+
                                 '<td>'+dt[i].untuk_username+' ('+dt[i].untuk_pangkat+')</td>'+
                                 '<td>'+dt[i].catatan_disposisi+'</td>'+
@@ -199,7 +209,7 @@
                                       // '<a href="javascript:modalForm(\'Edit Surat Masuk\',\''+(i+1)+'\',\''+dt[i].id+'\')">'+
                                       //  '<button class="btn btn-xs btn-teal" title="Edit"><i class="fa fa-pencil" style=""></i></button>'+
                                       //  '</a>&nbsp;'+
-                                       '<a href="javascript:modalDetail(\'Detail Surat Masuk\',\''+dt[i].id+'\')">'+
+                                       '<a href="javascript:modalDetail(\'Detail Surat Masuk\',\''+dt[i].id_disposisi+'\')">'+
                                        '<button class="btn btn-xs btn-teal" title="Lihat detail surat masuk"><i class="fa fa-search" style=""></i></button>'+
                                        '</a>'+
                                        hhh+
@@ -232,6 +242,10 @@
 
                   });
                   $('#loading').hide();
+                  if (iddis!=0) {
+                    modalDetail('Detail ',iddis);
+                  }
+                  
                 },
                 error: function() {
                     alert("Memproses data gagal !");
@@ -274,7 +288,7 @@
            });
   }
 
-  function modalDetail(title,id){
+  function modalDetail(title,iddis){
         $('#det_nomor_surat').val("");
         $('#det_tanggal_surat').val("");
         $('#det_perihal').val("");
@@ -285,12 +299,24 @@
         $('#det_ringkasan_surat').val("");
         $('#det_id_surat_masuk').val("");
         $('#det_id_user_camat').val("");
-        $('#modal_detail_title').html(title);
+        
         $('#det_file').html('<i style="color:#ff0000;">Belum ada file</i>');
 
-        if (id!='') {
+        if (iddis!='') {
+          idjs = $('#dsp_'+iddis).attr('data-jenissurat');
+          ids = $('#dsp_'+iddis).attr('data-idsurat');
+
+          if (idjs==1) {
+            urlx = "{{url('/api/getsuratmasuk')}}"+"/"+ids;
+            ttl = 'Surat Masuk';
+          }else if (idjs==2) {
+            urlx = "{{url('/api/getsuratkeluar')}}"+"/"+ids;
+            ttl = 'Surat Keluar';
+          }
+          $('#modal_detail_title').html(title+ttl);
+
            $.ajax({
-                url: "{{url('/api/getsuratmasuk')}}"+"/"+id,
+                url: urlx,
                 type: "GET",
                 data: {
                   // 'id':id

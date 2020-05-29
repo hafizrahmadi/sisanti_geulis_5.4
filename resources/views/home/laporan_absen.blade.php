@@ -68,62 +68,12 @@
                <button type="button" class="close" data-dismiss="modal">&times;</button>
                <h4 class="modal-title" id="modal_detail_title" style="font-weight:bold;"></h4>
             </div>
-            <div class="modal-body">
-               <div class="form-group">
-                  <label>Nomor Surat</label>
-                  <input type="text" name="nomor_surat" class="form-control" id="det_nomor_surat" disabled="disabled" placeholder="Nomor Surat">
-               </div>
-               <div class="form-group">
-                  <label>Tanggal Surat</label>
-                  <div class="input-group date">
-                    <div class="input-group-addon">
-                      <i class="fa fa-calendar"></i>
-                    </div>
-                    <input type="text" name="tanggal_surat" class="form-control pull-right" id="det_tanggal_surat" disabled="disabled" placeholder="Tanggal Surat">
-                  </div>
-               </div>
-               <div class="form-group">
-                  <label>Perihal</label>
-                  <input type="text" name="perihal" class="form-control" id="det_perihal" disabled="disabled" placeholder="Perihal">
-               </div>
-
-               <div class="form-group">
-                  <label>Asal Surat</label>
-                  <input type="text" name="asal_surat" class="form-control" id="det_asal_surat" disabled="disabled" placeholder="Asal Surat">
-               </div>
-
-               <div class="form-group">
-                  <label>Lampiran</label>
-                  <input type="text" name="lampiran" class="form-control" id="det_lampiran" disabled="disabled" placeholder="Lampiran">
-               </div>
-
-               <div class="form-group">
-                  <label for="exampleInputFile">File Dokumen</label>
-                  <!-- <input type="file" id="file_dokumen"> -->
-                  <div id="det_file"></div>
-                </div>
-
-                <div class="form-group">
-                  <label>Absen</label>
-                  <select class="form-control" name="id_user_camat" id="det_id_user_camat" disabled="disabled">
-
-                  </select>
-               </div>
-               <div class="form-group">
-                  <label>Ringkasan Surat</label>
-                  <textarea class="form-control" rows="2" placeholder="Ringkasan surat ..." id="det_ringkasan_surat" disabled="disabled"></textarea>
-               </div>
-               <div class="form-group">
-                  <label>Catatan</label>
-                  <textarea class="form-control" rows="2" placeholder="Catatan ..." id="det_catatan" disabled="disabled"></textarea>
-               </div>
-               <!-- <input type="hidden" id="note_breach_date" name="note_breach_date" /> -->
-               <input type="hidden" id="id_surat_masuk" name="det_id_surat_masuk" />
-               <input type="hidden" id="id_user" name="det_id_user" value="{{session('id_user')}}" />
+            <div class="modal-body" id="modal-body">
+               
             </div>
             <div class="modal-footer">
                <!-- <button type="button" class="btn btn-sm btn-default" title="Reset" id="appendix1_reset"><i class="fa fa-undo"></i></button> -->
-               <!-- <button type="button" class="btn btn-sm btn-teal" title="Save" id="btn_save"><i class="fa fa-save"></i></button> -->
+               <button type="button" class="btn btn-sm btn-teal" title="Save" id="btn_excel"><i class="fa fa-file-excel-o"></i> Ekspor File Excel</button>
             </div>
          </div>
       </div>
@@ -140,6 +90,9 @@
 <!-- DataTables -->
 <script src="{{asset('file_assets/adminlte/bower_components/datatables.net/js/jquery.dataTables.min.js') }}"></script>
 <script src="{{asset('file_assets/adminlte/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
+
+
+<script src="{{asset('file_assets/jquery.table2excel.js')}}"></script>
 
 <script type="text/javascript">
     var tablex = null;
@@ -191,7 +144,7 @@
                                       // '<a href="javascript:modalForm(\'Edit Surat Masuk\',\''+(i+1)+'\',\''+dt[i].id+'\')">'+
                                       //  '<button class="btn btn-xs btn-teal" title="Edit"><i class="fa fa-pencil" style=""></i></button>'+
                                       //  '</a>&nbsp;'+
-                                       '<a href="javascript:modalDetail(\'Detail Absensi\',\''+dt[i].id+'\')">'+
+                                       '<a href="javascript:modalDetail(\'Riwayat Absensi '+dt[i].nama_lengkap+'\',\''+dt[i].id+'\',\''+dt[i].npk+'\',\''+dt[i].nama_lengkap+'\')">'+
                                        '<button class="btn btn-xs btn-teal" title="Lihat detail surat masuk"><i class="fa fa-search" style=""></i></button>'+
                                        '</a>'+
                                        // hhh+
@@ -231,6 +184,91 @@
             });
   }
 
+
+  function modalDetail(title,id,npk,nama){
+        var table_riwayat = null;
+        if (id!='') {
+           $.ajax({
+                url: "{{url('/api/riwayat_absen')}}"+"/"+id,
+                type: "GET",
+                data: {
+                  // 'id':id
+                },
+                beforeSend: function() {
+
+                },
+                success: function(dt) {
+                  // dt = JSON.parse(data);
+
+                  console.log(dt);
+                  data = dt.data;
+                  var days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+                  
+                  content = '<table id="table_riwayat" class="table table-bordered table-striped " style="width: 100%;">'+
+                      '<thead>'+
+                          '<tr>'+
+                              '<th>No.</th>'+
+                              '<th>Status Absen</th>'+
+                              '<th>Tanggal</th>'+
+                              '<th>Waktu</th>'+
+                          '</tr>'+
+                      '</thead>'+
+                      '<tbody id="tbody-riwayat">';
+                  for (var i = 0; i < data.length; i++) {
+                    var d = new Date(data[i].tanggal_absen);
+                    var dayName = days[d.getDay()];
+                    content+='<tr>'+
+                              '<td>'+(i+1)+'</td>'+
+                              '<td>'+data[i].status_absen+'</td>'+
+                              '<td>'+data[i].tanggal_absen+' ('+dayName+')</td>'+
+                              '<td>'+data[i].jam_absen+'</td>'+
+                              '</tr>';
+                  }
+                  content+='</tbody>'+'</table>';
+                  $('#modal-body').html(content);
+                  $('#modal-detail').modal('show');
+                  $('#modal_detail_title').html(title);
+                  $('#btn_excel').attr('onclick', 'exportExcel(\''+npk+'\',\''+nama+'\')');
+                },
+                complete: function() {
+                   table_riwayat = $('#table_riwayat').DataTable({
+                      //  scrollX:        true,
+                      //  scrollCollapse: true,
+                      //  fixedColumns:   {
+                      //     leftColumns: 0,
+                      //     rightColumns: 3,
+                      // },
+                      // paging:         false,
+                    //   "columnDefs": [
+                    //   { "targets": 6, "orderable": false},
+                    // ]
+                    // "paging": true,
+                    // "lengthChange": false,
+                    // "searching": false,
+                    // "ordering": false,
+                    // "info": true,
+                    // "autoWidth": false,
+
+                  });
+                },
+                error: function() {
+                    alert("Memproses data gagal !");
+                }
+            });
+        }
+  }
+
+  function exportExcel(npk,nama){
+    $("#table_riwayat").table2excel({
+ // exclude CSS class
+    exclude: ".noExl",
+    name: "Worksheet Name",
+    filename: "riwayat_absen_"+npk+"_"+nama+".xls", //do not include extension
+    // fileext: ".xls" // file extension
+  });
+
+  }
+
   function readAbsen(id){
     $.ajax({
                url: "{{url('/api/readAbsen')}}",
@@ -266,64 +304,6 @@
            });
   }
 
-  function modalDetail(title,id){
-        $('#det_nomor_surat').val("");
-        $('#det_tanggal_surat').val("");
-        $('#det_perihal').val("");
-        $('#det_asal_surat').val("");
-        $('#det_lampiran').val("");
-        $('#det_file_dokumen').val("");
-        $('#det_catatan').val("");
-        $('#det_ringkasan_surat').val("");
-        $('#det_id_surat_masuk').val("");
-        $('#det_id_user_camat').val("");
-        $('#modal_detail_title').html(title);
-        $('#det_file').html('<i style="color:#ff0000;">Belum ada file</i>');
-
-        if (id!='') {
-           $.ajax({
-                url: "{{url('/api/getsuratmasuk')}}"+"/"+id,
-                type: "GET",
-                data: {
-                  // 'id':id
-                },
-                beforeSend: function() {
-
-                },
-                success: function(dt) {
-                  // dt = JSON.parse(data);
-
-                  console.log(dt);
-                  dtx = dt[0];
-                  $('#det_nomor_surat').val(dtx.nomor_surat);
-                  $('#det_tanggal_surat').val(dtx.tanggal_surat);
-                  $('#det_perihal').val(dtx.perihal);
-                  $('#det_asal_surat').val(dtx.asal_surat);
-                  $('#det_lampiran').val(dtx.lampiran);
-                  if (dtx.file_dokumen!=""&&dtx.file_dokumen!=null) {
-                    lk = "{{url('/')}}"+"/"+dtx.file_dokumen;
-                    $('#det_file').html('<a href="'+lk+'" target="_blank"><i class="fa fa-file-pdf-o"></i> '+dtx.file_dokumen+'</a>');
-                  }
-                  
-                  $('#det_catatan').val(dtx.catatan);
-                  $('#det_ringkasan_surat').val(dtx.ringkasan_surat);
-
-                  $('#det_id_surat_masuk').val(dtx.id);
-                  $('#det_id_user_camat').val(dtx.id_user_camat);
-                  $('#modal-detail').modal('show');
-                },
-                complete: function() {
-
-                },
-                error: function() {
-                    alert("Memproses data gagal !");
-                }
-            });
-
-            
-        }
-        
-  }
 
   function getListCamat(){
     $('#tbody').html("");

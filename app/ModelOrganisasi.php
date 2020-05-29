@@ -4,8 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ModelNotifMasuk extends Model
+class ModelOrganisasi extends Model
 {
     //
     protected $table = 'tb_organisasi';
+    public $timestamps = false; 
 }

@@ -493,14 +493,20 @@
 
                   content+='<li class="header">Ada '+dt.length+' Notifikasi Disposisi</li>';
                   for (var i = 0; i < dt.length; i++) {
-                    link = "{{url('/list_disposisi')}}";
+                    if (dt[i].jenis_surat==1) {
+                      jsu = 'Surat Masuk';
+                    }else if (dt[i].jenis_surat==2) {
+                      jsu = 'Surat Keluar';
+                    }
+
+                    link = "{{url('/list_disposisi')}}"+'?id='+dt[i].id_disposisi;
                   content+=
                   '<li>'+
                     '<ul class="menu">'+
                       '<li>'+
                         '<a href="'+link+'">'+
                           '<h4>'+
-                            '<i class="fa fa-mail-forward"></i> '+'Surat Masuk : '+dt[i].perihal+' ('+')'+
+                            '<i class="fa fa-mail-forward"></i> '+jsu+' : '+dt[i].perihal+' ('+dt[i].nomor_surat+')'+
                             // '<small><i class="fa fa-clock-o"></i> 5 mins</small>'+
                           '</h4>'+
                           '<p>Telah didisposisikan dari '+dt[i].dari_username+', untuk '+dt[i].untuk_username+'.</p>'+

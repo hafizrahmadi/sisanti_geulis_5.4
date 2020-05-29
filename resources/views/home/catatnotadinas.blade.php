@@ -422,6 +422,11 @@
           if ($('#file_dokumen_'+index).attr('data-val')!="") {
             $('#p_file_dokumen').html("Format file .pdf | Current File : "+$('#file_dokumen_'+index).attr('data-val'));
           }
+          if ($('#jenis').val()=='disposisi') {
+            $('#div_surat_masuk').show();
+          }else{
+            $('#div_surat_masuk').hide();
+          }
         }
         $('#btn_save').attr('onclick', 'modalSave()');
         $('#modal').modal('show');

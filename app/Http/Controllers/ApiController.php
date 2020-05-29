@@ -247,6 +247,14 @@ class ApiController extends Controller
     ];
   }
 
+  public function detailSuratKeluar($id) {
+    $data = ModelSuratKeluar::where('id',$id)->first();
+    return [
+      'status' => 'Success',
+      'data' => $data
+    ];
+  }
+
   public function instruksiCamat() {
     $data = ModelInstruksiCamat::all();
     return [
@@ -318,6 +326,216 @@ class ApiController extends Controller
     return response()->json($sel);
   }
 
+   public function getListNotifDisposisi(){
+     $listd = array();
+      $sel = DB::connection('mysql')->select("SELECT d.id,d.jenis_surat,d.id_surat,d.catatan,d.instruksi,d.dari_user_id,e.username as dari_username,e.pangkat as dari_pangkat, d.untuk_user_id, f.username as untuk_username, f.pangkat as untuk_pangkat,d.status_read_admin,d.created_at,d.updated_at
+        from tb_disposisi_surat d
+        left join tb_user e on d.dari_user_id = e.id
+        left join tb_user f on d.untuk_user_id = f.id
+        where d.status_read_admin = 0
+        ORDER BY id desc;");
+      for ($i=0; $i < count($sel); $i++) { 
+        $id_disposisi = $sel[$i]->id;
+        $jenis_surat = $sel[$i]->jenis_surat;
+        $id_surat = $sel[$i]->id_surat;
+        $catatan_disposisi = $sel[$i]->catatan;
+        $instruksi = $sel[$i]->instruksi;
+        $dari_user_id = $sel[$i]->dari_user_id;
+        $dari_username = $sel[$i]->dari_username;
+        $dari_pangkat = $sel[$i]->dari_pangkat;
+        $untuk_user_id = $sel[$i]->untuk_user_id;
+        $untuk_username = $sel[$i]->untuk_username;
+        $untuk_pangkat = $sel[$i]->untuk_pangkat;
+        $status_read_admin = $sel[$i]->status_read_admin;
+        $waktu_disposisi = $sel[$i]->created_at;
+        $nomor_surat = '';
+        $tanggal_surat = '';
+        $perihal = '';
+        $asal_surat = '';
+        $lampiran = '';
+        $file_dokumen = '';
+        $catatan_surat = '';
+        $ringkasan_surat = '';
+        if ($jenis_surat==1) {
+          $les = DB::connection('mysql')->select("SELECT a.id, a.nomor_surat, a.tanggal_surat, a.perihal, a.asal_surat, a.lampiran, a.file_dokumen, a.catatan, a.ringkasan_surat, 
+             a.id_user, b.username, b.nama_lengkap, 
+             a.id_user_camat, c.username as username_camat, c.nama_lengkap as nama_lengkap_camat, c.firebase, a.status,
+             a.created_at, a.updated_at, a.deleted_at
+            from tb_surat_masuk a left join tb_user b on a.id_user = b.id left join tb_user c on a.id_user_camat = c.id 
+            where a.id = $id_surat
+            and a.deleted_at is null ;");
+        }else if ($jenis_surat==2) {
+          $les = DB::connection('mysql')->select("SELECT a.id, a.nomor_surat, a.tanggal_surat, a.perihal, a.asal_surat, a.lampiran, a.file_dokumen, a.catatan, a.ringkasan_surat, a.status, a.created_at,
+             a.id_user, b.username, b.nama_lengkap, 
+             a.created_at, a.updated_at
+            from tb_surat_keluar a left join tb_user b on a.id_user = b.id 
+            where a.id = $id_surat ;");
+        }
+        if (count($les)>0) {
+            $nomor_surat = $les[0]->nomor_surat;
+            $tanggal_surat = $les[0]->tanggal_surat;
+            $perihal = $les[0]->perihal;
+            $asal_surat = $les[0]->asal_surat;
+            $lampiran = $les[0]->lampiran;
+            $file_dokumen = $les[0]->file_dokumen;
+            $catatan_surat = $les[0]->catatan;
+            $ringkasan_surat = $les[0]->ringkasan_surat;
+          }
+        $listd[] = array(
+                        'id_disposisi'=>$id_disposisi,
+                        'jenis_surat'=>$jenis_surat,
+                        'id_surat'=>$id_surat,
+                        'catatan_disposisi'=>$catatan_disposisi,
+                        'instruksi'=>$instruksi,
+                        'dari_user_id'=>$dari_user_id,
+                        'dari_username'=>$dari_username,
+                        'dari_pangkat'=>$dari_pangkat,
+                        'untuk_user_id'=>$untuk_user_id,
+                        'untuk_username'=>$untuk_username,
+                        'untuk_pangkat'=>$untuk_pangkat,
+                        'status_read_admin'=>$status_read_admin,
+                        'waktu_disposisi'=>$waktu_disposisi,
+                        'nomor_surat'=>$nomor_surat,
+                        'tanggal_surat'=>$tanggal_surat,
+                        'perihal'=>$perihal,
+                        'asal_surat'=>$asal_surat,
+                        'lampiran'=>$lampiran,
+                        'file_dokumen'=>$file_dokumen,
+                        'catatan_surat'=>$catatan_surat,
+                        'ringkasan_surat'=>$ringkasan_surat,
+                      );
+      }
+        // $sel = DB::connection('mysql')->select("SELECT a.id, a.nomor_surat, a.tanggal_surat, a.perihal, a.asal_surat, a.lampiran, a.file_dokumen, a.catatan, a.ringkasan_surat,
+        //     a.id_user, b.username, b.nama_lengkap,
+        //     a.id_user_camat, c.username as username_camat, c.nama_lengkap as nama_lengkap_camat, c.firebase, a.status,
+        //     a.created_at, a.updated_at, d.id as id_disposisi, d.catatan as catatan_disposisi,d.instruksi,d.status_read_admin,
+        //     d.dari_user_id,e.username as dari_username,e.pangkat as dari_pangkat, d.untuk_user_id, f.username as untuk_username, f.pangkat as untuk_pangkat,d.created_at as waktu_disposisi
+        //     from tb_surat_masuk a left join tb_user b on a.id_user = b.id
+        //     left join tb_user c on a.id_user_camat = c.id
+        //     left join tb_disposisi_surat d on d.id_surat = a.id
+        //     left join tb_user e on d.dari_user_id = e.id
+        //     left join tb_user f on d.untuk_user_id = f.id
+        //     where d.id is not null
+        //     and d.status_read_admin = 0
+        //     GROUP BY d.id order by d.id desc;");
+
+         // $sel = DB::connection('mysql')->select("SELECT * from tb_disposisi_surat d  where d.id is not null and d.status_read_admin = 0 order by 1 asc;");
+        return response()->json($listd);
+    }
+
+    public function getListDisposisi(Request $request){
+      $listd = array();
+      $sel = DB::connection('mysql')->select("SELECT d.id,d.jenis_surat,d.id_surat,d.catatan,d.instruksi,d.dari_user_id,e.username as dari_username,e.pangkat as dari_pangkat, d.untuk_user_id, f.username as untuk_username, f.pangkat as untuk_pangkat,d.status_read_admin,d.created_at,d.updated_at
+        from tb_disposisi_surat d
+        left join tb_user e on d.dari_user_id = e.id
+        left join tb_user f on d.untuk_user_id = f.id
+        ORDER BY id desc;");
+      for ($i=0; $i < count($sel); $i++) { 
+        $id_disposisi = $sel[$i]->id;
+        $jenis_surat = $sel[$i]->jenis_surat;
+        $id_surat = $sel[$i]->id_surat;
+        $catatan_disposisi = $sel[$i]->catatan;
+        $instruksi = $sel[$i]->instruksi;
+        $dari_user_id = $sel[$i]->dari_user_id;
+        $dari_username = $sel[$i]->dari_username;
+        $dari_pangkat = $sel[$i]->dari_pangkat;
+        $untuk_user_id = $sel[$i]->untuk_user_id;
+        $untuk_username = $sel[$i]->untuk_username;
+        $untuk_pangkat = $sel[$i]->untuk_pangkat;
+        $status_read_admin = $sel[$i]->status_read_admin;
+        $waktu_disposisi = $sel[$i]->created_at;
+        $nomor_surat = '';
+        $tanggal_surat = '';
+        $perihal = '';
+        $asal_surat = '';
+        $lampiran = '';
+        $file_dokumen = '';
+        $catatan_surat = '';
+        $ringkasan_surat = '';
+        if ($jenis_surat==1) {
+          $les = DB::connection('mysql')->select("SELECT a.id, a.nomor_surat, a.tanggal_surat, a.perihal, a.asal_surat, a.lampiran, a.file_dokumen, a.catatan, a.ringkasan_surat, 
+             a.id_user, b.username, b.nama_lengkap, 
+             a.id_user_camat, c.username as username_camat, c.nama_lengkap as nama_lengkap_camat, c.firebase, a.status,
+             a.created_at, a.updated_at, a.deleted_at
+            from tb_surat_masuk a left join tb_user b on a.id_user = b.id left join tb_user c on a.id_user_camat = c.id 
+            where a.id = $id_surat
+            and a.deleted_at is null ;");
+        }else if ($jenis_surat==2) {
+          $les = DB::connection('mysql')->select("SELECT a.id, a.nomor_surat, a.tanggal_surat, a.perihal, a.asal_surat, a.lampiran, a.file_dokumen, a.catatan, a.ringkasan_surat, a.status, a.created_at,
+             a.id_user, b.username, b.nama_lengkap, 
+             a.created_at, a.updated_at
+            from tb_surat_keluar a left join tb_user b on a.id_user = b.id 
+            where a.id = $id_surat ;");
+        }
+        if (count($les)>0) {
+            $nomor_surat = $les[0]->nomor_surat;
+            $tanggal_surat = $les[0]->tanggal_surat;
+            $perihal = $les[0]->perihal;
+            $asal_surat = $les[0]->asal_surat;
+            $lampiran = $les[0]->lampiran;
+            $file_dokumen = $les[0]->file_dokumen;
+            $catatan_surat = $les[0]->catatan;
+            $ringkasan_surat = $les[0]->ringkasan_surat;
+          }
+        $listd[] = array(
+                        'id_disposisi'=>$id_disposisi,
+                        'jenis_surat'=>$jenis_surat,
+                        'id_surat'=>$id_surat,
+                        'catatan_disposisi'=>$catatan_disposisi,
+                        'instruksi'=>$instruksi,
+                        'dari_user_id'=>$dari_user_id,
+                        'dari_username'=>$dari_username,
+                        'dari_pangkat'=>$dari_pangkat,
+                        'untuk_user_id'=>$untuk_user_id,
+                        'untuk_username'=>$untuk_username,
+                        'untuk_pangkat'=>$untuk_pangkat,
+                        'status_read_admin'=>$status_read_admin,
+                        'waktu_disposisi'=>$waktu_disposisi,
+                        'nomor_surat'=>$nomor_surat,
+                        'tanggal_surat'=>$tanggal_surat,
+                        'perihal'=>$perihal,
+                        'asal_surat'=>$asal_surat,
+                        'lampiran'=>$lampiran,
+                        'file_dokumen'=>$file_dokumen,
+                        'catatan_surat'=>$catatan_surat,
+                        'ringkasan_surat'=>$ringkasan_surat,
+                      );
+      }
+
+        // $sel = DB::connection('mysql')->select("SELECT a.id, a.nomor_surat, a.tanggal_surat, a.perihal, a.asal_surat, a.lampiran, a.file_dokumen, a.catatan, a.ringkasan_surat,
+        //     a.id_user, b.username, b.nama_lengkap,
+        //     a.id_user_camat, c.username as username_camat, c.nama_lengkap as nama_lengkap_camat, c.firebase, a.status,
+        //     a.created_at, a.updated_at, d.id as id_disposisi, d.catatan as catatan_disposisi,d.instruksi,d.status_read_admin,
+        //     d.dari_user_id,e.username as dari_username,e.pangkat as dari_pangkat, d.untuk_user_id, f.username as untuk_username, f.pangkat as untuk_pangkat,d.created_at as waktu_disposisi
+        //     from tb_surat_masuk a left join tb_user b on a.id_user = b.id
+        //     left join tb_user c on a.id_user_camat = c.id
+        //     left join tb_disposisi_surat d on d.id_surat = a.id
+        //     left join tb_user e on d.dari_user_id = e.id
+        //     left join tb_user f on d.untuk_user_id = f.id
+        //     where d.id is not null
+        //     GROUP BY d.id order by d.id desc;");
+//         $qqq = "SELECT a.id, a.jenis_surat,a.id_surat,a.catatan,a.instruksi,
+            //         a.dari_user_id, b.username as dari_username, b.nama_lengkap as dari_nama_lengkap, 
+            //         a.untuk_user_id,c.username as untuk_username, c.nama_lengkap as untuk_nama_lengkap
+            // from tb_disposisi_surat a left join tb_user b on b.id = a.dari_user_id 
+            // left join tb_user c on c.id = a.untuk_user_id;";
+
+         // $sel = DB::connection('mysql')->select("SELECT * from tb_disposisi_surat d  where d.id is not null and d.status_read_admin = 0 order by 1 asc;");
+        return response()->json($listd);
+    }
+
+    function readDisposisi(Request $request){
+        $id_disposisi = $request->id;
+        $update = DB::connection('mysql')->table('tb_disposisi_surat')->where('id',$id_disposisi)
+                        ->update(['status_read_admin'=>1]);
+
+        if ($update) {
+            return response()->json(['status'=>'success']);
+        }else{
+            return response()->json(['status'=>'failed','detail'=>'update data failed']);
+        }
+    }
+
   public function checkRole(Request $request){
     $id = $request->id;
     $dt = ModelUser::where('id',$id)->first();
@@ -347,6 +565,24 @@ class ApiController extends Controller
             ->latest('tb_absen.created_at')
             ->first();
 
+    if($data) {
+      return [
+        'status' => 'Success',
+        'data' => $data
+      ];
+    } else {
+      return [
+        'status' => 'Failed',
+        'data' => $data
+      ];
+    }
+  }
+
+  public function riwayatabsen($user_id){
+    $data = DB::table('tb_user')
+            ->select('tb_user.username','tb_absen.status_absen', 'tb_absen.tanggal_absen', 'tb_absen.jam_absen')
+            ->join('tb_absen', 'tb_absen.user_id', '=', 'tb_user.id')
+            ->where('tb_user.id', $user_id)->get( );
     if($data) {
       return [
         'status' => 'Success',

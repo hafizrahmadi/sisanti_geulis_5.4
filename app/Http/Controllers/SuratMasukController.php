@@ -194,59 +194,6 @@ class SuratMasukController extends Controller
         return response()->json($sel);
     }
 
-    public function getListNotifDisposisi(){
-        $sel = DB::connection('mysql')->select("SELECT a.id, a.nomor_surat, a.tanggal_surat, a.perihal, a.asal_surat, a.lampiran, a.file_dokumen, a.catatan, a.ringkasan_surat,
-            a.id_user, b.username, b.nama_lengkap,
-            a.id_user_camat, c.username as username_camat, c.nama_lengkap as nama_lengkap_camat, c.firebase, a.status,
-            a.created_at, a.updated_at, d.id as id_disposisi, d.catatan as catatan_disposisi,d.instruksi,d.status_read_admin,
-            d.dari_user_id,e.username as dari_username,e.pangkat as dari_pangkat, d.untuk_user_id, f.username as untuk_username, f.pangkat as untuk_pangkat,d.created_at as waktu_disposisi
-            from tb_surat_masuk a left join tb_user b on a.id_user = b.id
-            left join tb_user c on a.id_user_camat = c.id
-            left join tb_disposisi_surat d on d.id_surat = a.id
-            left join tb_user e on d.dari_user_id = e.id
-            left join tb_user f on d.untuk_user_id = f.id
-            where d.id is not null
-            and d.status_read_admin = 0
-            GROUP BY d.id order by d.id desc;");
-
-         // $sel = DB::connection('mysql')->select("SELECT * from tb_disposisi_surat d  where d.id is not null and d.status_read_admin = 0 order by 1 asc;");
-        return response()->json($sel);
-    }
-
-    public function getListDisposisi(){
-        $sel = DB::connection('mysql')->select("SELECT a.id, a.nomor_surat, a.tanggal_surat, a.perihal, a.asal_surat, a.lampiran, a.file_dokumen, a.catatan, a.ringkasan_surat,
-            a.id_user, b.username, b.nama_lengkap,
-            a.id_user_camat, c.username as username_camat, c.nama_lengkap as nama_lengkap_camat, c.firebase, a.status,
-            a.created_at, a.updated_at, d.id as id_disposisi, d.catatan as catatan_disposisi,d.instruksi,d.status_read_admin,
-            d.dari_user_id,e.username as dari_username,e.pangkat as dari_pangkat, d.untuk_user_id, f.username as untuk_username, f.pangkat as untuk_pangkat,d.created_at as waktu_disposisi
-            from tb_surat_masuk a left join tb_user b on a.id_user = b.id
-            left join tb_user c on a.id_user_camat = c.id
-            left join tb_disposisi_surat d on d.id_surat = a.id
-            left join tb_user e on d.dari_user_id = e.id
-            left join tb_user f on d.untuk_user_id = f.id
-            where d.id is not null
-            GROUP BY d.id order by d.id desc;");
-//         $qqq = "SELECT a.id, a.jenis_surat,a.id_surat,a.catatan,a.instruksi,
-            //         a.dari_user_id, b.username as dari_username, b.nama_lengkap as dari_nama_lengkap, 
-            //         a.untuk_user_id,c.username as untuk_username, c.nama_lengkap as untuk_nama_lengkap
-            // from tb_disposisi_surat a left join tb_user b on b.id = a.dari_user_id 
-            // left join tb_user c on c.id = a.untuk_user_id;";
-
-         // $sel = DB::connection('mysql')->select("SELECT * from tb_disposisi_surat d  where d.id is not null and d.status_read_admin = 0 order by 1 asc;");
-        return response()->json($sel);
-    }
-
-    function readDisposisi(Request $request){
-        $id_disposisi = $request->id;
-        $update = DB::connection('mysql')->table('tb_disposisi_surat')->where('id',$id_disposisi)
-                        ->update(['status_read_admin'=>1]);
-
-        if ($update) {
-            return response()->json(['status'=>'success']);
-        }else{
-            return response()->json(['status'=>'failed','detail'=>'update data failed']);
-        }
-    }
 
     function getDistinctDateSuratMasuk(){
         $sel = DB::connection('mysql')->select("SELECT distinct date(created_at) tanggal from tb_surat_masuk where deleted_at is null order by 1 desc;");

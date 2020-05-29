@@ -25,6 +25,7 @@ Route::get('/notifications/{user_id}', 'ApiController@getMail');
 Route::get('/notifications/unread/{user_id}', 'ApiController@getMailUnread');
 Route::post('/status_read/{id}', 'ApiController@updateStatusRead');
 Route::get('/detail_surat_masuk/{id}', 'ApiController@detailSuratMasuk');
+Route::get('/detail_surat_keluar/{id}', 'ApiController@detailSuratKeluar');
 Route::get('/list_instruksi_camat', 'ApiController@instruksiCamat');
 Route::post('/post/instruksi', 'ApiController@postInstruksi');
 Route::get('/list_under/{leader_id}', 'ApiController@organisasi');
@@ -32,6 +33,11 @@ Route::get('/list_disposisi', 'ApiController@listdisposisi');
 Route::get('/checkrole/{id}', 'ApiController@checkRole');
 Route::post('/post_absen', 'ApiController@postAbsen');
 Route::get('/status_absen/{user_id}', 'ApiController@statusabsen');
+Route::get('/riwayat_absen/{user_id}', 'ApiController@riwayatabsen');
+
+Route::get('getlistnotifdisposisi','ApiController@getListNotifDisposisi');
+Route::get('getlistdisposisi/{id}','ApiController@getListDisposisi');
+Route::post('/readdisposisi', 'ApiController@readDisposisi');
 
 Route::get('getlistuser','UserController@getListUser');
 Route::get('getlistsuratmasuk','SuratMasukController@getListSuratMasuk');
@@ -39,9 +45,7 @@ Route::get('getsuratmasuk/{id}','SuratMasukController@getSuratMasuk');
 Route::post('/addsuratmasuk', 'SuratMasukController@addSuratMasuk');
 Route::post('/deletesuratmasuk', 'SuratMasukController@deleteSuratMasuk');
 Route::get('getlistcamat','SuratMasukController@getListCamat');
-Route::get('getlistnotifdisposisi','SuratMasukController@getListNotifDisposisi');
-Route::get('getlistdisposisi','SuratMasukController@getListDisposisi');
-Route::post('/readdisposisi', 'SuratMasukController@readDisposisi');
+
 Route::get('/getdistinctdatesuratmasuk','SuratMasukController@getDistinctDateSuratMasuk'); //arsip
 Route::get('/getlistsuratmasukbydate/{date}','SuratMasukController@getListSuratMasukByDate'); //arsip
 
