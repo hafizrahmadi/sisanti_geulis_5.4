@@ -138,18 +138,21 @@ class UserController extends Controller
             // $data->password = $request->password;
             return json_encode($data->save());
         }else{
-            $yy = ModelOrganisasi::where('id',$request->id_user)->get();
-            // $ak = true;
-            if (count($yy)>0) {
-              
-              ModelOrganisasi::where('id',$request->id_user)->update(['leader_id'=>$request->atasan,'under_id'=>$request->bawahan]);
-            }else{
-                $oo = new ModelOrganisasi();
-                $oo->id = $request->id_user;
-                $oo->leader_id = $request->atasan;
-                $oo->under_id = $request->bawahan;
-                $oo->save();
-            }
+
+            $ee = ModelOrganisasi::where('leader_id',$request->id_user)->where('under_id',$request->bawahan)->delete();
+            $ii = ModelOrganisasi::where('leader_id',$request->atasan)->where('under_id',$request->id_user)->delete();
+
+
+            $oo = new ModelOrganisasi();
+            $oo->leader_id = $request->id_user;
+            $oo->under_id = $request->bawahan;
+            $oo->save();
+
+            $aa = new ModelOrganisasi();
+            $aa->leader_id = $request->atasan;
+            $aa->under_id = $request->id_user;
+            $aa->save();
+
 
             $xx = ModelUser::where('id',$request->id_user)->update(['username'=>$request->username,'password'=>$request->password,'npk'=>$request->npk,'nama_lengkap'=>$request->nama_lengkap,'pangkat'=>$request->pangkat,'golongan'=>$request->golongan,'jabatan'=>$request->jabatan,'role'=>$request->role]);
             return json_encode($xx);

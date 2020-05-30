@@ -93,10 +93,10 @@
           <div class="col-sm-6">
             <div class="card fat" style="min-height:340px;">
             <div class="card-body">
-              <h4 class="card-title text-center">Aplikasi Mobile SISANTI GEULIS</h4>
+              <h4 class="card-title text-center" style="margin-bottom: 20px;">Kecamatan Tanjungsari, Kabupaten Bogor</h4>
               <div class="text-center">
-                <a href="{{asset('sisanti_geulis.apk')}}" style="" onclick="alert('Terima kasih telah mengunduh! :)')"><img style="width: 30%;margin-top: 20px;margin-bottom: 20px;" src="{{asset('file_assets/img/android-logo.png')}}"></a>
-                <p>Klik logo android untuk mengunduh aplikasi</p>
+                <img style="width: 30%;margin-bottom: 10px;" src="{{asset('file_assets/img/logo_pemkab_bogor.png')}}">
+                <p>Klik <a href="{{asset('sisanti_geulis.apk')}}" style="" onclick="alert('Terima kasih telah mengunduh! :)')">download</a> untuk mengunduh aplikasi mobile</p>
               </div>
             </div>
 

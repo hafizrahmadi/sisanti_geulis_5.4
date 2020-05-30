@@ -288,6 +288,41 @@
            });
   }
 
+  function readDisposisi2(id){
+    $.ajax({
+               url: "{{url('/api/readdisposisi')}}",
+               type: "POST",
+               data: {
+                    _token: '{{csrf_token()}}',
+                  'id': id,
+               },
+               beforeSend: function() {
+                 console.log({
+                   _token: '{{csrf_token()}}',
+                  'id': id,
+                 });
+                // console.log('baca disposisi ID : '+id);
+               },
+               success: function(data) {
+                    // alert(data);
+                    console.log(data);
+                    status = data.status;
+                    if (status == 'success') {
+                      // alert(status);
+                    }else{
+                      // alert(status+' : '+data.detail);
+                    }
+               },
+               complete: function() {
+                 getListDisposisi();
+                 getListNotifDisposisi();
+               },
+               error: function() {
+                   alert("Memproses data gagal !");
+               }
+           });
+  }
+
   function modalDetail(title,iddis){
         $('#det_nomor_surat').val("");
         $('#det_tanggal_surat').val("");
@@ -347,7 +382,7 @@
                   $('#modal-detail').modal('show');
                 },
                 complete: function() {
-
+                  readdisposisi2(iddis);
                 },
                 error: function() {
                     alert("Memproses data gagal !");

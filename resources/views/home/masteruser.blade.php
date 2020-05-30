@@ -34,7 +34,7 @@
                         <th>No.</th>
                         <!-- <th>ID User</th> -->
                         <th>Username</th>
-                        <th>NPK</th>
+                        <th>NIP</th>
                         <th>Nama Lengkap</th>
                         <th>Pangkat</th>
                         <th>Golongan</th>
@@ -84,8 +84,8 @@
                </div>
 
                <div class="form-group">
-                  <label>NPK</label>
-                  <input type="text" name="npk" class="form-control" id="npk" placeholder="NPK">
+                  <label>NIP</label>
+                  <input type="text" name="npk" class="form-control" id="npk" placeholder="NIP">
                </div>
 
                <div class="form-group">
@@ -120,6 +120,7 @@
                     <option value="kasi">Kasi</option>
                     <option value="kasubag">Kasubag</option>
                     <option value="admin">Admin</option>
+                    <option value="pelaksana">pelaksana</option>
                   </select>
                </div>
 

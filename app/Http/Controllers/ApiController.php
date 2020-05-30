@@ -84,10 +84,7 @@ class ApiController extends Controller
             )
         );
 
-    // cek role user id untuk kebutuhan status surat masuk/keluar
-    $dt = ModelUser::where('id',$request->user_id)->first();
-    $role = $dt['role'];
-    $status_code = null;
+    
 
     if ($jenis==1) { // surat masuk
       //========
@@ -103,30 +100,6 @@ class ApiController extends Controller
       $data->save();
       //========
 
-      // ===== update status surat masuk =====
-      // kalo pake dari_user_id
-      // if ($role=='admin') {
-      //   $status_code =
-      // }else if ($role=='camat') {
-
-      // }else if ($role=='sekcam') {
-
-      // }else if ($role=='kasi'||$role=='kasubag') {
-
-      // }
-
-      // kalo pake untuk_user_id
-      if ($role=='camat') {
-        $status_code = 0;
-      }else if ($role=='sekcam') {
-        $status_code = 2;
-      }else if ($role=='kasi'||$role=='kasubag') {
-        $status_code = 4;
-      }
-
-      $xx = ModelSuratMasuk::where('id',$request->id_surat_masuk)->update(['status'=>$status_code]);
-      // ===== end update status surat masuk =====
-
       // ===== nyimpen ke tb disposisi surat (disposisi baru)
       $data = new ModelDisposisiSurat();
       $data->id_surat = $request->id_surat_masuk;
@@ -139,9 +112,25 @@ class ApiController extends Controller
       $data->created_at = Carbon::now();
       $response = $data->save();
       // ==== end nyimpen ke tb disposisi surat (disposisi baru)
-    }
 
-    if ($jenis==2) { // surat keluar
+      // ===== update status surat masuk =====
+      // cek role user id untuk kebutuhan status surat masuk/keluar
+      $dt = ModelUser::where('id',$request->user_id)->first();
+      $role = $dt['role'];
+      $status_code = null;
+      // kalo pake untuk_user_id
+      if ($role=='camat') {
+        $status_code = 1;
+      }
+      // else if ($role=='sekcam') {
+      //   $status_code = 2;
+      // }else if ($role=='kasi'||$role=='kasubag') {
+      //   $status_code = 4;
+      // }
+
+      $xx = ModelSuratMasuk::where('id',$request->id_surat_masuk)->update(['status'=>$status_code]);
+      // ===== end update status surat masuk =====
+    }else if ($jenis==2) { // surat keluar
       $dari_user_id = $request->dari_user_id;
       $untuk_user_id = $request->untuk_user_id;
       $id_surat = $request->id_surat;
@@ -172,13 +161,25 @@ class ApiController extends Controller
       $response = $data->save();
 
       // ===== update status surat keluar =====
+      // cek role user id untuk kebutuhan status surat masuk/keluar
+      $dt = ModelUser::where('id',$request->untuk_user_id)->first();
+      $role_untuk = $dt['role'];
+      $dtz = ModelUser::where('id',$request->dari_user_id)->first();
+      $role_dari = $dtz['role'];
+      $status_code = null;
       // kalo pake untuk_user_id
-      if ($role=='kasi'||$role=='kasubag') {
-        $status_code = 0;
-      }else if ($role=='sekcam') {
+      if (($role_untuk=='kasi'||$role_untuk=='kasubag')&&$role_dari=='admin') {
+        $status_code = 0.5;
+      }else if (($role_dari=='kasi'||$role_dari=='kasubag')&&$role_untuk=='admin') {
+        $status_code = 1;
+      }else if (($role_dari=='kasi'||$role_dari=='kasubag')&&$role_untuk=='sekcam') {
         $status_code = 2;
-      }else if ($role=='camat') {
+      }else if ($role_dari=='sekcam'&&$role_untuk=='admin') {
+        $status_code = 3;
+      }else if ($role_dari=='sekcam'&&$role_untuk=='camat') {
         $status_code = 4;
+      }else if ($role_dari=='camat'&&$role_untuk=='admin') {
+        $status_code = 5;
       }
       $xx = ModelSuratKeluar::where('id',$request->id_surat)->update(['status'=>$status_code]);
       // ===== end update status surat keluar =====
@@ -283,6 +284,58 @@ class ApiController extends Controller
     $data->created_at = Carbon::now();
     $response = $data->save();
 
+    if ($jenis_surat==1) {
+      $dt = ModelUser::where('id',$request->untuk_user_id)->first();
+      $role_untuk = $dt['role'];
+      $dtz = ModelUser::where('id',$request->dari_user_id)->first();
+      $role_dari = $dtz['role'];
+      $status_code = null;
+      // if (($role_untuk=='kasi'||$role_untuk=='kasubag')&&$role_dari=='admin') {
+      //   $status_code = 0.5;
+      // }else if (($role_dari=='kasi'||$role_dari=='kasubag')&&$role_untuk=='admin') {
+      //   $status_code = 1;
+      // }else if (($role_dari=='kasi'||$role_dari=='kasubag')&&$role_untuk=='sekcam') {
+      //   $status_code = 2;
+      // }else if ($role_dari=='sekcam'&&$role_untuk=='admin') {
+      //   $status_code = 3;
+      // }else if ($role_dari=='sekcam'&&$role_untuk=='camat') {
+      //   $status_code = 4;
+      // }else if ($role_dari=='camat'&&$role_untuk=='admin') {
+      //   $status_code = 5;
+      // }
+
+      if ($role_untuk=='camat') {
+        $status_code = 1;
+      }else if ($role_untuk=='sekcam') {
+        $status_code = 2;
+      }else if ($role_untuk=='kasi'||$role_untuk=='kasubag') {
+        $status_code = 3;
+      }else if ($role_untuk=='pelaksana') {
+        $status_code = 4;
+      }
+      $xx = ModelSuratMasuk::where('id',$request->id_surat)->update(['status'=>$status_code]);
+    }else if ($jenis_surat==2) {
+      $dt = ModelUser::where('id',$request->untuk_user_id)->first();
+      $role_untuk = $dt['role'];
+      $dtz = ModelUser::where('id',$request->dari_user_id)->first();
+      $role_dari = $dtz['role'];
+      $status_code = null;
+      if (($role_untuk=='kasi'||$role_untuk=='kasubag')&&$role_dari=='admin') {
+        $status_code = 0.5;
+      }else if (($role_dari=='kasi'||$role_dari=='kasubag')&&$role_untuk=='admin') {
+        $status_code = 1;
+      }else if (($role_dari=='kasi'||$role_dari=='kasubag')&&$role_untuk=='sekcam') {
+        $status_code = 2;
+      }else if ($role_dari=='sekcam'&&$role_untuk=='admin') {
+        $status_code = 3;
+      }else if ($role_dari=='sekcam'&&$role_untuk=='camat') {
+        $status_code = 4;
+      }else if ($role_dari=='camat'&&$role_untuk=='admin') {
+        $status_code = 5;
+      }
+      $xx = ModelSuratKeluar::where('id',$request->id_surat)->update(['status'=>$status_code]);
+    }
+
     if($response) {
       return [
         'status' => 'Success'
@@ -292,6 +345,8 @@ class ApiController extends Controller
         'status' => 'Failed'
       ];
     }
+
+    
   }
 
   public function organisasi($leader_id) {
@@ -540,6 +595,13 @@ class ApiController extends Controller
     $id = $request->id;
     $dt = ModelUser::where('id',$id)->first();
     $role = $dt['role'];
+   // if ($role=='kasi'||$role=='kasubag') {
+   //      $status_code = 0;
+   //    }else if ($role=='sekcam') {
+   //      $status_code = 2;
+   //    }else if ($role=='camat') {
+   //      $status_code = 4;
+   //    }
     return response($role);
   }
 

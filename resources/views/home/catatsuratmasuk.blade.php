@@ -296,15 +296,11 @@
                     }else if (dt[i].status==1) {
                       ctn_notif = '<span class="text-success"><i class="fa fa-eye"></i> Surat pada Camat</span>';
                     }else if (dt[i].status==2) {
-                      ctn_notif = '<span class="text-success"><i class="fa fa-eye"></i> Camat meneruskan ke Sekcam</span>';
-                    }else if (dt[i].status==3) {
                       ctn_notif = '<span class="text-success"><i class="fa fa-eye"></i> Surat pada Sekcam</span>';
-                    }else if (dt[i].status==4) {
-                      ctn_notif = '<span class="text-success"><i class="fa fa-eye"></i> Sekcam meneruskan ke Kasi/Kasubag</span>';
-                    }else if (dt[i].status==5) {
+                    }else if (dt[i].status==3) {
                       ctn_notif = '<span class="text-success"><i class="fa fa-eye"></i> Surat pada Kasi/Kasubag</span>';
-                    }else if (dt[i].status==6) {
-                      ctn_notif = '<span class="text-success"><i class="fa fa-eye"></i> Kasi/Kasubag Meneruskan ke Pelaksana</span>';
+                    }else if (dt[i].status==4) {
+                      ctn_notif = '<span class="text-success"><i class="fa fa-eye"></i> Surat pada Pelaksana</span>';
                     }
                     
                     content+='<tr>'+
