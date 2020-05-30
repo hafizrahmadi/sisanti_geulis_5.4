@@ -138,11 +138,11 @@ class ApiController extends Controller
 
        //======== notif masuk
       $data =  new ModelNotifMasuk();
-      $data->user_id = $request->untuk_user_id;
+      $data->user_id = $request->user_id;
       $data->title = $request->title;
       $data->body = $request->body;
       $data->jenis = $request->jenis;
-      $data->id_surat_masuk = $request->id_surat;
+      $data->id_surat_masuk = $request->id_surat_masuk;
       $data->status_read = 0;
       $data->created_at = Carbon::now();
       $data->updated_at = Carbon::now();
@@ -183,6 +183,8 @@ class ApiController extends Controller
       }
       $xx = ModelSuratKeluar::where('id',$request->id_surat)->update(['status'=>$status_code]);
       // ===== end update status surat keluar =====
+      
+      // ===== nyimpen ke tb disposisi surat (disposisi baru)
     }
 
     $fields = json_encode ( $fields );
@@ -269,7 +271,7 @@ class ApiController extends Controller
     $jenis_surat = $request->jenis_surat;
     $id_surat = $request->id_surat;
     $catatan = $request->catatan;
-    $instruksi	 = $request->instruksi	;
+    $instruksi   = $request->instruksi  ;
     $dari_user_id =  $request->dari_user_id;
     $untuk_user_id = $request->untuk_user_id;
 
@@ -290,19 +292,6 @@ class ApiController extends Controller
       $dtz = ModelUser::where('id',$request->dari_user_id)->first();
       $role_dari = $dtz['role'];
       $status_code = null;
-      // if (($role_untuk=='kasi'||$role_untuk=='kasubag')&&$role_dari=='admin') {
-      //   $status_code = 0.5;
-      // }else if (($role_dari=='kasi'||$role_dari=='kasubag')&&$role_untuk=='admin') {
-      //   $status_code = 1;
-      // }else if (($role_dari=='kasi'||$role_dari=='kasubag')&&$role_untuk=='sekcam') {
-      //   $status_code = 2;
-      // }else if ($role_dari=='sekcam'&&$role_untuk=='admin') {
-      //   $status_code = 3;
-      // }else if ($role_dari=='sekcam'&&$role_untuk=='camat') {
-      //   $status_code = 4;
-      // }else if ($role_dari=='camat'&&$role_untuk=='admin') {
-      //   $status_code = 5;
-      // }
 
       if ($role_untuk=='camat') {
         $status_code = 1;
@@ -310,8 +299,6 @@ class ApiController extends Controller
         $status_code = 2;
       }else if ($role_untuk=='kasi'||$role_untuk=='kasubag') {
         $status_code = 3;
-      }else if ($role_untuk=='pelaksana') {
-        $status_code = 4;
       }
       $xx = ModelSuratMasuk::where('id',$request->id_surat)->update(['status'=>$status_code]);
     }else if ($jenis_surat==2) {
@@ -460,21 +447,6 @@ class ApiController extends Controller
                         'ringkasan_surat'=>$ringkasan_surat,
                       );
       }
-        // $sel = DB::connection('mysql')->select("SELECT a.id, a.nomor_surat, a.tanggal_surat, a.perihal, a.asal_surat, a.lampiran, a.file_dokumen, a.catatan, a.ringkasan_surat,
-        //     a.id_user, b.username, b.nama_lengkap,
-        //     a.id_user_camat, c.username as username_camat, c.nama_lengkap as nama_lengkap_camat, c.firebase, a.status,
-        //     a.created_at, a.updated_at, d.id as id_disposisi, d.catatan as catatan_disposisi,d.instruksi,d.status_read_admin,
-        //     d.dari_user_id,e.username as dari_username,e.pangkat as dari_pangkat, d.untuk_user_id, f.username as untuk_username, f.pangkat as untuk_pangkat,d.created_at as waktu_disposisi
-        //     from tb_surat_masuk a left join tb_user b on a.id_user = b.id
-        //     left join tb_user c on a.id_user_camat = c.id
-        //     left join tb_disposisi_surat d on d.id_surat = a.id
-        //     left join tb_user e on d.dari_user_id = e.id
-        //     left join tb_user f on d.untuk_user_id = f.id
-        //     where d.id is not null
-        //     and d.status_read_admin = 0
-        //     GROUP BY d.id order by d.id desc;");
-
-         // $sel = DB::connection('mysql')->select("SELECT * from tb_disposisi_surat d  where d.id is not null and d.status_read_admin = 0 order by 1 asc;");
         return response()->json($listd);
     }
 
@@ -557,25 +529,6 @@ class ApiController extends Controller
                       );
       }
 
-        // $sel = DB::connection('mysql')->select("SELECT a.id, a.nomor_surat, a.tanggal_surat, a.perihal, a.asal_surat, a.lampiran, a.file_dokumen, a.catatan, a.ringkasan_surat,
-        //     a.id_user, b.username, b.nama_lengkap,
-        //     a.id_user_camat, c.username as username_camat, c.nama_lengkap as nama_lengkap_camat, c.firebase, a.status,
-        //     a.created_at, a.updated_at, d.id as id_disposisi, d.catatan as catatan_disposisi,d.instruksi,d.status_read_admin,
-        //     d.dari_user_id,e.username as dari_username,e.pangkat as dari_pangkat, d.untuk_user_id, f.username as untuk_username, f.pangkat as untuk_pangkat,d.created_at as waktu_disposisi
-        //     from tb_surat_masuk a left join tb_user b on a.id_user = b.id
-        //     left join tb_user c on a.id_user_camat = c.id
-        //     left join tb_disposisi_surat d on d.id_surat = a.id
-        //     left join tb_user e on d.dari_user_id = e.id
-        //     left join tb_user f on d.untuk_user_id = f.id
-        //     where d.id is not null
-        //     GROUP BY d.id order by d.id desc;");
-//         $qqq = "SELECT a.id, a.jenis_surat,a.id_surat,a.catatan,a.instruksi,
-            //         a.dari_user_id, b.username as dari_username, b.nama_lengkap as dari_nama_lengkap, 
-            //         a.untuk_user_id,c.username as untuk_username, c.nama_lengkap as untuk_nama_lengkap
-            // from tb_disposisi_surat a left join tb_user b on b.id = a.dari_user_id 
-            // left join tb_user c on c.id = a.untuk_user_id;";
-
-         // $sel = DB::connection('mysql')->select("SELECT * from tb_disposisi_surat d  where d.id is not null and d.status_read_admin = 0 order by 1 asc;");
         return response()->json($listd);
     }
 

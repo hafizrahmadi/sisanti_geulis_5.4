@@ -208,6 +208,7 @@
                       '<thead>'+
                           '<tr>'+
                               '<th>No.</th>'+
+                              '<th>Nama</th>'+
                               '<th>Status Absen</th>'+
                               '<th>Tanggal</th>'+
                               '<th>Waktu</th>'+
@@ -219,6 +220,7 @@
                     var dayName = days[d.getDay()];
                     content+='<tr>'+
                               '<td>'+(i+1)+'</td>'+
+                              '<td>'+nama+'</td>'+
                               '<td>'+data[i].status_absen+'</td>'+
                               '<td>'+data[i].tanggal_absen+' ('+dayName+')</td>'+
                               '<td>'+data[i].jam_absen+'</td>'+

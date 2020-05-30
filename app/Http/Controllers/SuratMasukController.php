@@ -66,25 +66,21 @@ class SuratMasukController extends Controller
         // return response()->json($request);
         if ($request->hasFile('file_dokumen')) {
             $this->validate($request, [
-                // 'name' => 'required|min:4',
-                // 'email' => 'required|min:4|email|unique:users',
                 'nomor_surat'=>'required',
                 'tanggal_surat' => 'required',
                 'perihal' => 'required',
                 'asal_surat'=>'required',
-                // 'lampiran'=>'required',
+                'lampiran'=>'required',
                 'id_user_camat'=>'required',
                 'file_dokumen'=>'file|mimes:pdf',
             ]);
         }else{
             $this->validate($request, [
-            // 'name' => 'required|min:4',
-            // 'email' => 'required|min:4|email|unique:users',
             'nomor_surat'=>'required',
             'tanggal_surat' => 'required',
             'perihal' => 'required',
             'asal_surat'=>'required',
-            // 'lampiran'=>'required',
+            'lampiran'=>'required',
             'id_user_camat'=>'required',
         ]);
         }

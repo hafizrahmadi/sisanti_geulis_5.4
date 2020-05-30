@@ -85,25 +85,22 @@
       <div class="row justify-content-md-center h-100">
         
         <!-- <div class="card-wrapper"> -->
-          <div class="col-sm-12">
+          <div class="col-lg-3 col-sm-2 col-md-2">&nbsp;</div>
+          <div class="col-lg-3 col-sm-4 col-md-4">
             <div class="brand">
               <img src="{{asset('file_assets/img/logo_sisanti_geulis_landscape.png')}}" style="height: 100px; width: auto; display: block; margin: auto">
             </div>
           </div>
-          <div class="col-sm-6">
-            <div class="card fat" style="min-height:340px;">
-            <div class="card-body">
-              <h4 class="card-title text-center" style="margin-bottom: 20px;">Kecamatan Tanjungsari, Kabupaten Bogor</h4>
-              <div class="text-center">
-                <img style="width: 30%;margin-bottom: 10px;" src="{{asset('file_assets/img/logo_pemkab_bogor.png')}}">
-                <p>Klik <a href="{{asset('sisanti_geulis.apk')}}" style="" onclick="alert('Terima kasih telah mengunduh! :)')">download</a> untuk mengunduh aplikasi mobile</p>
-              </div>
+          <div class="col-lg-3 col-sm-4 col-md-4">
+            <div class="brand">
+              <img style="height: 100px; width: auto; display: block; margin: auto" src="{{asset('file_assets/img/logo_pemkab_bogor.png')}}">
             </div>
-
           </div>
-          </div>
-          <div class="col-sm-6">
-            <div class="card fat" style="min-height:340px;">
+          <div class="col-lg-3 col-sm-2 col-md-2">&nbsp;</div>
+          <!-- batas -->
+          <div class="col-lg-3 col-sm-2 col-md-2">&nbsp;</div>
+          <div class="col-lg-6 col-sm-8 col-md-8">
+            <div class="card fat" style="min-height:350px;">
             <div class="card-body">
               <h4 style="" class="card-title text-center">Login SISANTI GEULIS</h4>
               <form method="POST" id="form-login" action="{{url('/loginpost')}}">
@@ -127,13 +124,14 @@
                     Login
                   </button>
                 </div>
+                <p style="text-align: center; margin-top: 15px;">Klik <a href="{{asset('sisanti_geulis.apk')}}" style="" onclick="alert('Terima kasih telah mengunduh! :)')">download</a> untuk mengunduh aplikasi mobile</p>
               </form>
               <div class="overlay" id="submit_loading" style="display: none;"><i class="fa fa-refresh fa-spin"></i></div>
             </div>
 
           </div>
           </div>
-          
+          <div class="col-lg-3 col-sm-2 col-md-2">&nbsp;</div>
           <div class="footer">
             SISANTI GEULIS | Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved
           </div>

@@ -120,19 +120,18 @@
                     <option value="kasi">Kasi</option>
                     <option value="kasubag">Kasubag</option>
                     <option value="admin">Admin</option>
-                    <option value="pelaksana">pelaksana</option>
                   </select>
                </div>
 
                <div class="form-group div_organisasi">
-                  <label>Atasan</label>
+                  <label>Terima Dari</label>
                   <select class="form-control" name="atasan" id="atasan">
                     
                   </select>
                </div>
 
                <div class="form-group div_organisasi">
-                  <label>Bawahan</label>
+                  <label>Kirim Ke</label>
                   <select class="form-control" name="bawahan" id="bawahan">
                     
                   </select>
@@ -248,8 +247,8 @@
                   dt = data;
                   console.log(dt);
                   content = '';
-                  content_atasan = '<option value="0">Tanpa Atasan</option>';
-                  content_bawahan = '<option value="0">Tanpa Bawahan</option>';
+                  content_atasan = '<option value="0">Tanpa Pengirim</option>';
+                  content_bawahan = '<option value="0">Tanpa Penerima</option>';
                   for (var i = 0; i < dt.length; i++) {
                     content+='<tr>'+
                                 '<td>'+(i+1)+'</td>'+

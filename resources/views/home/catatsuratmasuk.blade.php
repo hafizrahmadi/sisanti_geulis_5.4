@@ -99,7 +99,7 @@
                </div>
 
                <div class="form-group">
-                  <label>Lampiran</label>
+                  <label>Lampiran <span style="color:#ff0000;">*</span></label>
                   <input type="text" name="lampiran" class="form-control" id="lampiran" placeholder="Lampiran">
                </div>
 
@@ -376,7 +376,7 @@
     var id_user_camat = $('#id_user_camat').val();
     var id_user = $('#id_user').val();
 
-    if (nomor_surat!=''&&tanggal_surat!=''&&perihal!=''&&asal_surat!=''&&id_user_camat!='') {
+    if (nomor_surat!=''&&tanggal_surat!=''&&perihal!=''&&asal_surat!=''&&id_user_camat!=''&&lampiran!='') {
       var form_data = new FormData();
       form_data.append('_token', '{{csrf_token()}}');
        form_data.append('id', id_surat_masuk);
@@ -534,6 +534,7 @@
                   _token: '{{csrf_token()}}',
                   'user_id':id_user_camat,
                   'id_admin':id_admin,
+                  'dari_user_id':id_admin,
                   'firebase':firebase,
                   'title': "SISANTI GEULIS",
                   'body': "Pemberitahuan! Surat masuk baru untuk anda. Perihal : "+perihal,
@@ -545,6 +546,7 @@
                    _token: '{{csrf_token()}}',
                   'user_id':id_user_camat,
                   'id_admin':id_admin,
+                  'dari_user_id':id_admin,
                   'firebase':firebase,
                   'title': "SISANTI GEULIS",
                   'body': "Pemberitahuan! Surat masuk baru untuk anda. Perihal : "+perihal,

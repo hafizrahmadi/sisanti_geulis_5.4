@@ -36,23 +36,29 @@ class UserController extends Controller
         if($data){ //apakah email tersebut ada atau tidak
             // if(Hash::check($password,$data->password)){
             if ($password==$data->password) {
-                Session::put('id_user',$data->id);
-                Session::put('username',$data->username);
-                Session::put('nama_lengkap',$data->nama_lengkap);
-                Session::put('pangkat',$data->pangkat);
-                Session::put('jabatan',$data->jabatan);
-                Session::put('npk',$data->npk);
-                Session::put('role',$data->role);
-                Session::put('token',$data->token);
-                Session::put('login',TRUE);
+                
+                if ($data->role=='admin') {
+                    Session::put('id_user',$data->id);
+                    Session::put('username',$data->username);
+                    Session::put('nama_lengkap',$data->nama_lengkap);
+                    Session::put('pangkat',$data->pangkat);
+                    Session::put('jabatan',$data->jabatan);
+                    Session::put('npk',$data->npk);
+                    Session::put('role',$data->role);
+                    Session::put('token',$data->token);
+                    Session::put('login',TRUE);
 
-                $nama_jabatan = '';
-                if ($data->jabatan!=null||$data->jabatan!='') {
-                    $jbt = ModelJabatan::where('id',$data->jabatan)->first();
-                    $nama_jabatan = $jbt->nama_jabatan;
+                    $nama_jabatan = '';
+                    if ($data->jabatan!=null||$data->jabatan!='') {
+                        $jbt = ModelJabatan::where('id',$data->jabatan)->first();
+                        $nama_jabatan = $jbt->nama_jabatan;
+                    }
+                    Session::put('nama_jabatan',$nama_jabatan);
+                    return redirect('home')->with('alert','Halo '.session('username').' ! Selamat bekerja sama dengan SISANTI GEULIS :)');
+                }else{
+                    return redirect('/')->with('alert','Hanya admin yang bisa login pada aplikasi web !');
                 }
-                Session::put('nama_jabatan',$nama_jabatan);
-                return redirect('home')->with('alert','Halo '.session('username').' ! Selamat bekerja sama dengan SISANTI GEULIS :)');
+                
             }
             else{
                 return redirect('/')->with('alert','Username atau Password, Salah !');
@@ -73,14 +79,55 @@ class UserController extends Controller
     }
 
     public function getListUser(){
-        $sel = DB::connection('mysql')->select("SELECT a.id,a.username,a.password,a.npk,a.nama_lengkap,a.pangkat,a.golongan,a.jabatan,a.role,a.token,a.firebase,b.nama_jabatan, c.leader_id as atasan, c.under_id as bawahan
+        $listu = array();
+        $sel = DB::connection('mysql')->select("SELECT a.id,a.username,a.password,a.npk,a.nama_lengkap,a.pangkat,a.golongan,a.jabatan,a.role,a.token,a.firebase,b.nama_jabatan
             from tb_user a left join tb_jabatan b on a.jabatan = b.id 
-            left join tb_organisasi c on c.id = a.id
             order by 1 asc");
+        for ($i=0; $i < count($sel); $i++) { 
+            $id = $sel[$i]->id;
+            $username = $sel[$i]->username;
+            $password = $sel[$i]->password;
+            $npk = $sel[$i]->npk;
+            $nama_lengkap = $sel[$i]->nama_lengkap;
+            $pangkat = $sel[$i]->pangkat;
+            $golongan = $sel[$i]->golongan;
+            $jabatan = $sel[$i]->jabatan;
+            $role = $sel[$i]->role;
+            $token = $sel[$i]->token;
+            $firebase = $sel[$i]->firebase;
+            $nama_jabatan = $sel[$i]->nama_jabatan;
+            $atasan = null;
+            $bawahan = null;
+            $sis = DB::connection('mysql')->select("SELECT * FROM tb_organisasi where under_id = '$id'");
+            if (count($sis)>0) {
+                $atasan = $sis[0]->leader_id;
+            }
+            $sin = DB::connection('mysql')->select("SELECT * FROM tb_organisasi where leader_id = '$id'");
+            if (count($sin)>0) {
+                $bawahan = $sin[0]->under_id;
+            }
+            $listu[] = array(
+                                'id' => $id,
+                                'username' => $username,
+                                'password' => $password,
+                                'npk' => $npk,
+                                'nama_lengkap' => $nama_lengkap,
+                                'pangkat' => $pangkat,
+                                'golongan' => $golongan,
+                                'jabatan' => $jabatan,
+                                'role' => $role,
+                                'token' => $token,
+                                'firebase' => $firebase,
+                                'nama_jabatan' => $nama_jabatan,
+                                'atasan' => $atasan,
+                                'bawahan' => $bawahan,
+                            );
+
+        }
         // $sel = ModelUser::all();
         // return json_encode($sel);
         // return $sel;
-        return response()->json($sel);
+        return response()->json($listu);
     }
 
     public function getListAbsen(){
@@ -138,19 +185,23 @@ class UserController extends Controller
             // $data->password = $request->password;
             return json_encode($data->save());
         }else{
+            
+            $id_user = $request->id_user!=null?$request->id_user:0;
+            $atasan = $request->atasan!=null?$request->atasan:0;
+            $bawahan = $request->bawahan!=null?$request->bawahan:0;
 
-            $ee = ModelOrganisasi::where('leader_id',$request->id_user)->where('under_id',$request->bawahan)->delete();
-            $ii = ModelOrganisasi::where('leader_id',$request->atasan)->where('under_id',$request->id_user)->delete();
+            $ee = ModelOrganisasi::where('leader_id',$id_user)->where('under_id',$bawahan)->delete();
+            $ii = ModelOrganisasi::where('leader_id',$atasan)->where('under_id',$id_user)->delete();
 
 
             $oo = new ModelOrganisasi();
-            $oo->leader_id = $request->id_user;
-            $oo->under_id = $request->bawahan;
+            $oo->leader_id = $id_user;
+            $oo->under_id = $bawahan;
             $oo->save();
 
             $aa = new ModelOrganisasi();
-            $aa->leader_id = $request->atasan;
-            $aa->under_id = $request->id_user;
+            $aa->leader_id = $atasan;
+            $aa->under_id = $id_user;
             $aa->save();
 
 

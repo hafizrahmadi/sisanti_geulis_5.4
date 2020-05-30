@@ -98,7 +98,7 @@
                </div>
 
                <div class="form-group">
-                  <label>Lampiran</label>
+                  <label>Lampiran <span style="color:#ff0000;">*</span></label>
                   <input type="text" name="lampiran" class="form-control" id="lampiran" placeholder="Lampiran">
                </div>
 
@@ -407,7 +407,7 @@
     var id_surat_keluar = $('#id_surat_keluar').val();
     var id_user = $('#id_user').val();
 
-    if (nomor_surat!=''&&tanggal_surat!=''&&perihal!=''&&asal_surat!='') {
+    if (nomor_surat!=''&&tanggal_surat!=''&&perihal!=''&&asal_surat!=''&&lampiran!='') {
       var form_data = new FormData();
       form_data.append('_token', '{{csrf_token()}}');
        form_data.append('id', id_surat_keluar);
@@ -726,6 +726,7 @@
                type: "POST",
                data: {
                   _token: '{{csrf_token()}}',
+                  'user_id':id_user_kk,
                   'untuk_user_id':id_user_kk,
                   'dari_user_id':id_user,
                   'firebase':firebase,
@@ -733,10 +734,12 @@
                   'body': "Pemberitahuan! Surat keluar baru untuk anda. Mohon untuk melakukan pemeriksaan. Perihal : "+perihal,
                   'jenis':2,
                   'id_surat':id_surat_keluar,
+                  'id_surat_masuk':id_surat_keluar,
                },
                beforeSend: function() {
                  console.log({
                    _token: '{{csrf_token()}}',
+                  'user_id':id_user_kk,
                   'untuk_user_id':id_user_kk,
                   'dari_user_id':id_user,
                   'firebase':firebase,
@@ -744,6 +747,7 @@
                   'body': "Pemberitahuan! Surat keluar baru untuk anda. Mohon untuk melakukan pemeriksaan. Perihal : "+perihal,
                   'jenis':2,
                   'id_surat':id_surat_keluar,
+                  'id_surat_masuk':id_surat_keluar,
                  });
 
                },
